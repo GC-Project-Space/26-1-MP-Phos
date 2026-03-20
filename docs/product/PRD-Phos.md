@@ -1,0 +1,323 @@
+# PRD: Phos (모바일 인생네컷 포토부스)
+
+**Date**: 2026-03-20  
+**Document Type**: Product Requirements Document  
+**Scope**: MVP v1 기능 구현 계획 수립  
+**Related Docs**: `docs/discovery/phos-discovery-plan.md`, `docs/discovery/phos-metrics-dashboard.md`
+
+---
+
+## 1) Summary (Step 1)
+
+이 문서는 `Phos`의 MVP v1을 만들기 위한 제품 요구사항 문서입니다.  
+Phos는 짧은 시간 안에 촬영, 간단 편집, 저장, 공유까지 끝내는 재미 중심 모바일 인생네컷 앱입니다.  
+첫 버전은 `Live Booth`를 중심으로 만들고, 사진과 메이킹 영상을 모두 결과물로 제공하는 데 집중합니다.
+
+---
+
+## 2) Contacts (Step 2)
+
+| Name | Role | Comment |
+|---|---|---|
+| Luke | Product Owner | 제품 방향, 범위, 우선순위 결정 |
+| TBD | Design | 촬영 흐름, 프레임, 편집 UX 설계 |
+| TBD | Mobile Engineering | 카메라, 녹화, 로컬 저장, 성능 최적화 |
+| TBD | Backend Engineering | 세션, 렌더, 공유 링크, 삭제/내보내기 처리 |
+| TBD | QA | 저사양 기기, 촬영 중단 복구, 다운로드 검증 |
+
+---
+
+## 3) Background (Step 3)
+
+### Context
+
+기존 인생네컷 경험은 오프라인 포토부스에 묶여 있거나, 모바일에서는 사진 편집만 강한 경우가 많습니다.  
+Phos는 모바일에서 바로 인생네컷 촬영을 하고, 촬영 과정의 메이킹 영상까지 함께 남기게 하려는 제품입니다.  
+핵심은 `실용성`보다 `재미`입니다.
+
+### Why now
+
+- 모바일 카메라와 영상 처리 경험이 충분히 익숙해졌습니다.
+- QR 기반 공유와 웹 다운로드 흐름이 사용자에게 자연스러운 패턴이 되었습니다.
+- 프라이버시 민감도가 높아져, `계정 없이 쓰고 빠르게 지워지는` 경험이 차별점이 될 수 있습니다.
+
+### What changed
+
+- 사진만 잘 나오는 앱보다, `찍는 순간의 에너지`까지 남기는 영상형 결과물이 더 매력적인 시대가 되었습니다.
+- 사용자는 설치와 가입보다 `바로 찍고 바로 받는 흐름`을 더 선호합니다.
+
+---
+
+## 4) Objective (Step 4)
+
+### Objective
+
+Phos의 첫 버전 목표는 사용자가 2분 안에 촬영을 끝내고, 최종 사진 또는 영상을 자기 기기에 확보하게 만드는 것입니다.  
+이 경험이 빠르고 재미있어야 다시 쓰고 다른 사람에게 보여줄 이유가 생깁니다.
+
+### Why it matters
+
+- 사용자 입장: 복잡한 편집 없이도 특별한 순간을 바로 결과물로 남길 수 있습니다.
+- 제품 입장: `사진 + 메이킹 영상` 조합은 차별화된 핵심 경험입니다.
+- 사업 입장: 공유가 많을수록 자연 유입 가능성이 커집니다.
+
+### Strategy alignment
+
+- 제품 전략: 재미 중심, 빠른 완주, 결과물 확보, 프라이버시 신뢰
+- 기술 전략: 세션 중심 구조, 표준 API 우선, 낮은 기기 성능까지 고려한 안정성
+
+### Key Results (SMART)
+
+| KR | Definition | Target |
+|---|---|---|
+| KR1 | 첫 세션 완주율 | >= 70% |
+| KR2 | 공유 전환율 | >= 35% |
+| KR3 | 다운로드 성공률 | >= 97% |
+| KR4 | 세션 실패율 | < 3% |
+| KR5 | 2-Minute Keepsake Secured Rate | Soft launch W2 >= 30%, D+30 >= 45% |
+
+---
+
+## 5) Market Segment(s) (Step 5)
+
+### Primary segment
+
+`짧은 시간 안에 분위기 있는 포토 스트립을 만들고 싶은 사용자`
+
+대표 상황:
+- 친구와 노는 중 빠르게 사진을 남기고 싶을 때
+- 데이트, 파티, 여행, 행사에서 추억을 바로 만들고 싶을 때
+- 따로 편집 앱을 열지 않고 한 번에 끝내고 싶을 때
+
+### Secondary segment
+
+`행사나 모임에서 여러 사람이 쉽게 결과물을 받고 싶은 사용자`
+
+대표 상황:
+- 생일, 웨딩, 소규모 이벤트에서 QR로 사진/영상을 내려받고 싶을 때
+- 참가자가 계정 없이 결과물을 받고 싶을 때
+
+### Constraints
+
+- 저사양 기기에서도 동작해야 함
+- 촬영 흐름은 2분 안에 끝나야 함
+- 계정 없이 세션 사용 가능해야 함
+- 48시간 보관 후 자동 삭제되어야 함
+- 사용자는 언제든 삭제/내보내기를 요청할 수 있어야 함
+
+---
+
+## 6) Value Proposition(s) (Step 6)
+
+### Customer jobs
+
+- 재미있는 방식으로 사진을 찍고 싶다
+- 결과물을 빠르게 저장하고 공유하고 싶다
+- 촬영 순간의 분위기까지 남기고 싶다
+- 개인 사진이 오래 남거나 다른 용도로 쓰이지 않기를 바란다
+
+### Gains
+
+- 사진과 영상 두 결과물을 한 번에 얻는다
+- 복잡한 편집 없이도 인생네컷 스타일 결과를 만든다
+- QR로 빠르게 기기에 저장한다
+- 가입 부담 없이 사용한다
+
+### Pains we remove
+
+- 촬영 앱과 편집 앱을 오가는 번거로움
+- 저장/공유가 느려서 흐름이 끊기는 문제
+- 프라이버시 정책이 불명확한 불안감
+- 낮은 성능 기기에서 생기는 버벅임과 크래시
+
+### Differentiation
+
+- `최종 사진 + 메이킹 영상`을 기본 경험으로 묶는다
+- `빠른 완주`를 핵심 가치로 둔다
+- `계정 없이 사용 + 짧은 보관 + 즉시 삭제/내보내기`를 제품 가치로 드러낸다
+
+---
+
+## 7) Solution (Step 7)
+
+### 7.1 UX / Prototypes
+
+핵심 사용자 흐름은 아래와 같습니다.
+
+1. 앱 진입
+2. 프레임 선택
+3. Live Booth 촬영 시작
+4. 카운트다운 기반 4컷 또는 6컷 촬영
+5. 촬영 중 메이킹 영상 동시 기록
+6. 컷 선택 / 재배치 / 간단 편집
+7. 최종 사진 렌더링
+8. QR 페이지에서 사진/영상 다운로드
+9. 필요 시 로컬 저장, 삭제 요청, 내보내기 요청
+
+UX 원칙:
+- 메인 흐름은 한 손으로도 이해 가능해야 함
+- 주요 액션은 `촬영`, `다음`, `저장` 수준으로 단순해야 함
+- 잘못 눌렀을 때 복구 가능해야 함
+- 프라이버시 정보는 숨기지 말고 짧고 분명하게 보여줘야 함
+
+### 7.2 Key Features
+
+#### Feature 1. Frame Selection
+- 사용자는 촬영 전 프레임을 선택할 수 있다.
+- MVP에서는 4컷, 6컷 중심의 기본 프레임을 제공한다.
+- 프레임 선택은 2초 안에 이해 가능한 수준으로 단순해야 한다.
+
+#### Feature 2. Live Booth Capture
+- 사용자는 카운트다운 기반으로 연속 촬영을 진행한다.
+- 촬영 도중 앱은 세션 단위로 상태를 유지한다.
+- 촬영 진입 속도는 체감 2초 내를 목표로 한다.
+
+#### Feature 3. Making Video Recording
+- Live Booth 촬영 시작과 동시에 메이킹 영상을 기록한다.
+- 메이킹 영상은 최종 사진과 별도의 결과물이다.
+- 영상 기록 실패 시 사용자는 명확한 안내를 받아야 한다.
+
+#### Feature 4. Simple Edit
+- 사용자는 촬영 후 컷을 선택하고 순서를 바꿀 수 있다.
+- 간단한 필터, 텍스트, 크롭 수준의 빠른 편집을 제공한다.
+- 고급 편집은 첫 버전에 포함하지 않는다.
+
+#### Feature 5. Final Render
+- 앱은 선택된 컷과 프레임으로 최종 인생네컷 사진을 만든다.
+- 렌더링은 안정성과 속도가 중요하다.
+- 렌더 결과는 세션 단위로 관리된다.
+
+#### Feature 6. QR Download Page
+- 사용자는 QR 페이지에서 사진과 영상을 각각 받을 수 있다.
+- 다운로드는 별도 계정 없이 가능해야 한다.
+- 공유 링크 만료 시간은 retention 정책과 충돌하지 않아야 한다.
+
+#### Feature 7. Local Save
+- 사용자는 최종 결과물을 로컬 기기에 저장할 수 있다.
+- 로컬 저장 성공/실패는 명확히 계측되어야 한다.
+
+#### Feature 8. Privacy Controls
+- 사용자는 서비스 동의와 데이터 활용 동의를 분리해 본다.
+- `trainingOptIn=false`가 기본값이다.
+- 사용자는 삭제 요청과 내보내기 요청을 바로 할 수 있다.
+- 응답과 로그에는 `retentionExpiresAt`, `trainingUsed`, `consentVersion`, `deletionStatus`가 포함된다.
+
+#### Feature 9. Session Recovery (Soft-launch hardening)
+- 앱이 백그라운드로 전환된 직후 재진입한 경우에만, 아직 `finalize`되지 않은 세션 복구를 시도한다.
+- 복구 실패 시에는 부분 상태를 버리고 새 세션 시작을 안내한다.
+- 이 기능은 soft launch 품질 항목으로 추적하되 V1 출시 게이트에는 포함하지 않는다.
+
+#### Feature 10. Album Edit (Fast-follow)
+- 기존 사진을 프레임에 넣어 편집하는 기능은 중요하지만 MVP 핵심은 아니다.
+- 첫 버전 이후 `슬롯 교체 / 크롭 / 회전` 중심으로 확장한다.
+
+### 7.3 Technology
+
+기술 방향은 구현 상세가 아니라 구조 원칙 수준에서 정의합니다.
+
+#### Client
+- 모바일 앱은 카메라 진입 속도, 동시 녹화 안정성, 로컬 저장 UX가 중요하다.
+- 저사양 기기에서는 해상도와 처리량을 자동 조절해야 한다.
+
+#### Backend
+- 세션 중심 구조를 사용한다.
+- MVP 리소스 트리:
+  - `Session`: `/v1/sessions`, `/v1/sessions/{sessionId}`
+  - `Asset`: `/v1/sessions/{sessionId}/assets`, `/v1/sessions/{sessionId}/assets/{assetId}`
+  - `Frame`: `/v1/frames`, `/v1/frames/{frameId}`
+  - `Consent`: `/v1/sessions/{sessionId}/consents`, `/v1/sessions/{sessionId}/consents/{consentId}`
+  - `ShareLink`: `/v1/sessions/{sessionId}/shareLinks`, `/v1/sessions/{sessionId}/shareLinks/{shareLinkId}`
+  - `ExportRequest`: `/v1/sessions/{sessionId}/exportRequests`, `/v1/sessions/{sessionId}/exportRequests/{exportRequestId}`
+  - `DeletionRequest`: `/v1/sessions/{sessionId}/deletionRequests`, `/v1/sessions/{sessionId}/deletionRequests/{requestId}`
+- 메서드 원칙: `Create/Get/List/Update/Delete`를 우선 사용하고, custom method는 아래 두 개만 허용한다.
+  - `POST /v1/sessions/{sessionId}:render`
+  - `POST /v1/sessions/{sessionId}:finalize`
+
+#### Media / Share
+- 사진과 영상은 별도 자산으로 관리한다.
+- QR 페이지는 다운로드 성공률이 높아야 한다.
+- `shareLink.expiresAt <= retentionExpiresAt`를 보장해야 한다.
+
+#### Privacy / Data
+- 기본값: `trainingOptIn=false`, 계정 없이 `sessionId` 기반 세션 생성
+- 동의는 서비스 이용 필수 동의와 데이터 활용 선택 동의를 분리한다
+- 보관: `retentionExpiresAt` 기준 48시간 자동 삭제
+- 불변조건:
+  - `shareLink.expiresAt <= retentionExpiresAt`
+  - 세션 삭제 확정 시 해당 세션의 모든 `shareLink`는 즉시 무효화
+  - `exportRequest`는 삭제 확정 전까지만 생성 가능
+  - `trainingUsed=true`는 해당 세션의 유효한 `consentVersion` 스냅샷이 있을 때만 허용
+- 로그 원칙: 원본 URL/PII는 저장하지 않고 `sessionId`, 시각, 액션, `consentVersion`, 상태만 기록
+- 상태 전이: `active -> export_requested -> delete_requested -> deleted`
+
+### 7.4 Assumptions
+
+아직 검증이 필요한 핵심 가정입니다.
+
+- 사용자는 사진만이 아니라 메이킹 영상도 가치 있게 느낀다.
+- 2초 내 카메라 진입이 완주율을 높인다.
+- 저사양 기기에서도 동시 촬영 + 녹화가 충분히 가능하다.
+- QR 다운로드는 불안정한 네트워크에서도 높은 성공률을 유지할 수 있다.
+- 48시간 보관과 분리 동의는 신뢰를 높이고 큰 이탈을 만들지 않는다.
+- Album Edit는 Fast-follow여도 초기 제품 가치가 훼손되지 않는다.
+
+---
+
+## 8) Release (Step 8)
+
+### Version plan
+
+#### V1 (must ship first)
+- Live Booth 촬영
+- 메이킹 영상 동시 기록
+- 컷 선택과 간단 편집
+- 최종 사진 렌더링
+- QR 페이지 사진/영상 개별 다운로드
+- 로컬 저장
+- 48시간 자동 삭제
+- 분리 동의
+- 즉시 삭제/내보내기
+
+#### V1.5 (fast-follow)
+- Album Edit 기본 버전
+- 기존 프레임 사진 자동 수집의 반자동 버전
+- 프레임 카탈로그 확장
+- 세션 복구 안정성 개선
+
+#### V2+
+- 자동 수집 정확도 고도화
+- 더 다양한 템플릿/프롬프트/세션형 재미 요소
+- 이벤트/모임용 다인 사용 흐름 강화
+
+### Relative timeline
+
+- **Phase 1**: 세션/자산/동의/공유 링크 리소스 모델 확정, retention/share 불변조건 확정, 이벤트 스키마 고정
+- **Phase 2**: 프레임 선택, Live Booth 촬영, 메이킹 영상 기록, 저사양 프로파일 구현
+- **Phase 3**: 컷 선택/간단 편집, 최종 렌더링, 로컬 저장, QR 다운로드 구현
+- **Phase 4**: 삭제/내보내기 UX, 품질 안정화, soft launch 검증
+
+### Release gates
+
+- 첫 세션 완주율 >= 70%
+- 공유 전환율 >= 35%
+- 다운로드 성공률 >= 97%
+- 세션 실패율 < 3%
+- KSR soft launch W2 >= 30%
+- Session Crash Rate < 2.0%
+- Video Recording Failure Rate < 3.0%
+- Expired Asset Access Rate = 0%
+- Deletion SLA Met Rate >= 99%
+- Export SLA Met Rate >= 95%
+- soft launch에서 `50 sessions/day` 미만이면 퍼널 지표는 `Calibrating`으로 보고 추세 중심으로 판단한다
+- privacy/download 신뢰성 실패 시 출시 보류
+
+---
+
+## Appendix: Planning Defaults
+
+- analytics vendor는 추후 확정하되, MVP 이벤트 이름은 아래로 고정한다:
+  `session_started`, `camera_ready`, `capture_completed`, `render_succeeded`, `local_save_tapped`, `local_save_succeeded`, `qr_opened`, `photo_download_succeeded`, `video_download_succeeded`, `consent_updated`, `export_requested`, `export_completed`, `deletion_requested`, `deletion_completed`
+- 익명 식별은 MVP에서 `sessionId` 기준으로 정의한다
+- 공유 링크 기본 만료시간은 `24h`로 두고 항상 `shareLink.expiresAt <= retentionExpiresAt`를 만족한다
+- 설치 단위 식별과 analytics vendor 확정은 출시 후 운영 개선 항목으로 남긴다
+- 구체 모바일 구현 스택과 카메라 라이브러리 선택은 별도 아키텍처 결정 문서에서 확정한다
