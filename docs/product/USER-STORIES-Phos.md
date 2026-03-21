@@ -2,7 +2,7 @@
 
 **Date**: 2026-03-20  
 **Product**: Phos  
-**Source Docs**: `docs/product/PRD-Phos.md`, `docs/discovery/phos-discovery-plan.md`, `docs/discovery/phos-metrics-dashboard.md`  
+**Source Docs**: `docs/product/README.md`, `docs/product/PRD-Phos.md`, `docs/discovery/phos-discovery-plan.md`, `docs/discovery/phos-metrics-dashboard.md`  
 **Design**: TBD  
 **Scope**: MVP v1 only (Fast-follow stories are separated at the end)
 
