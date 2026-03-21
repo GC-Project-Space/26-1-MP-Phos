@@ -3,7 +3,7 @@
 **Date**: 2026-03-20  
 **Product**: Phos  
 **Document Type**: Event schema  
-**Related Docs**: `docs/product/API-SPEC-Phos.md`, `docs/product/PRD-Phos.md`, `docs/product/WWA-Backlog-Phos.md`, `docs/discovery/phos-metrics-dashboard.md`  
+**Related Docs**: `docs/product/README.md`, `docs/product/API-SPEC-Phos.md`, `docs/product/PRD-Phos.md`, `docs/product/WWA-Backlog-Phos.md`, `docs/discovery/phos-metrics-dashboard.md`  
 **Scope**: MVP v1 analytics and operational events
 
 ---

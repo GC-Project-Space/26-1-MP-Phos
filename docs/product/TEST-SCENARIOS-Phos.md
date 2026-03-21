@@ -3,7 +3,7 @@
 **Date**: 2026-03-20  
 **Product**: Phos  
 **Document Type**: QA test scenarios  
-**Related Docs**: `docs/product/PRD-Phos.md`, `docs/product/USER-STORIES-Phos.md`, `docs/product/WWA-Backlog-Phos.md`, `docs/product/API-SPEC-Phos.md`, `docs/product/EVENT-SCHEMA-Phos.md`  
+**Related Docs**: `docs/product/README.md`, `docs/product/PRD-Phos.md`, `docs/product/USER-STORIES-Phos.md`, `docs/product/WWA-Backlog-Phos.md`, `docs/product/API-SPEC-Phos.md`, `docs/product/EVENT-SCHEMA-Phos.md`  
 **Scope**: MVP v1, soft-launch hardening, fast-follow note
 
 ---

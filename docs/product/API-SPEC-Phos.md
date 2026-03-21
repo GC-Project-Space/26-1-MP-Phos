@@ -3,7 +3,7 @@
 **Date**: 2026-03-20  
 **Product**: Phos  
 **Document Type**: API specification  
-**Related Docs**: `docs/product/PRD-Phos.md`, `docs/product/USER-STORIES-Phos.md`, `docs/product/WWA-Backlog-Phos.md`  
+**Related Docs**: `docs/product/README.md`, `docs/product/PRD-Phos.md`, `docs/product/USER-STORIES-Phos.md`, `docs/product/WWA-Backlog-Phos.md`  
 **Scope**: MVP v1 API contract only
 
 ---
