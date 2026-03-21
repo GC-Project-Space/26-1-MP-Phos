@@ -1,0 +1,7 @@
+.turbo
+coverage
+dist
+node_modules
+apps/mobile/.expo
+apps/mobile/android
+apps/mobile/ios
