@@ -51,14 +51,14 @@ pnpm dev:mobile
 
 ## 개발 환경 기준
 
-- **Node.js**: `22.13+` 또는 `24.x LTS` 권장 (`Prisma 7`, `ESLint 10`, Expo SDK 55 호환 기준)
+- **Node.js**: `22.13+` 또는 `24.x LTS` 권장 (`Prisma 7`, `ESLint 10`, Expo SDK 56 canary 호환 기준)
 - **pnpm**: `10.32.1+` (`corepack` 사용 권장)
 - **Docker Desktop**: 로컬 Postgres/API 스택 실행 시 필요
 
 ## 기술 스택
 
 - **모노레포**: `pnpm` workspaces + `turbo`
-- **프론트엔드**: `apps/mobile` - Expo SDK 55, React Native 0.83, React 19, TypeScript, FSD-inspired 구조
+- **프론트엔드**: `apps/mobile` - Expo SDK 56 canary, React Native 0.84.1, React 19.2.3, TypeScript, FSD-inspired 구조
 - **백엔드**: `apps/api` - NestJS 11, TypeScript, 멀티모듈 MVC 구조
 - **데이터베이스**: `packages/db` - Prisma 7 + PostgreSQL
 - **타입 검증**: 모바일은 `Valibot`, 백엔드는 `Typia`
@@ -66,7 +66,9 @@ pnpm dev:mobile
 
 ## 의존성 업데이트 메모
 
-- Expo 관리 패키지(`react`, `react-native`, `react-native-safe-area-context`)는 레지스트리 최신값보다 `Expo SDK 55`가 요구하는 호환 버전을 우선합니다.
+- Expo 관리 패키지(`expo-status-bar`, `react`, `react-dom`, `react-native`, `react-native-safe-area-context`)는 레지스트리 최신값보다 현재 설치된 Expo SDK가 요구하는 호환 버전을 우선합니다.
+- 현재 모바일 앱은 다음 메이저 선행 검증을 위해 `Expo SDK 56 canary`를 사용합니다. Expo 56 안정판 출시 후에는 canary 태그를 정식 `56.x` 버전으로 치환하는 후속 정리가 필요합니다.
+- `apps/mobile/app.json`의 루트 `splash` 설정은 Expo 56 canary 스키마 검증에 맞춰 제거된 상태입니다. 안정판 전환 시 스키마 허용 여부를 다시 확인한 뒤 복원 여부를 판단해야 합니다.
 - Prisma 7부터 연결 URL은 `packages/db/prisma.config.ts`에서 관리하며, `packages/db/prisma/schema.prisma`의 datasource 블록에는 provider만 유지합니다.
 - 모바일 의존성 정합성 확인은 `pnpm --dir apps/mobile run doctor`로 수행합니다.
 

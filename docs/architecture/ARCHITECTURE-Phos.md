@@ -28,7 +28,7 @@ Phos is a mobile photo-booth product built as a pnpm + Turbo monorepo. It consis
 
 ### Frontend (`apps/mobile`)
 
-- **Framework**: Expo SDK 55 (React Native 0.83 / React 19)
+- **Framework**: Expo SDK 56 canary (React Native 0.84.1 / React 19.2.3)
 - **Language**: TypeScript
 - **Architecture**: FSD-inspired (Feature-Sliced Design)
   - `src/app`: Global providers, styles, and entry point.
@@ -103,6 +103,8 @@ If `corepack` is unavailable on your machine, use `npx pnpm@10.32.1 <command>` a
 ### Dependency Notes
 
 - Expo-managed packages should stay on the versions required by the installed Expo SDK. Use `pnpm --dir apps/mobile exec expo install --fix` when upgrading mobile dependencies.
+- The mobile workspace is currently on the Expo SDK 56 canary line to validate the next major before the stable release. Once Expo 56 stable ships, replace the canary pins with the corresponding stable `56.x` versions.
+- The root `splash` field was removed from `apps/mobile/app.json` because Expo 56 canary schema validation rejected it. Re-check the stable schema before restoring any splash configuration.
 - Prisma 7 reads connection configuration from `packages/db/prisma.config.ts`; `packages/db/prisma/schema.prisma` keeps the datasource provider only.
 
 ## Documentation Map
