@@ -12,6 +12,7 @@ export default tseslint.config(
       '**/.expo/**',
       '**/.turbo/**',
       'packages/db/generated/**',
+      'packages/db/prisma.config.ts',
       'apps/mobile/android/**',
       'apps/mobile/ios/**',
     ],
