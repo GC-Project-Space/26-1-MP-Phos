@@ -1,98 +1,61 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Phos API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+`apps/api`는 Phos 모노레포의 NestJS 11 기반 백엔드 앱입니다. 세션, 프레임, 헬스 체크 모듈과 `@phos/db` Prisma client를 사용합니다.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 환경 기준
 
-## Description
+- Node.js: `22.13+` 또는 `24.x LTS` 권장
+- pnpm: 루트 `package.json`의 `packageManager` 기준(`10.32.1`)
+- Database: PostgreSQL (`DATABASE_URL` 필요)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 시작하기
 
-## Project setup
+레포 루트에서 의존성을 설치합니다.
 
 ```bash
-$ pnpm install
+corepack enable
+pnpm install
 ```
 
-## Compile and run the project
+`corepack`이 없는 환경에서는 `npx pnpm@10.32.1 install`을 사용해도 됩니다.
+
+필요한 환경 변수를 준비합니다.
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+cp apps/api/.env.example apps/api/.env
+cp packages/db/.env.example packages/db/.env
 ```
 
-## Run tests
+로컬 DB/API 스택을 Docker로 올리거나, API만 단독 실행할 수 있습니다.
 
 ```bash
-# unit tests
-$ pnpm run test
+# repo root
+pnpm docker:up
 
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+# 별도 터미널에서 API만 watch mode 실행
+pnpm dev:api
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## 주요 명령어
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+# repo root
+pnpm dev:api
+pnpm --filter api build
+pnpm --filter api test
+pnpm --filter api test:e2e
+pnpm db:generate
+pnpm db:migrate:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Prisma 메모
 
-## Resources
+- Prisma 7부터 DB 연결 설정은 `packages/db/prisma.config.ts`에서 읽습니다.
+- `packages/db/prisma/schema.prisma`의 datasource 블록에는 provider만 유지합니다.
+- Prisma client 재생성은 루트에서 `pnpm db:generate`로 실행합니다.
 
-Check out a few resources that may come in handy when working with NestJS:
+## 참고 문서
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- 루트 가이드: [`../../README.md`](../../README.md)
+- 아키텍처 문서: [`../../docs/architecture/ARCHITECTURE-Phos.md`](../../docs/architecture/ARCHITECTURE-Phos.md)
+- API 명세: [`../../docs/product/API-SPEC-Phos.md`](../../docs/product/API-SPEC-Phos.md)
