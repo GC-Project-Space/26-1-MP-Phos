@@ -35,6 +35,7 @@ Phos는 재미 중심의 모바일 인생네컷 포토부스 제품을 만들기
 ## 빠른 시작
 
 ```bash
+corepack enable
 pnpm install
 # 터미널 1
 pnpm docker:up
@@ -43,17 +44,31 @@ pnpm docker:up
 pnpm dev:mobile
 ```
 
+`corepack`이 없는 환경에서는 `npx pnpm@10.32.1 install` 같은 형태로 동일 버전의 pnpm을 직접 호출할 수 있습니다.
+
 - `pnpm docker:up`: 백엔드 로컬 스택(`postgres` + `api`)을 포그라운드로 실행
 - `pnpm dev:mobile`: 별도 터미널에서 Expo 모바일 앱 개발 서버 실행
+
+## 개발 환경 기준
+
+- **Node.js**: `22.13+` 또는 `24.x LTS` 권장 (`Prisma 7`, `ESLint 10`, Expo SDK 55 호환 기준)
+- **pnpm**: `10.32.1+` (`corepack` 사용 권장)
+- **Docker Desktop**: 로컬 Postgres/API 스택 실행 시 필요
 
 ## 기술 스택
 
 - **모노레포**: `pnpm` workspaces + `turbo`
-- **프론트엔드**: `apps/mobile` - Expo React Native, TypeScript, FSD-inspired 구조
+- **프론트엔드**: `apps/mobile` - Expo SDK 55, React Native 0.83, React 19, TypeScript, FSD-inspired 구조
 - **백엔드**: `apps/api` - NestJS 11, TypeScript, 멀티모듈 MVC 구조
-- **데이터베이스**: `packages/db` - Prisma + PostgreSQL
+- **데이터베이스**: `packages/db` - Prisma 7 + PostgreSQL
 - **타입 검증**: 모바일은 `Valibot`, 백엔드는 `Typia`
 - **공유 패키지**: `packages/shared` 는 DTO/상수, `packages/backend-contracts` 는 Typia validator
+
+## 의존성 업데이트 메모
+
+- Expo 관리 패키지(`react`, `react-native`, `react-native-safe-area-context`)는 레지스트리 최신값보다 `Expo SDK 55`가 요구하는 호환 버전을 우선합니다.
+- Prisma 7부터 연결 URL은 `packages/db/prisma.config.ts`에서 관리하며, `packages/db/prisma/schema.prisma`의 datasource 블록에는 provider만 유지합니다.
+- 모바일 의존성 정합성 확인은 `pnpm --dir apps/mobile run doctor`로 수행합니다.
 
 ## 문서 안내
 
@@ -83,18 +98,18 @@ docs/
 
 ## 주요 명령어
 
-| 명령어 | 설명 |
-|--------|------|
-| `pnpm install` | 전체 의존성 설치 |
-| `pnpm dev` | 모바일 + API 동시 개발 모드 실행 |
-| `pnpm dev:mobile` | 모바일 앱만 실행 |
-| `pnpm dev:api` | API만 실행 |
-| `pnpm docker:up` | 로컬 Postgres + API Docker 실행 |
-| `pnpm docker:down` | 로컬 Docker 서비스 종료 |
-| `pnpm db:generate` | Prisma Client 생성 |
-| `pnpm db:migrate:dev` | Prisma 개발 마이그레이션 실행 |
-| `pnpm typecheck` | 워크스페이스 전체 타입 점검 |
-| `pnpm lint` | ESLint 실행 |
-| `pnpm test` | 전체 테스트 실행 |
-| `pnpm test:e2e` | API e2e 테스트 실행 |
-| `pnpm clean` | 산출물과 설치 파일 정리 |
+| 명령어                | 설명                             |
+| --------------------- | -------------------------------- |
+| `pnpm install`        | 전체 의존성 설치                 |
+| `pnpm dev`            | 모바일 + API 동시 개발 모드 실행 |
+| `pnpm dev:mobile`     | 모바일 앱만 실행                 |
+| `pnpm dev:api`        | API만 실행                       |
+| `pnpm docker:up`      | 로컬 Postgres + API Docker 실행  |
+| `pnpm docker:down`    | 로컬 Docker 서비스 종료          |
+| `pnpm db:generate`    | Prisma Client 생성               |
+| `pnpm db:migrate:dev` | Prisma 개발 마이그레이션 실행    |
+| `pnpm typecheck`      | 워크스페이스 전체 타입 점검      |
+| `pnpm lint`           | ESLint 실행                      |
+| `pnpm test`           | 전체 테스트 실행                 |
+| `pnpm test:e2e`       | API e2e 테스트 실행              |
+| `pnpm clean`          | 산출물과 설치 파일 정리          |
