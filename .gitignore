@@ -53,6 +53,9 @@ web_modules/
 # Optional eslint cache
 .eslintcache
 
+# Turbo cache
+.turbo/
+
 # Optional stylelint cache
 .stylelintcache
 
@@ -124,6 +127,7 @@ dist
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+.vscode/
 
 # yarn v3
 .pnp.*
@@ -133,6 +137,9 @@ dist
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Prisma
+packages/db/generated/
 
 # Vite logs files
 vite.config.js.timestamp-*
