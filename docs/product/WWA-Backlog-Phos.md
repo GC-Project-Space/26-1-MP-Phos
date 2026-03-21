@@ -3,7 +3,7 @@
 **Date**: 2026-03-20  
 **Product**: Phos  
 **Document Type**: Why-What-Acceptance backlog  
-**Related Docs**: `docs/product/PRD-Phos.md`, `docs/product/USER-STORIES-Phos.md`, `docs/discovery/phos-discovery-plan.md`, `docs/discovery/phos-metrics-dashboard.md`  
+**Related Docs**: `docs/product/README.md`, `docs/product/PRD-Phos.md`, `docs/product/USER-STORIES-Phos.md`, `docs/discovery/phos-discovery-plan.md`, `docs/discovery/phos-metrics-dashboard.md`  
 **Design**: TBD  
 **Scope**: MVP v1 first, then soft-launch hardening, then fast-follow
 

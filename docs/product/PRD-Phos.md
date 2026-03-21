@@ -3,7 +3,7 @@
 **Date**: 2026-03-20  
 **Document Type**: Product Requirements Document  
 **Scope**: MVP v1 기능 구현 계획 수립  
-**Related Docs**: `docs/discovery/phos-discovery-plan.md`, `docs/discovery/phos-metrics-dashboard.md`
+**Related Docs**: `docs/product/README.md`, `docs/discovery/phos-discovery-plan.md`, `docs/discovery/phos-metrics-dashboard.md`
 
 ---
 
