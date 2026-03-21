@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: phos-postgres
+    environment:
+      POSTGRES_DB: phos
+      POSTGRES_USER: phos
+      POSTGRES_PASSWORD: phos
+    ports:
+      - '5432:5432'
+    volumes:
+      - phos-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U phos -d phos']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: phos-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgresql://phos:phos@postgres:5432/phos?schema=public
+    ports:
+      - '3000:3000'
+    command: >-
+      sh -c "pnpm --filter @phos/db db:push && pnpm --filter api start:prod"
+
+volumes:
+  phos-postgres-data:
