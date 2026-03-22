@@ -4,14 +4,14 @@
 
 ## 개요
 
-Phos는 `pnpm` + `Turbo` 모노레포로 구성한 모바일 포토부스 제품입니다. Expo 기반 React Native 모바일 애플리케이션과 NestJS API로 이루어져 있으며, 내부 패키지를 통해 로직과 계약을 공유합니다.
+Phos는 `pnpm@10.32.1` + `Turbo@2.8.20` 모노레포로 구성한 모바일 포토부스 제품입니다. Expo 기반 React Native 모바일 애플리케이션과 NestJS API로 이루어져 있으며, 내부 패키지를 통해 로직과 계약을 공유합니다.
 
 ## 워크스페이스 구조
 
 ```text
 .
 ├── apps/
-│   ├── api/                # NestJS 11 백엔드
+│   ├── api/                # NestJS 11.1.17 백엔드
 │   └── mobile/             # Expo React Native 프론트엔드
 ├── packages/
 │   ├── backend-contracts/  # Typia 기반 백엔드 검증기
@@ -28,7 +28,7 @@ Phos는 `pnpm` + `Turbo` 모노레포로 구성한 모바일 포토부스 제품
 
 ### 프론트엔드 (`apps/mobile`)
 
-- **프레임워크**: Expo SDK 56 canary (React Native 0.84.1 / React 19.2.3)
+- **프레임워크**: `expo@56.0.0-canary-20260305-5163746` (React Native `0.84.1` / React `19.2.3`)
 - **언어**: TypeScript
 - **아키텍처**: FSD-inspired (Feature-Sliced Design)
   - `src/app`: 전역 provider, 스타일, 진입점
@@ -39,13 +39,13 @@ Phos는 `pnpm` + `Turbo` 모노레포로 구성한 모바일 포토부스 제품
 
 ### 백엔드 (`apps/api`)
 
-- **프레임워크**: NestJS 11
+- **프레임워크**: NestJS `11.1.17`
 - **언어**: TypeScript
 - **아키텍처**: 멀티모듈 MVC 성격 구조
   - `src/modules`: 도메인별 모듈(Frames, Sessions, Health)과 `PrismaModule`을 통한 인프라 연결
   - `src/common`: 공통 유틸리티와 HTTP 헬퍼
 - **검증**: 고성능 AOT 검증에 [Typia](https://typia.io/) 사용
-- **데이터베이스**: Prisma 7 기반 PostgreSQL
+- **데이터베이스**: Prisma `7.5.0` 기반 PostgreSQL (로컬 컨테이너 `postgres:18-alpine`)
 
 ### 공유 패키지 (`packages/*`)
 
@@ -73,9 +73,9 @@ Phos는 개발 경험과 성능을 함께 최적화하기 위해 "Validation Spl
 
 ### 사전 준비
 
-- Node.js (`22.13+` 또는 `24.x LTS` 권장)
-- pnpm (`10.32.1+`, Corepack 사용 권장)
-- Docker Desktop (로컬 데이터베이스와 API 실행용)
+- Node.js (`25.x` 권장, Docker API 런타임 `node:25-alpine`; 로컬 실행은 `>=22`)
+- pnpm (`10.32.1`, Corepack 사용 권장)
+- Docker Desktop (로컬 `postgres:18-alpine` + API 실행용)
 
 ### 주요 명령어
 
@@ -105,9 +105,9 @@ Phos는 개발 경험과 성능을 함께 최적화하기 위해 "Validation Spl
 ### 의존성 메모
 
 - Expo 관리 패키지는 설치된 Expo SDK가 요구하는 버전에 맞춰 유지해야 합니다. 모바일 의존성을 올릴 때는 `pnpm --dir apps/mobile exec expo install --fix`를 사용합니다.
-- 현재 모바일 워크스페이스는 다음 메이저를 안정판 전에 검증하기 위해 Expo SDK 56 canary 계열을 사용합니다. Expo 56 안정판이 배포되면 canary 고정 버전을 대응하는 안정 `56.x` 버전으로 바꿔야 합니다.
+- 현재 모바일 워크스페이스는 다음 메이저를 안정판 전에 검증하기 위해 `expo@56.0.0-canary-20260305-5163746`을 사용합니다. Expo 56 안정판이 배포되면 canary 고정 버전을 대응하는 안정 `56.x` 버전으로 바꿔야 합니다.
 - `apps/mobile/app.json`의 루트 `splash` 필드는 Expo 56 canary 스키마 검증에서 거부되어 제거했습니다. splash 설정을 복원하기 전에는 안정판 스키마를 다시 확인해야 합니다.
-- Prisma 7은 `packages/db/prisma.config.ts`에서 연결 설정을 읽고, `packages/db/prisma/schema.prisma`에는 datasource provider만 유지합니다.
+- Prisma `7.5.0`은 `packages/db/prisma.config.ts`에서 연결 설정을 읽고, `packages/db/prisma/schema.prisma`에는 datasource provider만 유지합니다.
 
 ## 문서 맵
 

@@ -51,25 +51,25 @@ pnpm dev:mobile
 
 ## 개발 환경 기준
 
-- **Node.js**: `22.13+` 또는 `24.x LTS` 권장 (`Prisma 7`, `ESLint 10`, Expo SDK 56 canary 호환 기준)
-- **pnpm**: `10.32.1+` (`corepack` 사용 권장)
-- **Docker Desktop**: 로컬 Postgres/API 스택 실행 시 필요
+- **Node.js**: `25.x` (Docker API 런타임 `node:25-alpine` 기준, 로컬 실행은 `>=22`)
+- **pnpm**: `10.32.1` (`corepack` 사용 권장)
+- **Docker Desktop**: 로컬 `postgres:18-alpine` + API 스택 실행 시 필요
 
 ## 기술 스택
 
-- **모노레포**: `pnpm` workspaces + `turbo`
-- **프론트엔드**: `apps/mobile` - Expo SDK 56 canary, React Native 0.84.1, React 19.2.3, TypeScript, FSD-inspired 구조
-- **백엔드**: `apps/api` - NestJS 11, TypeScript, 멀티모듈 MVC 구조
-- **데이터베이스**: `packages/db` - Prisma 7 + PostgreSQL
-- **타입 검증**: 모바일은 `Valibot`, 백엔드는 `Typia`
+- **모노레포**: `pnpm@10.32.1` workspaces + `turbo@2.8.20`
+- **프론트엔드**: `apps/mobile` - `expo@56.0.0-canary-20260305-5163746`, `react-native@0.84.1`, `react@19.2.3`, TypeScript, FSD-inspired 구조
+- **백엔드**: `apps/api` - `@nestjs/common@11.1.17`, TypeScript, 멀티모듈 MVC 구조
+- **데이터베이스**: `packages/db` - `@prisma/client@7.5.0` + 로컬 컨테이너 `postgres:18-alpine`
+- **타입 검증**: 모바일은 `valibot@1.3.1`, 백엔드는 `typia@12.0.1`
 - **공유 패키지**: `packages/shared`는 DTO/상수, `packages/backend-contracts`는 Typia 검증기
 
 ## 의존성 업데이트 메모
 
 - Expo 관리 패키지(`expo-status-bar`, `react`, `react-dom`, `react-native`, `react-native-safe-area-context`)는 레지스트리 최신값보다 현재 설치된 Expo SDK가 요구하는 호환 버전을 우선합니다.
-- 현재 모바일 앱은 다음 메이저 선행 검증을 위해 `Expo SDK 56 canary`를 사용합니다. Expo 56 안정판 출시 후에는 canary 태그를 정식 `56.x` 버전으로 치환하는 후속 정리가 필요합니다.
+- 현재 모바일 앱은 다음 메이저 선행 검증을 위해 `expo@56.0.0-canary-20260305-5163746`를 사용합니다. Expo 56 안정판 출시 후에는 canary 태그를 정식 `56.x` 버전으로 치환하는 후속 정리가 필요합니다.
 - `apps/mobile/app.json`의 루트 `splash` 설정은 Expo 56 canary 스키마 검증에 맞춰 제거된 상태입니다. 안정판 전환 시 스키마 허용 여부를 다시 확인한 뒤 복원 여부를 판단해야 합니다.
-- Prisma 7부터 연결 URL은 `packages/db/prisma.config.ts`에서 관리하며, `packages/db/prisma/schema.prisma`의 datasource 블록에는 provider만 유지합니다.
+- Prisma `7.5.0`부터 연결 URL은 `packages/db/prisma.config.ts`에서 관리하며, `packages/db/prisma/schema.prisma`의 datasource 블록에는 provider만 유지합니다.
 - 모바일 의존성 정합성 확인은 `pnpm --dir apps/mobile run doctor`로 수행합니다.
 
 ## 문서 안내

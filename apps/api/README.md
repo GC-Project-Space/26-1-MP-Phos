@@ -1,12 +1,12 @@
 # Phos API 문서
 
-`apps/api`는 Phos 모노레포의 NestJS 11 기반 백엔드 앱입니다. 세션, 프레임, 헬스 체크 모듈과 `@phos/db` Prisma client를 사용합니다.
+`apps/api`는 Phos 모노레포의 NestJS `11.1.17` 기반 백엔드 앱입니다. 세션, 프레임, 헬스 체크 모듈과 `@phos/db` Prisma client(`7.5.0`)를 사용합니다.
 
 ## 환경 기준
 
-- Node.js: `22.13+` 또는 `24.x LTS` 권장
+- Node.js: `25.x` 권장 (Docker API 런타임 `node:25-alpine`, 로컬 실행은 `>=22`)
 - pnpm: 루트 `package.json`의 `packageManager` 기준(`10.32.1`)
-- 데이터베이스: PostgreSQL (`DATABASE_URL` 필요)
+- 데이터베이스: PostgreSQL (`docker-compose.yml` 기준 `postgres:18-alpine`, `DATABASE_URL` 필요)
 
 ## 시작하기
 
@@ -50,7 +50,7 @@ pnpm db:migrate:dev
 
 ## Prisma 메모
 
-- Prisma 7부터 DB 연결 설정은 `packages/db/prisma.config.ts`에서 읽습니다.
+- Prisma `7.5.0`부터 DB 연결 설정은 `packages/db/prisma.config.ts`에서 읽습니다.
 - `packages/db/prisma/schema.prisma`의 datasource 블록에는 provider만 유지합니다.
 - Prisma client 재생성은 루트에서 `pnpm db:generate`로 실행합니다.
 
