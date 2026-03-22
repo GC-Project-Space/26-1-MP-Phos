@@ -1,347 +1,146 @@
-# Test Scenarios: Phos MVP v1
+# 테스트 시나리오: Phos MVP v1
 
-**Date**: 2026-03-20  
-**Product**: Phos  
-**Document Type**: QA test scenarios  
-**Related Docs**: `docs/product/README.md`, `docs/product/PRD-Phos.md`, `docs/product/USER-STORIES-Phos.md`, `docs/product/WWA-Backlog-Phos.md`, `docs/product/API-SPEC-Phos.md`, `docs/product/EVENT-SCHEMA-Phos.md`  
-**Scope**: MVP v1, soft-launch hardening, fast-follow note
+**날짜**: 2026-03-20  
+**제품**: Phos  
+**문서 유형**: QA 테스트 시나리오  
+**관련 문서**: `docs/product/README.md`, `docs/product/PRD-Phos.md`, `docs/product/USER-STORIES-Phos.md`, `docs/product/WWA-Backlog-Phos.md`, `docs/product/API-SPEC-Phos.md`, `docs/product/EVENT-SCHEMA-Phos.md`  
+**범위**: MVP v1, 소프트 런치 안정화, 후속 우선순위 메모
 
 ---
 
-## 1) Test Plan Overview (Step 1)
+## 1) 테스트 계획 개요 (1단계)
 
 이 문서는 `Phos` MVP의 QA 실행 시나리오입니다.  
-목표는 happy path, failure path, privacy path를 모두 검증하는 것입니다.
+목표는 정상 흐름, 실패 흐름, 프라이버시 흐름을 모두 검증하는 것입니다.
 
 테스트 우선순위:
-- `P0`: 촬영, 렌더, 저장, 다운로드, privacy promise
+
+- `P0`: 촬영, 렌더, 저장, 다운로드, 프라이버시 약속
 - `P1`: 저사양 안정성, 중단 복구
-- `P2`: fast-follow 준비 항목
+- `P2`: 후속 우선순위 준비 항목
 
----
+## 2) MVP 테스트 시나리오 (2단계)
 
-## 2) MVP Test Scenarios (Step 2)
+### 테스트 시나리오 1. 세션 시작 및 카메라 준비
 
-### Test Scenario 1. Start session and ready camera
+**테스트 목적:** Live Booth 시작 시 세션이 생성되고 카메라가 사용 가능한 상태가 되는지 검증한다.
+**시작 조건:** 앱 설치됨 / 카메라 권한 허용 가능 / 네트워크 정상
+**사용자 역할:** 사용자
+**테스트 단계:** Live Booth 진입 -> 프레임 선택 -> 카메라 사용 가능 상태 확인 -> 실패 시 재시도 확인
+**기대 결과:** 익명 세션 생성, 프레임 연결, `session_started`/`camera_ready` 기록, 실패 시 멈춘 상태 대신 재시도 제공
 
-**Test Objective:** Live Booth 시작 시 세션이 생성되고 카메라가 usable 상태가 되는지 검증한다.
+### 테스트 시나리오 2. 카운트다운 기반 다중 촬영 완료
 
-**Starting Conditions:**
-- 앱이 설치되어 있다
-- 카메라 권한을 허용할 수 있다
-- 네트워크 상태는 정상이다
+**테스트 목적:** 카운트다운 기반 촬영이 선택한 프레임 타입에 맞춰 끝까지 완료되는지 검증한다.
+**시작 조건:** 활성 세션 존재 / 프레임 선택 완료
+**사용자 역할:** 사용자
+**테스트 단계:** 촬영 시작 -> 각 컷 전 카운트다운 확인 -> 모든 컷 수행 -> 검토 단계 이동 확인
+**기대 결과:** 각 컷 전 카운트다운 표시, 컷 수 일치, 각 컷 저장, `capture_completed` 기록
 
-**User Role:** 사용자
+### 테스트 시나리오 3. 메이킹 영상 실패 시에도 사진 흐름 계속 진행
 
-**Test Steps:**
-1. 앱에서 Live Booth 진입 버튼을 누른다
-2. 4컷 또는 6컷 프레임을 하나 선택한다
-3. 카메라 화면이 usable 상태가 되는지 확인한다
-4. 실패 시 retry 경로가 보이는지 확인한다
+**테스트 목적:** 메이킹 영상 기록 실패가 포토 스트립 흐름을 막지 않는지 검증한다.
+**시작 조건:** 활성 세션 존재 / 영상 기록 실패를 유도할 수 있는 환경
+**사용자 역할:** 사용자
+**테스트 단계:** Live Booth 시작 -> 메이킹 영상 실패 유도 -> 사진 컷 촬영 계속 가능 여부 확인 -> 안내 문구 확인
+**기대 결과:** 사진 흐름 계속 진행, 자산 분리 규칙 유지, `making_video_failed` 기록, 명확한 안내 표시
 
-**Expected Outcomes:**
-- 익명 session이 생성된다
-- 선택한 frame이 session에 연결된다
-- `session_started`, `camera_ready`가 기록된다
-- 카메라 준비 실패 시 frozen state 대신 retry가 보인다
+### 테스트 시나리오 4. 컷 검토 및 스트립 슬롯 순서 변경
 
-### Test Scenario 2. Complete countdown multi-shot capture
+**테스트 목적:** 사용자가 촬영 후 컷을 보고 순서를 바꿀 수 있는지 검증한다.
+**시작 조건:** 촬영 완료 세션 존재
+**사용자 역할:** 사용자
+**테스트 단계:** 검토 화면 진입 -> 전체 컷 확인 -> 스트립 슬롯 순서 변경 -> 렌더 단계 반영 여부 확인
+**기대 결과:** 전체 컷 노출, 순서 변경 가능, 저장된 순서 반영, 편집 없이 렌더 진행 가능
 
-**Test Objective:** countdown 기반 촬영이 선택한 frame type에 맞춰 끝까지 완료되는지 검증한다.
+### 테스트 시나리오 5. 간단한 사진 편집 적용
 
-**Starting Conditions:**
-- active session이 존재한다
-- frame이 선택되어 있다
+**테스트 목적:** MVP 범위의 빠른 편집만 적용되고, 실패 시 기존 선택 상태가 보존되는지 검증한다.
+**시작 조건:** 검토 가능한 세션 존재
+**사용자 역할:** 사용자
+**테스트 단계:** 프리셋 필터 적용 -> 텍스트 오버레이 1개 적용 -> 프레임 크롭 적용 -> 편집 실패 상황 유도
+**기대 결과:** MVP 범위 편집만 제공, 세션 상태 갱신, 편집은 선택 사항, 실패해도 컷/순서 보존
 
-**User Role:** 사용자
+### 테스트 시나리오 6. 재시도 가능한 최종 포토 스트립 렌더
 
-**Test Steps:**
-1. 촬영 시작 버튼을 누른다
-2. 각 shot 전 countdown을 확인한다
-3. 계획된 모든 shot이 끝날 때까지 촬영을 진행한다
-4. shot 목록이 review 단계로 넘어가는지 확인한다
+**테스트 목적:** 렌더 성공과 실패 재시도 흐름을 검증한다.
+**시작 조건:** 선택된 컷과 프레임이 준비된 세션 존재
+**사용자 역할:** 사용자
+**테스트 단계:** 렌더 시작 -> 성공 시 최종 포토 스트립 자산 확인 -> 실패 환경에서 재시작 -> 재시도 경로 확인
+**기대 결과:** 성공 시 최종 포토 스트립 자산 저장, `render_succeeded` 또는 실패 이벤트 기록, 재시도 제공, 결과가 저장/다운로드 흐름에 연결됨
 
-**Expected Outcomes:**
-- countdown이 각 shot 전에 표시된다
-- shot 수는 frame type과 일치한다
-- 각 shot은 active session asset으로 저장된다
-- `capture_completed`가 기록된다
+### 테스트 시나리오 7. QR 페이지에서 사진과 영상 다운로드
 
-### Test Scenario 3. Continue photo flow when making video fails
+**테스트 목적:** 계정 없이 QR 페이지에서 존재하는 자산을 개별 다운로드할 수 있는지 검증한다.
+**시작 조건:** 렌더 완료 세션 존재 / 활성 공유 링크 존재
+**사용자 역할:** 사용자
+**테스트 단계:** 공유 링크 생성 -> `url`로 QR 페이지 열기 -> 영상 존재 시 영상 다운로드 시도 -> 만료/사용 불가 메시지 확인
+**기대 결과:** `share_link_created`/`qr_opened` 기록, 개별 동작 제공, 계정 없이 다운로드 가능, 만료/사용 불가 안내 제공
 
-**Test Objective:** making video recording 실패가 photo strip flow를 막지 않는지 검증한다.
+### 테스트 시나리오 8. 최종 결과물 로컬 저장
 
-**Starting Conditions:**
-- active session이 있다
-- video recording failure를 유도할 수 있는 테스트 환경이 있다
+**테스트 목적:** 로컬 저장 시작, 성공, 실패 흐름과 이벤트 기록을 검증한다.
+**시작 조건:** 최종 결과물 화면 준비됨
+**사용자 역할:** 사용자
+**테스트 단계:** 로컬 저장 버튼 클릭 -> 성공 메시지 확인 -> 실패 환경 재시도 -> 세션 자산 무결성 확인
+**기대 결과:** `local_save_tapped` 기록, 성공 시 `local_save_succeeded` 기록, 실패 시 자산 무손상, QR 다운로드와 독립 동작
 
-**User Role:** 사용자
+### 테스트 시나리오 9. 서비스 이용 동의와 선택적 데이터 활용 동의 분리
 
-**Test Steps:**
-1. Live Booth 촬영을 시작한다
-2. making video failure 조건을 발생시킨다
-3. photo shot capture가 계속 가능한지 확인한다
-4. 사용자 안내 문구를 확인한다
+**테스트 목적:** 필수 서비스 이용 동의와 선택적 데이터 활용 동의가 분리 동작하는지 검증한다.
+**시작 조건:** 새 세션 시작 가능
+**사용자 역할:** 사용자
+**테스트 단계:** 동의 화면 열기 -> 필수 동의만 수락 -> 선택 동의 비활성 유지 -> 다음 단계 가능 여부 확인
+**기대 결과:** 필수/선택 분리 표시, `trainingOptIn` 기본 false, 필수 동의 없이는 진행 불가, 동의 스냅샷 저장
 
-**Expected Outcomes:**
-- video 실패 시에도 photo flow는 계속된다
-- making video는 final photo와 분리된 asset 처리 규칙을 따른다
-- `making_video_failed`가 기록된다
-- 사용자는 명확한 안내를 본다
+### 테스트 시나리오 10. 내보내기 및 삭제 요청
 
-### Test Scenario 4. Review shots and reorder strip slots
+**테스트 목적:** 내보내기/삭제 요청이 보관 규칙과 생명주기 규칙에 맞게 동작하는지 검증한다.
+**시작 조건:** 세션이 아직 `deleted`가 아님
+**사용자 역할:** 사용자
+**테스트 단계:** 내보내기 요청 생성 -> 내보내기 상태 확인 -> 삭제 요청 생성 -> 삭제 후 공유 링크 상태 확인
+**기대 결과:** 내보내기 요청은 `deleted` 이전에만 생성되고, 삭제 요청은 보관 기간 내에서만 생성되며, 완료 후 공유 링크가 무효화되고 관련 이벤트가 기록된다
 
-**Test Objective:** 사용자가 촬영 후 샷을 보고 순서를 바꿀 수 있는지 검증한다.
+### 테스트 시나리오 11. 최소 세션 API 계약 검증
 
-**Starting Conditions:**
-- capture가 완료된 session이 있다
+**테스트 목적:** MVP에 필요한 엔드포인트와 리소스 경로가 문서 계약대로 존재하는지 검증한다.
+**시작 조건:** API 테스트 환경 준비됨
+**사용자 역할:** QA / 백엔드 테스터
+**테스트 단계:** 세션 생성/조회/수정 호출 -> 프레임 목록/단건 조회 호출 -> 세션 범위 리소스 경로 확인 -> 문서에 없는 커스텀 메서드 유무 확인
+**기대 결과:** sessions/frames/세션 범위 리소스가 문서와 일치하고, 커스텀 메서드는 `:render`/`:finalize`만 존재하며, 사용자용 삭제는 `DeletionRequest`를 사용한다
 
-**User Role:** 사용자
+### 테스트 시나리오 12. 보관 및 프라이버시 메타데이터 강제
 
-**Test Steps:**
-1. review 화면에 진입한다
-2. 각 shot이 모두 보이는지 확인한다
-3. 샷의 slot 배치 순서를 바꾼다
-4. render 단계로 이동한 뒤 반영 여부를 확인한다
+**테스트 목적:** 48시간 보관, 메타데이터 포함, PII 미기록, 동의 불변조건을 검증한다.
+**시작 조건:** 세션 생성 및 만료 시뮬레이션 가능
+**사용자 역할:** QA / 프라이버시 테스터
+**테스트 단계:** 새 세션 생성 및 `retentionExpiresAt` 확인 -> 공유 링크 만료 검증 -> 만료 후 자산 접근 시도 -> 응답 메타데이터와 로그 확인
+**기대 결과:** 모든 세션이 `createdAt + 48h` 보관 기간을 보유하고, 만료 후 `deleted` 상태가 되며, 프라이버시 메타데이터를 포함하고, 원본 자산 URL/직접 PII를 저장하지 않으며, `trainingUsed=true`는 유효한 동의 스냅샷이 있을 때만 허용된다
 
-**Expected Outcomes:**
-- 모든 shot이 review 화면에 보인다
-- 순서 변경이 가능하다
-- 저장된 순서가 render state에 반영된다
-- 편집 없이도 render로 진행 가능하다
+### 테스트 시나리오 13. 저사양 프리셋 자동 적용
 
-### Test Scenario 5. Apply simple photo edits
+**테스트 목적:** 저사양 기기에서 저사양 프리셋이 자동 적용되어 촬영/영상 흐름이 유지되는지 검증한다.
+**시작 조건:** 저사양 기기 또는 동등한 시뮬레이션 환경
+**사용자 역할:** 사용자 / QA
+**테스트 단계:** 저사양 기기에서 Live Booth 시작 -> 프리셋 선택 결과 확인 -> 다중 컷 촬영 진행 -> 메이킹 영상 기록 동작 확인
+**기대 결과:** 기본 프리셋 또는 저사양 프리셋 자동 선택, 해상도 또는 처리 부하 감소, 수동 기술 설정 없이 완료, 선택 프리셋 저장
 
-**Test Objective:** MVP 범위의 빠른 편집만 적용되고, 실패 시 기존 선택 상태가 보존되는지 검증한다.
+## 3) 소프트 런치 안정화 시나리오 (3단계)
 
-**Starting Conditions:**
-- review 가능한 session이 있다
+### 테스트 시나리오 14. 짧은 중단 후 미완료 세션 복구
 
-**User Role:** 사용자
+**테스트 목적:** 짧은 중단 후 미완료 세션 복구가 안정적으로 동작하는지 검증한다.
+**시작 조건:** `finalize` 전 활성 세션 존재
+**사용자 역할:** 사용자
+**테스트 단계:** 촬영/검토 도중 백그라운드 전환 -> 짧은 시간 내 복귀 -> 복구 성공/실패 경로 확인
+**기대 결과:** 성공 시 미완료 세션 상태로 복귀하고, 실패 시 새 세션 안내가 표시되며, finalized 세션은 손상되지 않음
 
-**Test Steps:**
-1. preset filter를 적용한다
-2. one text overlay를 적용한다
-3. crop-to-frame을 적용한다
-4. edit 실패 상황을 유도해 기존 상태 보존 여부를 확인한다
+## 4) 후속 우선순위 시나리오 (4단계)
 
-**Expected Outcomes:**
-- MVP 범위의 edit만 제공된다
-- 각 edit는 render용 session state를 갱신한다
-- edit는 optional이다
-- 실패해도 captured shots와 shot order는 보존된다
+### 테스트 시나리오 15. 기존 사진으로 스트립 편집
 
-### Test Scenario 6. Render final photo strip with retry
-
-**Test Objective:** render 성공과 실패 재시도 흐름을 검증한다.
-
-**Starting Conditions:**
-- selected shots와 frame이 준비된 session이 있다
-
-**User Role:** 사용자
-
-**Test Steps:**
-1. render를 시작한다
-2. 성공 시 final photo asset 생성 여부를 확인한다
-3. 실패 환경에서 render를 다시 시작한다
-4. retry path가 보이는지 확인한다
-
-**Expected Outcomes:**
-- render 성공 시 final photo asset이 session에 저장된다
-- `render_succeeded` 또는 failure event가 기록된다
-- 실패 시 retry path가 보인다
-- render 결과는 save/download flow에 연결된다
-
-### Test Scenario 7. Download photo and video from QR page
-
-**Test Objective:** account 없이 QR page에서 존재하는 asset을 개별 다운로드할 수 있는지 검증한다.
-
-**Starting Conditions:**
-- rendered session이 있다
-- active share link가 있다
-
-**User Role:** 사용자
-
-**Test Steps:**
-1. rendered session에서 share link를 생성한다
-2. 반환된 `url`로 QR page를 연다
-3. video asset이 존재하면 video download도 시도한다
-4. asset expiry 또는 unavailable 상태에서 메시지를 확인한다
-
-**Expected Outcomes:**
-- `share_link_created`, `qr_opened`가 기록된다
-- page는 존재하는 asset에 대해서만 개별 action을 제공한다
-- account 없이 download가 가능하다
-- expired/unavailable asset은 broken state 대신 명확한 안내를 보여준다
-
-### Test Scenario 8. Save final assets locally
-
-**Test Objective:** local save 시작, 성공, 실패 흐름과 event 기록을 검증한다.
-
-**Starting Conditions:**
-- final result 화면이 준비되어 있다
-
-**User Role:** 사용자
-
-**Test Steps:**
-1. local save 버튼을 누른다
-2. 성공 시 저장 완료 메시지를 확인한다
-3. 실패 환경에서 다시 시도한다
-4. session asset integrity를 확인한다
-
-**Expected Outcomes:**
-- `local_save_tapped`가 기록된다
-- 성공 시 `local_save_succeeded`가 기록된다
-- 실패 시 asset이 손상되지 않는다
-- local save는 QR download와 독립적으로 동작한다
-
-### Test Scenario 9. Separate service consent and data-use consent
-
-**Test Objective:** required service consent와 optional data-use consent가 분리되어 동작하는지 검증한다.
-
-**Starting Conditions:**
-- 새로운 session을 시작할 수 있다
-
-**User Role:** 사용자
-
-**Test Steps:**
-1. consent 화면을 연다
-2. required service consent만 수락해 본다
-3. optional data-use consent를 비활성 상태로 둔다
-4. 다음 단계로 진행 가능한지 확인한다
-
-**Expected Outcomes:**
-- required consent와 optional consent가 분리되어 보인다
-- `trainingOptIn` 기본값은 false다
-- required consent 없이는 다음 단계로 갈 수 없다
-- consent snapshot은 `consentVersion`과 함께 저장된다
-
-### Test Scenario 10. Request export and deletion
-
-**Test Objective:** export/deletion request가 retention rule과 lifecycle rule에 맞게 동작하는지 검증한다.
-
-**Starting Conditions:**
-- session이 아직 deleted가 아니다
-
-**User Role:** 사용자
-
-**Test Steps:**
-1. export request를 생성한다
-2. export status를 확인한다
-3. deletion request를 생성한다
-4. deletion confirmed 뒤 share link 상태를 확인한다
-
-**Expected Outcomes:**
-- export request는 deleted 이전에만 생성된다
-- deletion request는 retention window 안에서만 생성된다
-- deletion 완료 후 share links는 무효화된다
-- `export_requested`, `export_completed`, `deletion_requested`, `deletion_completed`가 기록된다
-
-### Test Scenario 11. Validate minimum session API contract
-
-**Test Objective:** MVP에서 필요한 endpoint와 resource path가 문서 계약대로 존재하는지 검증한다.
-
-**Starting Conditions:**
-- API test environment가 준비되어 있다
-
-**User Role:** QA / backend tester
-
-**Test Steps:**
-1. session create/get/patch endpoint를 호출한다
-2. frame list/get endpoint를 호출한다
-3. session-scoped resource path들을 확인한다
-4. undocumented custom method가 없는지 확인한다
-
-**Expected Outcomes:**
-- sessions, frames, scoped resources가 문서 계약과 일치한다
-- custom method는 `:render`, `:finalize`만 존재한다
-- user-facing deletion은 `DeletionRequest` 경로를 사용한다
-
-### Test Scenario 12. Enforce retention and privacy metadata
-
-**Test Objective:** 48시간 retention, metadata inclusion, no-PII logging, consent invariant를 검증한다.
-
-**Starting Conditions:**
-- session 생성 및 expiry simulation이 가능하다
-
-**User Role:** QA / privacy tester
-
-**Test Steps:**
-1. new session을 생성하고 `retentionExpiresAt`를 확인한다
-2. share link expiry가 retention을 넘지 않는지 확인한다
-3. expiry 이후 asset access를 시도한다
-4. response metadata와 logs를 확인한다
-
-**Expected Outcomes:**
-- 모든 session은 `createdAt + 48h` retention을 가진다
-- expiry 후 session은 deleted 상태가 된다
-- relevant response는 privacy metadata를 포함한다
-- logs는 raw asset URL이나 직접 PII를 저장하지 않는다
-- `trainingUsed=true`는 유효한 consent snapshot이 있을 때만 허용된다
-
-### Test Scenario 13. Apply low-end preset automatically
-
-**Test Objective:** 저사양 기기에서 low-end preset이 자동 적용되어 capture/video flow가 유지되는지 검증한다.
-
-**Starting Conditions:**
-- low-end device 또는 equivalent simulation 환경이 있다
-
-**User Role:** 사용자 / QA
-
-**Test Steps:**
-1. low-end device에서 Live Booth를 시작한다
-2. preset 선택 결과를 확인한다
-3. multi-shot capture를 진행한다
-4. making video recording이 함께 동작하는지 확인한다
-
-**Expected Outcomes:**
-- app은 default 또는 low-end preset을 자동 선택한다
-- low-end preset은 resolution 또는 processing load를 줄인다
-- manual technical setting 없이 flow를 완료할 수 있다
-- 선택된 preset은 session과 함께 저장된다
-
----
-
-## 3) Soft-Launch Hardening Scenario (Step 3)
-
-### Test Scenario 14. Recover unfinished session after short interruption
-
-**Test Objective:** 짧은 interruption 후 unfinished session recovery가 안정적으로 동작하는지 검증한다.
-
-**Starting Conditions:**
-- `finalize` 전 active session이 있다
-
-**User Role:** 사용자
-
-**Test Steps:**
-1. capture 또는 review 도중 앱을 background로 보낸다
-2. 짧은 시간 안에 앱으로 돌아온다
-3. recovery success/failure 경로를 각각 확인한다
-
-**Expected Outcomes:**
-- recovery 성공 시 unfinished state로 돌아간다
-- recovery 실패 시 새 session 시작 안내를 본다
-- finalized session은 corrupt 되지 않는다
-
----
-
-## 4) Fast-Follow Scenario (Step 4)
-
-### Test Scenario 15. Edit strip from existing photos
-
-**Test Objective:** fast-follow Album Edit에서 기존 사진 import와 기본 slot edit가 가능한지 검증한다.
-
-**Starting Conditions:**
-- fast-follow build 또는 feature flag가 켜져 있다
-
-**User Role:** 사용자
-
-**Test Steps:**
-1. 기존 사진을 frame slot에 가져온다
-2. replace, crop, rotate를 적용한다
-3. 저장 가능한 결과 상태를 확인한다
-
-**Expected Outcomes:**
-- 기존 사진 import가 가능하다
-- basic slot edit가 동작한다
-- 이 시나리오는 MVP release blocking 항목이 아니다
+**테스트 목적:** 후속 우선순위 Album Edit에서 기존 사진 가져오기와 기본 프레임 슬롯 편집이 가능한지 검증한다.
+**시작 조건:** 후속 우선순위 빌드 또는 기능 플래그 활성화
+**사용자 역할:** 사용자
+**테스트 단계:** 기존 사진을 프레임 슬롯에 가져오기 -> 교체/크롭/회전 적용 -> 저장 가능한 결과 상태 확인
+**기대 결과:** 기존 사진 가져오기 가능, 기본 프레임 슬롯 편집 동작, 이 시나리오는 MVP 출시 차단 항목이 아님

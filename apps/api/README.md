@@ -1,4 +1,4 @@
-# Phos API
+# Phos API 문서
 
 `apps/api`는 Phos 모노레포의 NestJS 11 기반 백엔드 앱입니다. 세션, 프레임, 헬스 체크 모듈과 `@phos/db` Prisma client를 사용합니다.
 
@@ -6,7 +6,7 @@
 
 - Node.js: `22.13+` 또는 `24.x LTS` 권장
 - pnpm: 루트 `package.json`의 `packageManager` 기준(`10.32.1`)
-- Database: PostgreSQL (`DATABASE_URL` 필요)
+- 데이터베이스: PostgreSQL (`DATABASE_URL` 필요)
 
 ## 시작하기
 
@@ -29,17 +29,17 @@ cp packages/db/.env.example packages/db/.env
 로컬 DB/API 스택을 Docker로 올리거나, API만 단독 실행할 수 있습니다.
 
 ```bash
-# repo root
+# 레포 루트
 pnpm docker:up
 
-# 별도 터미널에서 API만 watch mode 실행
+# 별도 터미널에서 API만 감시 모드로 실행
 pnpm dev:api
 ```
 
 ## 주요 명령어
 
 ```bash
-# repo root
+# 레포 루트
 pnpm dev:api
 pnpm --filter api build
 pnpm --filter api test
