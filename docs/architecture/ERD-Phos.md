@@ -41,15 +41,15 @@ erDiagram
 
 ### `Frame`
 
-Frame catalog item available to sessions.
+세션에서 사용할 수 있는 프레임 카탈로그 항목.
 
 Properties as follows:
 
-- `frameId`: Stable frame identifier.
-- `layoutType`: Layout variant exposed to clients.
-- `title`: Human-friendly frame title.
-- `slotCount`: Number of capture slots available in the frame.
-- `isActive`: Whether the frame is currently selectable.
+- `frameId`: 변경되지 않는 프레임 식별자.
+- `layoutType`: 클라이언트에 노출되는 레이아웃 변형.
+- `title`: 사람이 읽기 쉬운 프레임 제목.
+- `slotCount`: 프레임에서 사용할 수 있는 촬영 슬롯 수.
+- `isActive`: 현재 선택 가능한 프레임인지 여부.
 
 ## SessionFlow
 
@@ -138,27 +138,27 @@ erDiagram
 
 ### `Session`
 
-Core anonymous session aggregate.
+익명 세션의 핵심 집계 모델.
 
 Properties as follows:
 
-- `sessionId`: Anonymous session identifier.
-- `mode`: Session mode for capture experience.
-- `status`: Session lifecycle status.
-- `selectedFrameId`: Selected frame identifier.
+- `sessionId`: 익명 세션 식별자.
+- `mode`: 촬영 경험에 사용되는 세션 모드.
+- `status`: 세션 생명주기 상태.
+- `selectedFrameId`: 선택한 프레임 식별자.
 - `selectedShotAssetIds`
-  > Legacy compatibility snapshot for the current API implementation.
-  > The ordered relational model should remain the source of truth.
-- `editState`: Flexible edit payload for lightweight editing.
-- `mediaPreset`: Media preset applied for device-tier optimization.
-- `finalPhotoAssetId`: Rendered final photo asset.
-- `makingVideoAssetId`: Recorded making video asset.
-- `retentionExpiresAt`: Retention deadline for privacy cleanup.
-- `trainingUsed`: Whether training data from this session has been used.
-- `consentVersion`: Latest active consent version snapshot.
-- `deletionStatus`: Privacy/deletion workflow state.
-- `createdAt`: Session creation timestamp.
-- `updatedAt`: Last mutation timestamp.
+  > 현재 API 구현과의 하위 호환을 위한 스냅샷.
+  > 순서가 있는 관계형 모델을 계속 최종 기준으로 삼아야 한다.
+- `editState`: 가벼운 편집을 위한 유연한 편집 페이로드.
+- `mediaPreset`: 디바이스 등급 최적화에 적용되는 미디어 프리셋.
+- `finalPhotoAssetId`: 렌더링된 최종 사진 에셋.
+- `makingVideoAssetId`: 기록된 메이킹 영상 에셋.
+- `retentionExpiresAt`: 프라이버시 정리를 위한 보관 만료 시각.
+- `trainingUsed`: 이 세션의 학습 데이터가 사용되었는지 여부.
+- `consentVersion`: 최신 활성 동의 버전 스냅샷.
+- `deletionStatus`: 프라이버시/삭제 워크플로 상태.
+- `createdAt`: 세션 생성 시각.
+- `updatedAt`: 마지막 변경 시각.
 
 ## MediaAssets
 
@@ -205,28 +205,28 @@ erDiagram
 
 ### `Asset`
 
-Media generated or uploaded within a session.
+세션 내에서 생성되거나 업로드된 미디어.
 
 Properties as follows:
 
-- `assetId`: Stable asset identifier.
-- `sessionId`: Owning session identifier.
-- `assetType`: Physical media kind.
-- `assetRole`: Functional role within the session flow.
-- `mimeType`: MIME type served to clients.
-- `status`: Availability status.
-- `durationMs`: Optional duration for video assets.
-- `createdAt`: Creation timestamp.
+- `assetId`: 변경되지 않는 에셋 식별자.
+- `sessionId`: 소유 세션 식별자.
+- `assetType`: 물리적 미디어 종류.
+- `assetRole`: 세션 흐름 내 기능적 역할.
+- `mimeType`: 클라이언트에 제공되는 MIME 타입.
+- `status`: 사용 가능 상태.
+- `durationMs`: 비디오 에셋의 선택적 재생 길이.
+- `createdAt`: 생성 시각.
 
 ### `SessionShotSelection`
 
-Snapshot of the ordered raw shots selected for rendering.
+렌더링용으로 선택된 원본 컷 순서 스냅샷.
 
 Properties as follows:
 
-- `sessionId`: Parent session identifier.
-- `assetId`: Selected raw shot asset identifier.
-- `position`: Zero-based render order.
+- `sessionId`: 상위 세션 식별자.
+- `assetId`: 선택된 원본 컷 에셋 식별자.
+- `position`: 0부터 시작하는 렌더 순서.
 
 ## PrivacyControls
 
@@ -270,28 +270,28 @@ erDiagram
 
 ### `Consent`
 
-Immutable consent snapshot for auditing privacy decisions.
+프라이버시 결정 감사를 위한 불변 동의 스냅샷.
 
 Properties as follows:
 
-- `consentId`: Consent snapshot identifier.
-- `sessionId`: Parent session identifier.
-- `serviceConsentAccepted`: Required service terms acceptance.
-- `trainingOptIn`: Optional model-training opt-in.
-- `consentVersion`: Consent version shown to the user.
-- `createdAt`: Snapshot creation time.
+- `consentId`: 동의 스냅샷 식별자.
+- `sessionId`: 상위 세션 식별자.
+- `serviceConsentAccepted`: 필수 서비스 약관 동의 여부.
+- `trainingOptIn`: 선택적 모델 학습 동의 여부.
+- `consentVersion`: 사용자에게 표시된 동의 버전.
+- `createdAt`: 스냅샷 생성 시각.
 
 ### `DeletionRequest`
 
-User-triggered request to delete the session and invalidate delivery artifacts.
+사용자가 세션 삭제와 전달 산출물 무효화를 요청한 기록.
 
 Properties as follows:
 
-- `requestId`: Deletion request identifier.
-- `sessionId`: Parent session identifier.
-- `status`: Deletion workflow status.
-- `createdAt`: Request creation time.
-- `completedAt`: Completion timestamp.
+- `requestId`: 삭제 요청 식별자.
+- `sessionId`: 상위 세션 식별자.
+- `status`: 삭제 워크플로 상태.
+- `createdAt`: 요청 생성 시각.
+- `completedAt`: 완료 시각.
 
 ## DeliveryLifecycle
 
@@ -335,25 +335,25 @@ erDiagram
 
 ### `ShareLink`
 
-Downloadable share link for rendered session outputs.
+렌더링된 세션 결과물을 내려받을 수 있는 공유 링크.
 
 Properties as follows:
 
-- `shareLinkId`: Share link identifier.
-- `sessionId`: Parent session identifier.
-- `status`: Link availability status.
-- `url`: Public URL served to end users.
-- `expiresAt`: Expiration timestamp constrained by session retention.
-- `createdAt`: Link creation time.
+- `shareLinkId`: 공유 링크 식별자.
+- `sessionId`: 상위 세션 식별자.
+- `status`: 링크 사용 가능 상태.
+- `url`: 최종 사용자에게 제공되는 공개 URL.
+- `expiresAt`: 세션 보관 정책에 따라 제한되는 만료 시각.
+- `createdAt`: 링크 생성 시각.
 
 ### `ExportRequest`
 
-Request to export the session before deletion.
+삭제 전에 세션을 내보내기 위한 요청.
 
 Properties as follows:
 
-- `exportRequestId`: Export request identifier.
-- `sessionId`: Parent session identifier.
-- `status`: Export workflow status.
-- `createdAt`: Request creation time.
-- `completedAt`: Completion timestamp.
+- `exportRequestId`: 내보내기 요청 식별자.
+- `sessionId`: 상위 세션 식별자.
+- `status`: 내보내기 워크플로 상태.
+- `createdAt`: 요청 생성 시각.
+- `completedAt`: 완료 시각.

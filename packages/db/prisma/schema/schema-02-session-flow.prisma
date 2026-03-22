@@ -16,7 +16,7 @@ enum DeletionStatus {
   deleted
 }
 
-/// Core anonymous session aggregate.
+/// 익명 세션의 핵심 집계 모델.
 ///
 /// @namespace SessionFlow
 /// @erd FrameCatalog
@@ -24,77 +24,77 @@ enum DeletionStatus {
 /// @erd PrivacyControls
 /// @erd DeliveryLifecycle
 model Session {
-  /// Anonymous session identifier.
+  /// 익명 세션 식별자.
   sessionId String @id
 
-  /// Session mode for capture experience.
+  /// 촬영 경험에 사용되는 세션 모드.
   mode SessionMode
 
-  /// Session lifecycle status.
+  /// 세션 생명주기 상태.
   status SessionStatus @default(active)
 
-  /// Selected frame identifier.
+  /// 선택한 프레임 식별자.
   selectedFrameId String
 
-  /// Selected frame relation.
+  /// 선택한 프레임 관계.
   selectedFrame Frame @relation(fields: [selectedFrameId], references: [frameId], onDelete: Restrict, onUpdate: Cascade)
 
-  /// Legacy compatibility snapshot for the current API implementation.
-  /// The ordered relational model should remain the source of truth.
+  /// 현재 API 구현과의 하위 호환을 위한 스냅샷.
+  /// 순서가 있는 관계형 모델을 계속 최종 기준으로 삼아야 한다.
   selectedShotAssetIds String[]
 
-  /// Render input ordering for chosen raw shots.
+  /// 선택한 원본 컷의 렌더 입력 순서.
   selectedShots SessionShotSelection[]
 
-  /// Flexible edit payload for lightweight editing.
+  /// 가벼운 편집을 위한 유연한 편집 페이로드.
   editState Json
 
-  /// Media preset applied for device-tier optimization.
+  /// 디바이스 등급 최적화에 적용되는 미디어 프리셋.
   mediaPreset String @default("default")
 
-  /// Rendered final photo asset.
+  /// 렌더링된 최종 사진 에셋.
   finalPhotoAssetId String? @unique
 
-  /// Relation to rendered final photo asset.
+  /// 렌더링된 최종 사진 에셋과의 관계.
   finalPhotoAsset Asset? @relation("FinalPhotoAsset", fields: [finalPhotoAssetId], references: [assetId], onDelete: SetNull, onUpdate: Cascade)
 
-  /// Recorded making video asset.
+  /// 기록된 메이킹 영상 에셋.
   makingVideoAssetId String? @unique
 
-  /// Relation to captured making video asset.
+  /// 촬영된 메이킹 영상 에셋과의 관계.
   makingVideoAsset Asset? @relation("MakingVideoAsset", fields: [makingVideoAssetId], references: [assetId], onDelete: SetNull, onUpdate: Cascade)
 
-  /// Retention deadline for privacy cleanup.
+  /// 프라이버시 정리를 위한 보관 만료 시각.
   retentionExpiresAt DateTime
 
-  /// Whether training data from this session has been used.
+  /// 이 세션의 학습 데이터가 사용되었는지 여부.
   trainingUsed Boolean @default(false)
 
-  /// Latest active consent version snapshot.
+  /// 최신 활성 동의 버전 스냅샷.
   consentVersion String?
 
-  /// Privacy/deletion workflow state.
+  /// 프라이버시/삭제 워크플로 상태.
   deletionStatus DeletionStatus @default(active)
 
-  /// Session creation timestamp.
+  /// 세션 생성 시각.
   createdAt DateTime @default(now())
 
-  /// Last mutation timestamp.
+  /// 마지막 변경 시각.
   updatedAt DateTime @updatedAt
 
-  /// Assets owned by the session.
+  /// 세션이 소유한 에셋.
   assets Asset[]
 
-  /// Consent snapshots tied to the session.
+  /// 세션에 연결된 동의 스냅샷.
   consents Consent[]
 
-  /// Share links issued for the session.
+  /// 세션에 발급된 공유 링크.
   shareLinks ShareLink[]
 
-  /// Export requests for the session.
+  /// 세션의 내보내기 요청.
   exportRequests ExportRequest[]
 
-  /// Deletion requests for the session.
+  /// 세션의 삭제 요청.
   deletionRequests DeletionRequest[]
 
   @@index([selectedFrameId])
