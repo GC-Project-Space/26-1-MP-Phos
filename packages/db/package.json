@@ -11,8 +11,9 @@
     }
   },
   "scripts": {
-    "build": "prisma generate",
-    "db:generate": "prisma generate",
+    "build": "prisma generate --generator client",
+    "db:generate": "prisma generate --generator client",
+    "db:erd": "prisma generate --generator markdown",
     "db:migrate:dev": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "dotenv": "^17.3.1",
-    "prisma": "^7.5.0"
+    "prisma": "^7.5.0",
+    "prisma-markdown": "^4.0.0"
   }
 }

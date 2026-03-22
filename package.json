@@ -7,6 +7,7 @@
     "dev:mobile": "pnpm --filter mobile start",
     "dev:api": "pnpm --filter api start:dev",
     "db:generate": "pnpm --filter @phos/db db:generate",
+    "db:erd": "pnpm --filter @phos/db db:erd",
     "db:migrate:dev": "pnpm --filter @phos/db db:migrate:dev",
     "db:push": "pnpm --filter @phos/db db:push",
     "db:studio": "pnpm --filter @phos/db db:studio",
