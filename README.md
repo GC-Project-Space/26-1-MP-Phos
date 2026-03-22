@@ -1,13 +1,13 @@
-# Phos Monorepo
+# Phos 모노레포
 
 Phos는 재미 중심의 모바일 인생네컷 포토부스 제품을 만들기 위한 모노레포입니다.
 
 ## 제품 요약
 
 - **제품 정의**: 촬영, 간단 편집, 저장, 공유까지 한 흐름에서 끝내는 모바일 포토부스 앱입니다.
-- **MVP 핵심 모드**: `Live Booth` 중심으로, 최종 사진과 메이킹 영상을 함께 결과물로 제공합니다.
+- **MVP 핵심 모드**: `Live Booth` 중심으로, 최종 포토 스트립과 메이킹 영상을 함께 결과물로 제공합니다.
 - **목표 경험**: 가입 없이 시작하고, 약 2분 안에 결과물을 자기 기기에 확보할 수 있어야 합니다.
-- **차별점**: 사진 + 메이킹 영상 동시 제공, QR 기반 다운로드, 빠른 완주 경험, privacy-first 기본값.
+- **차별점**: 사진 + 메이킹 영상 동시 제공, QR 기반 다운로드, 빠른 완주 경험, 프라이버시 우선 기본값.
 - **프라이버시 원칙**: 익명 `sessionId` 기반 사용, `trainingOptIn=false` 기본값, 48시간 보관, 즉시 삭제/내보내기 지원.
 
 ## 제품 목표
@@ -16,7 +16,7 @@ Phos는 재미 중심의 모바일 인생네컷 포토부스 제품을 만들기
 - 공유 전환율: `>= 35%`
 - 다운로드 성공률: `>= 97%`
 - 세션 실패율: `< 3%`
-- North Star: `2-Minute Keepsake Secured Rate`
+- 노스스타 지표: `2-Minute Keepsake Secured Rate`
 
 ## MVP 사용자 흐름
 
@@ -27,7 +27,7 @@ Phos는 재미 중심의 모바일 인생네컷 포토부스 제품을 만들기
   -> 카운트다운 기반 연속 촬영
   -> 촬영 중 메이킹 영상 동시 기록
   -> 컷 선택 / 재배치 / 간단 편집
-  -> 최종 사진 렌더링
+  -> 최종 포토 스트립 렌더링
   -> QR 페이지에서 사진/영상 다운로드
   -> 필요 시 로컬 저장 / 삭제 요청 / 내보내기 요청
 ```
@@ -62,7 +62,7 @@ pnpm dev:mobile
 - **백엔드**: `apps/api` - NestJS 11, TypeScript, 멀티모듈 MVC 구조
 - **데이터베이스**: `packages/db` - Prisma 7 + PostgreSQL
 - **타입 검증**: 모바일은 `Valibot`, 백엔드는 `Typia`
-- **공유 패키지**: `packages/shared` 는 DTO/상수, `packages/backend-contracts` 는 Typia validator
+- **공유 패키지**: `packages/shared`는 DTO/상수, `packages/backend-contracts`는 Typia 검증기
 
 ## 의존성 업데이트 메모
 
@@ -78,24 +78,24 @@ pnpm dev:mobile
 - **[제품 문서 인덱스](docs/product/README.md)**: 제품 문서 읽는 순서와 각 문서 역할 안내
 - **[PRD](docs/product/PRD-Phos.md)**: MVP 목표, 핵심 기능, 범위
 - **[API 명세](docs/product/API-SPEC-Phos.md)**: 세션 중심 API 계약
-- **[유저 스토리](docs/product/USER-STORIES-Phos.md)**: 구현 단위 사용자 요구사항
-- **[Discovery Plan](docs/discovery/phos-discovery-plan.md)**: 초기 검증 질문과 실험 계획
-- **[Metrics Dashboard](docs/discovery/phos-metrics-dashboard.md)**: North Star 및 핵심 운영 지표
+- **[사용자 스토리](docs/product/USER-STORIES-Phos.md)**: 구현 단위 사용자 요구사항
+- **[디스커버리 계획](docs/discovery/phos-discovery-plan.md)**: 초기 검증 질문과 실험 계획
+- **[지표 대시보드](docs/discovery/phos-metrics-dashboard.md)**: 노스스타 및 핵심 운영 지표
 
 ## 워크스페이스 구조
 
 ```text
 apps/
-  api/                # NestJS backend
-  mobile/             # Expo React Native frontend
+  api/                # NestJS 백엔드
+  mobile/             # Expo React Native 프론트엔드
 packages/
-  backend-contracts/  # Typia-powered backend validators
-  db/                 # Prisma schema and client
-  shared/             # Shared DTOs and constants
+  backend-contracts/  # Typia 기반 백엔드 검증기
+  db/                 # Prisma 스키마와 클라이언트
+  shared/             # 공유 DTO와 상수
 docs/
-  architecture/       # Technical architecture docs
-  discovery/          # Product discovery and research
-  product/            # Product requirements and specs
+  architecture/       # 기술 아키텍처 문서
+  discovery/          # 제품 디스커버리와 리서치
+  product/            # 제품 요구사항과 명세
 ```
 
 ## 주요 명령어
@@ -108,7 +108,7 @@ docs/
 | `pnpm dev:api`        | API만 실행                       |
 | `pnpm docker:up`      | 로컬 Postgres + API Docker 실행  |
 | `pnpm docker:down`    | 로컬 Docker 서비스 종료          |
-| `pnpm db:generate`    | Prisma Client 생성               |
+| `pnpm db:generate`    | Prisma 클라이언트 생성           |
 | `pnpm db:migrate:dev` | Prisma 개발 마이그레이션 실행    |
 | `pnpm typecheck`      | 워크스페이스 전체 타입 점검      |
 | `pnpm lint`           | ESLint 실행                      |

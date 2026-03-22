@@ -1,249 +1,190 @@
-# Design System: Phos MVP v1
+# 디자인 시스템: Phos MVP v1
 
-**Date**: 2026-03-21  
-**Document Type**: Product design system baseline  
-**Scope**: Mobile MVP v1 visual and interaction system  
-**Source Docs**: `docs/product/UI-UX-REQUIREMENTS-Phos.md`, `docs/product/PRD-Phos.md`, `apps/mobile/src/shared/config/theme.ts`, `apps/mobile/src/shared/ui/InfoCard.tsx`
+**날짜**: 2026-03-21  
+**문서 유형**: 제품 디자인 시스템 기준선  
+**범위**: 모바일 MVP v1 시각/상호작용 시스템  
+**원본 문서**: `docs/product/UI-UX-REQUIREMENTS-Phos.md`, `docs/product/PRD-Phos.md`, `apps/mobile/src/shared/config/theme.ts`, `apps/mobile/src/shared/ui/InfoCard.tsx`
 
 ---
 
-## 1) System Purpose
+## 1) 시스템 목적
 
 이 문서는 Phos MVP 모바일 UI가 일관된 감도와 사용성을 유지하도록 하는 디자인 시스템 기준서입니다.
 
 현재 앱 코드에는 작은 색상 토큰과 카드 스타일만 존재하므로, 본 문서는 그 초기 구현을 기반으로 MVP에 필요한 시각/상호작용 규칙을 확장 정의합니다.
 
----
+## 2) 경험 방향
 
-## 2) Experience Direction
-
-### Visual thesis
+### 시각 테제
 
 `따뜻한 필름 톤 위에 빠른 촬영 흐름을 얹는, 가볍지만 신뢰감 있는 모바일 포토부스 인터페이스`
 
-### Content plan
+### 콘텐츠 계획
 
 - 시작: 브랜드와 핵심 행동을 바로 보여준다
 - 촬영: 현재 단계와 리듬을 분명하게 보여준다
 - 결과: 사진과 영상 결과물을 확실히 확보하게 한다
 - 신뢰: 보관/삭제/동의 상태를 숨기지 않는다
 
-### Interaction thesis
+### 상호작용 테제
 
 - 카운트다운과 진행률은 촬영 리듬을 만든다
-- 렌더/저장/다운로드 상태는 기다림의 불안을 줄이는 방향으로 움직인다
+- 렌더/저장/다운로드 상태는 기다림의 불안을 줄인다
 - 성공/실패/복구 피드백은 짧고 즉각적이어야 한다
 
----
+## 3) 디자인 원칙
 
-## 3) Design Principles
+1. **결과물 우선**: 화면은 기능보다 결과물 확보 흐름을 우선한다.
+2. **차분한 제어감**: 재미 중심 제품이어도 UI 크롬은 차분해야 한다.
+3. **하나의 주 행동 강조**: 각 화면에는 하나의 주 행동만 강조한다.
+4. **보이는 신뢰**: 데이터 보관/동의/삭제 상태를 숨기지 않는다.
+5. **프로토타입에서 제품까지의 연속성**: 현재 색/톤/카드 언어를 버리지 않고 확장한다.
 
-1. **Result-first**: 화면은 기능보다 결과물 확보 흐름을 우선한다.
-2. **Calm control**: 재미 중심 제품이어도 UI 크롬은 차분해야 한다.
-3. **Single dominant action**: 각 화면에는 하나의 주 행동만 강조한다.
-4. **Trust by visibility**: 데이터 보관/동의/삭제 상태를 숨기지 않는다.
-5. **Prototype to product continuity**: 현재의 색/톤/카드 언어를 버리지 않고 확장한다.
+## 4) 기초 요소
 
----
-
-## 4) Foundations
-
-## 4.1 Color Tokens
+### 4.1 색상 토큰
 
 현재 구현 토큰은 `apps/mobile/src/shared/config/theme.ts`에 정의되어 있습니다.
 
-| Token           | Value     | Usage                       |
-| --------------- | --------- | --------------------------- |
-| `background`    | `#f6f3ee` | 앱 기본 배경                |
-| `surface`       | `#fffdf9` | 주요 패널/컨테이너          |
-| `surfaceMuted`  | `#efe7db` | 목록 아이템, 보조 블록      |
-| `border`        | `#ded2c1` | 얇은 구분선과 패널 경계     |
-| `accent`        | `#a35f2b` | 강조 상태, primary emphasis |
-| `textPrimary`   | `#1f1711` | 주요 텍스트                 |
-| `textSecondary` | `#64564a` | 설명, 메타, 보조 라벨       |
+| 토큰            | 값        | 사용처                  |
+| --------------- | --------- | ----------------------- |
+| `background`    | `#f6f3ee` | 앱 기본 배경            |
+| `surface`       | `#fffdf9` | 주요 패널/컨테이너      |
+| `surfaceMuted`  | `#efe7db` | 목록 아이템, 보조 블록  |
+| `border`        | `#ded2c1` | 얇은 구분선과 패널 경계 |
+| `accent`        | `#a35f2b` | 강조 상태, 주요 강조    |
+| `textPrimary`   | `#1f1711` | 주요 텍스트             |
+| `textSecondary` | `#64564a` | 설명, 메타, 보조 라벨   |
 
-### Semantic usage rules
+### 의미 기반 사용 규칙
 
 - `accent`는 한 화면에서 한 가지 핵심 정보만 강조할 때 사용한다
-- destructive action은 추후 별도 red 계열 semantic token을 추가하되, 현재는 문서 단계에서 reserved로 둔다
+- 파괴적 액션은 추후 red 계열 의미 토큰을 추가하되 현재는 예약 상태로 둔다
 - 상태 구분을 색상 하나에만 의존하지 않는다
 
-## 4.2 Typography
+### 4.2 타이포그래피
 
-현재 코드 기준으로 자주 사용되는 스케일은 `12 / 13 / 15 / 16 / 18 / 28`입니다.
+현재 코드 기준 자주 쓰는 스케일은 `12 / 13 / 15 / 16 / 18 / 28`입니다.
 
-### Recommended type scale
+| 역할        | 크기 | 두께 | 사용처                          |
+| ----------- | ---- | ---- | ------------------------------- |
+| 디스플레이  | 28   | 800  | 시작 화면 핵심 타이틀           |
+| 대제목      | 24   | 700  | 주요 섹션 헤드라인              |
+| 중제목      | 18   | 700  | 카드/패널 타이틀                |
+| 본문 기본   | 15   | 400  | 본문 설명                       |
+| 본문 보조   | 13   | 400  | 메타 설명, 라벨                 |
+| 초소형 라벨 | 12   | 700  | 도입 라벨, 상태 배지, 상단 라벨 |
 
-| Role      | Size | Weight | Usage                   |
-| --------- | ---- | ------ | ----------------------- |
-| Display   | 28   | 800    | 시작 화면 핵심 타이틀   |
-| Heading L | 24   | 700    | 주요 섹션 헤드라인      |
-| Heading M | 18   | 700    | 카드/패널 타이틀        |
-| Body M    | 15   | 400    | 본문 설명               |
-| Body S    | 13   | 400    | 메타 설명, 라벨         |
-| Label XS  | 12   | 700    | kicker, badge, overline |
-
-### Typography rules
+### 타이포그래피 규칙
 
 - 한 화면에서 폰트 역할은 명확히 분리한다
-- 긴 설명 문장은 `Body M` 중심으로 유지한다
-- badge, status, kicker는 uppercase를 사용하더라도 남발하지 않는다
+- 긴 설명 문장은 `본문 기본` 중심으로 유지한다
+- 상태 배지나 도입 라벨은 대문자 스타일을 쓰더라도 남발하지 않는다
 
-## 4.3 Spacing
-
-현재 구현은 `4 / 10 / 12 / 16 / 18 / 20 / 24` 단위를 중심으로 구성됩니다.
-
-### Recommended spacing scale
+### 4.3 간격 체계
 
 - `4`: 미세 라벨 간격
 - `8`: 조밀한 수평 정렬
 - `12`: 리스트 아이템 내부 간격
 - `16`: 기본 섹션 간격
-- `20`: screen padding 기본값
-- `24`: 그룹 분리, hero/panel breathing room
+- `20`: 화면 패딩 기본값
+- `24`: 그룹 분리, 대표 영역/패널 여백
 - `32+`: 화면 전환 단위 분리
 
-## 4.4 Radius and Borders
+### 4.4 모서리 반경과 테두리
 
-| Token        | Current value | Usage                     |
-| ------------ | ------------- | ------------------------- |
-| Panel radius | `24`          | hero, info card           |
-| Item radius  | `18`          | list item, compact block  |
-| Border width | `1`           | panel, section separation |
+| 토큰        | 현재 값 | 사용처                   |
+| ----------- | ------- | ------------------------ |
+| 패널 반경   | `24`    | 대표 영역, 정보 카드     |
+| 아이템 반경 | `18`    | 목록 아이템, 조밀한 블록 |
+| 테두리 두께 | `1`     | 패널, 섹션 구분          |
 
-### Rules
+### 규칙
 
-- radius는 부드럽지만 과장되지 않게 유지한다
-- border는 구조를 설명할 때만 사용한다
+- 모서리 반경은 부드럽지만 과장되지 않게 유지한다
+- 테두리는 구조를 설명할 때만 사용한다
 - 그림자보다 색 대비와 간격으로 위계를 만든다
 
----
+## 5) 레이아웃 시스템
 
-## 5) Layout System
-
-## 5.1 App Shell
-
-- Safe area를 기본으로 한다
+- 안전 영역을 기본으로 한다
 - 화면 배경은 `background`를 사용한다
-- 세로 스크롤 화면에서는 핵심 CTA가 아래로 밀려 사라지지 않게 우선순위를 조정한다
-
-## 5.2 Screen Composition
-
 - 화면은 `header -> primary content -> action zone`의 3단 구조를 기본으로 한다
-- 홈/결과 화면에서는 상단 설명 영역과 하단 행동 영역을 명확히 분리한다
-- 촬영 화면에서는 카메라 프리뷰와 진행 정보가 시각적 중심이 된다
+- 홈/결과 화면은 설명 영역과 행동 영역을 명확히 분리한다
+- 촬영 화면은 카메라 프리뷰와 진행 정보가 시각 중심이 된다
+- `InfoCard` 패턴은 정보 패널의 기본형으로 사용한다
 
-## 5.3 Panel Usage
+## 6) 컴포넌트 스타일 규칙
 
-- 현재 코드의 `InfoCard` 패턴은 informational panel의 기본형으로 사용한다
-- 모든 영역을 카드로 감싸지 않는다
-- 실제 인터랙션이 없는 영역은 카드보다 plain layout이 우선이다
+### 버튼
 
----
+- 주 버튼: 한 화면에 하나만 강하게 강조하고 저장/촬영 시작/다음 단계 진입에 사용
+- 보조 버튼: 외곽선 또는 톤 다운된 표면 스타일로 건너뛰기/재시도/QR 다운로드 등에 사용
+- 3차 액션: 텍스트 버튼으로 설정/정책 상세/도움말 같은 저우선 액션에 사용
 
-## 6) Component Styling Rules
-
-## 6.1 Buttons
-
-### Primary button
-
-- 한 화면에 하나만 강하게 강조한다
-- `accent` 기반 채움 또는 강한 대비형 버튼을 사용한다
-- 저장, 촬영 시작, 다음 단계 진입에 사용한다
-
-### Secondary button
-
-- 외곽선 또는 toned surface 스타일
-- skip, retry, QR 받기 같은 보조 액션에 사용한다
-
-### Tertiary action
-
-- 텍스트 버튼
-- 설정, 정책 상세, 도움말 같은 저우선 행동에 사용한다
-
-## 6.2 Status Badge
+### 상태 배지
 
 - 짧은 상태 단어 중심으로 사용한다
-- `Ready`, `Paused`, `Saved`, `Recording failed`처럼 즉시 해석 가능해야 한다
-- badge만으로 상태를 전하지 말고 주변 컨텍스트를 함께 둔다
+- `준비됨`, `일시정지`, `저장됨`, `기록 실패`처럼 바로 이해할 수 있어야 한다
+- 배지만으로 상태를 전달하지 말고 주변 맥락을 함께 둔다
 
-## 6.3 Lists and Items
+### 목록과 아이템
 
-- 프레임 목록과 샷 목록은 스캔 가능한 리듬이 중요하다
-- 항목마다 주 정보와 보조 정보의 위계를 분명히 나눈다
-- selection state는 배경/테두리/아이콘 중 최소 두 가지로 구분한다
+- 프레임 목록과 컷 목록은 스캔 가능한 리듬이 중요하다
+- 주 정보와 보조 정보의 위계를 분명히 나눈다
+- 선택 상태는 배경/테두리/아이콘 중 최소 두 가지로 구분한다
 
----
+## 7) 모션과 피드백
 
-## 7) Motion and Feedback
-
-### Required motion patterns
-
-1. **Countdown motion**: 숫자 변화가 또렷하고 리듬감 있어야 한다
-2. **Progress transition**: 컷 완료마다 다음 단계로 넘어감을 분명히 보여준다
-3. **Result feedback**: 렌더/저장/다운로드 성공 상태를 짧은 전환으로 확인시킨다
-
-### Motion rules
-
-- 빠르고 짧아야 한다
-- 상태 전달이 목적이어야 한다
+- **카운트다운 모션**: 숫자 변화가 또렷하고 리듬감 있어야 한다
+- **진행 전환**: 컷 완료마다 다음 단계로 넘어감을 분명히 보여준다
+- **결과 피드백**: 렌더/저장/다운로드 성공 상태를 짧은 전환으로 확인시킨다
+- 빠르고 짧아야 하며, 상태 전달이 목적이어야 한다
 - 저사양 기기에서 끊기면 장식 모션을 먼저 줄인다
 
----
-
-## 8) Content System
-
-### Product copy style
+## 8) 콘텐츠 시스템
 
 - 짧은 문장
 - 행동 유도 중심
 - 기술 구현보다 사용자 행위 설명 우선
 
-### UI copy examples
+UI 카피 예시:
 
 - `4컷 프레임 선택`
 - `지금 촬영을 시작할게요`
 - `사진은 준비됐어요`
-- `영상 저장에 실패했어요. 사진은 계속 진행할 수 있어요`
+- `메이킹 영상 기록에 실패했어요. 사진은 계속 진행할 수 있어요`
 - `48시간 후 자동 삭제돼요`
 
----
+## 9) 신뢰, 프라이버시, 안전 패턴
 
-## 9) Trust, Privacy, and Safety Patterns
+- 서비스 이용 동의와 선택적 데이터 활용 동의는 체크 영역부터 분리한다
+- 보관 기간, 삭제, 내보내기 정보는 자주 묻는 질문 뒤가 아니라 흐름 안에서 보여준다
+- 삭제 액션은 강한 경고와 되돌릴 수 없음을 알리는 문구를 포함한다
+- 내보내기 / 삭제 요청 이후에는 현재 상태를 노출해야 한다
 
-- 필수 동의와 선택 동의는 체크 영역부터 분리한다
-- 보관 기간, 삭제, 내보내기 정보는 FAQ 뒤가 아니라 흐름 안에서 보여준다
-- deletion action은 강한 경고와 irreversible messaging을 포함한다
-- export / delete request 이후에는 현재 상태를 노출해야 한다
-
----
-
-## 10) Accessibility Baseline
+## 10) 접근성 기준선
 
 - 중요한 텍스트는 `textSecondary`만으로 오래 읽게 하지 않는다
-- 밝은 배경에서도 contrast가 유지되어야 한다
+- 밝은 배경에서도 대비가 유지되어야 한다
 - 버튼과 토글은 충분한 터치 영역을 가진다
 - 상태 변화는 텍스트, 아이콘, 위치 변화 등 복수 수단으로 전달한다
 
----
+## 11) 현재-미래 매핑
 
-## 11) Current-to-Future Mapping
+| 현재 코드 기준점       | 현재 역할           | 미래 시스템 역할                  |
+| ---------------------- | ------------------- | --------------------------------- |
+| `palette`              | 최소 색상 토큰      | 정식 의미 기반 색상 토대          |
+| `InfoCard`             | 정보 패널 공통형    | 패널 기본 단위                    |
+| `ExperienceOverview`   | 프레임 목록 샘플    | 프레임 선택 미리보기/목록 패턴    |
+| `SessionReadiness`     | 계약/상태 검증 샘플 | 세션 상태 카드 / 디버그 보조 도구 |
+| `BoothHomeScreen` hero | 소개형 스캐폴드     | 진입 화면 콘텐츠 블록             |
 
-| Current code anchor    | Current role        | Future system role                   |
-| ---------------------- | ------------------- | ------------------------------------ |
-| `palette`              | 최소 색상 토큰      | 정식 semantic color foundation       |
-| `InfoCard`             | 정보 패널 공통형    | panel primitive                      |
-| `ExperienceOverview`   | 프레임 목록 샘플    | Frame Selection preview/list pattern |
-| `SessionReadiness`     | 계약/상태 검증 샘플 | session status card / debug aid      |
-| `BoothHomeScreen` hero | 소개형 scaffold     | Entry screen content block           |
+## 12) 디자인 리뷰 체크리스트
 
----
-
-## 12) Design Review Checklist
-
-- 한 화면에 primary action이 하나만 또렷한가
+- 한 화면에 주 행동이 하나만 또렷한가
 - 촬영 화면에서 현재 컷/진행률/기록 상태가 동시에 읽히는가
 - 카드가 없어도 되는 영역을 카드로 감싸지 않았는가
-- privacy 정보가 보조 화면에만 숨지 않았는가
+- 프라이버시 정보가 보조 화면에만 숨지 않았는가
 - 성공/실패/만료/복구 상태가 각각 다른 시각 언어를 갖는가
 - 현재 토큰과 충돌 없이 확장 가능한가

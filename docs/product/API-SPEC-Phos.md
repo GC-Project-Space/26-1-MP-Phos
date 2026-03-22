@@ -1,19 +1,20 @@
-# API Spec: Phos MVP v1
+# API 명세: Phos MVP v1
 
-**Date**: 2026-03-20  
-**Product**: Phos  
-**Document Type**: API specification  
-**Related Docs**: `docs/product/README.md`, `docs/product/PRD-Phos.md`, `docs/product/USER-STORIES-Phos.md`, `docs/product/WWA-Backlog-Phos.md`  
-**Scope**: MVP v1 API contract only
+**날짜**: 2026-03-20  
+**제품**: Phos  
+**문서 유형**: API 명세  
+**관련 문서**: `docs/product/README.md`, `docs/product/PRD-Phos.md`, `docs/product/USER-STORIES-Phos.md`, `docs/product/WWA-Backlog-Phos.md`  
+**범위**: MVP v1 API 계약만 포함
 
 ---
 
-## 1) API Overview (Step 1)
+## 1) API 개요 (1단계)
 
 이 문서는 `Phos` MVP v1의 API 계약을 정의합니다.  
-원칙은 `session-centered`, `resource-oriented`, `standard methods first`, `custom only when needed` 입니다.
+원칙은 `세션 중심`, `리소스 지향`, `표준 메서드 우선`, `필요할 때만 커스텀 메서드 사용`입니다.
 
 핵심 리소스:
+
 - `Session`
 - `Asset`
 - `Frame`
@@ -22,37 +23,43 @@
 - `ExportRequest`
 - `DeletionRequest`
 
-핵심 custom method:
+핵심 커스텀 메서드:
+
 - `POST /v1/sessions/{sessionId}:render`
 - `POST /v1/sessions/{sessionId}:finalize`
 
 ---
 
-## 2) Common Rules (Step 2)
+## 2) 공통 규칙 (2단계)
 
-### Identity and privacy
+### 식별과 프라이버시
+
 - 사용자는 계정 없이 `sessionId` 기반 익명 세션으로 시작할 수 있다
 - 기본값은 `trainingOptIn=false`다
 - 모든 session은 생성 시 `retentionExpiresAt = createdAt + 48h`를 가진다
 - `shareLink.expiresAt <= retentionExpiresAt`를 항상 만족해야 한다
-- `trainingUsed=true`는 유효한 `consentVersion` snapshot이 있을 때만 허용된다
+- `trainingUsed=true`는 유효한 `consentVersion` 스냅샷이 있을 때만 허용된다
 
-### State transitions
+### 상태 전이
+
 - `session.status`: `active -> rendered -> finalized -> deleted`
 - `session.deletionStatus`: `active -> export_requested -> delete_requested -> deleted`
-- Only `POST /v1/sessions/{sessionId}:render`, `POST /v1/sessions/{sessionId}:finalize`, retention expiry, or deletion finalization may change `session.status`
-- Only export/deletion request flows may change `deletionStatus`
-- `shotCount` is derived from the selected frame's `slotCount`
+- `session.status`는 `POST /v1/sessions/{sessionId}:render`, `POST /v1/sessions/{sessionId}:finalize`, 보관 만료, 삭제 확정만 변경할 수 있다
+- `deletionStatus`는 내보내기/삭제 요청 흐름에서만 변경할 수 있다
+- `shotCount`는 선택한 프레임의 `slotCount`에서 파생된다
 
-### Response metadata
-Relevant response에는 아래 privacy metadata를 포함할 수 있다.
+### 응답 메타데이터
+
+관련 응답에는 아래 프라이버시 메타데이터가 포함될 수 있다.
+
 - `retentionExpiresAt`
 - `trainingUsed`
 - `consentVersion`
 - `deletionStatus`
 
-### Errors
-모든 endpoint는 최소한 아래 error shape를 지원한다.
+### 오류
+
+모든 엔드포인트는 최소한 아래 오류 응답 형태를 지원한다.
 
 ```json
 {
@@ -67,7 +74,8 @@ Relevant response에는 아래 privacy metadata를 포함할 수 있다.
 }
 ```
 
-권장 error codes:
+권장 오류 코드:
+
 - `INVALID_ARGUMENT`
 - `NOT_FOUND`
 - `FAILED_PRECONDITION`
@@ -79,7 +87,7 @@ Relevant response에는 아래 privacy metadata를 포함할 수 있다.
 
 ---
 
-## 3) Resource Model (Step 3)
+## 3) 리소스 모델 (3단계)
 
 ### Session
 
@@ -122,11 +130,13 @@ Relevant response에는 아래 privacy metadata를 포함할 수 있다.
 }
 ```
 
-Allowed `assetType` values:
+허용되는 `assetType` 값:
+
 - `photo`
 - `video`
 
-Allowed `assetRole` values:
+허용되는 `assetRole` 값:
+
 - `raw_shot`
 - `final_photo`
 - `making_video`
@@ -195,21 +205,24 @@ Allowed `assetRole` values:
 
 ---
 
-## 4) Endpoints (Step 4)
+## 4) 엔드포인트 (4단계)
 
 ### 4.1 Sessions
 
 #### `POST /v1/sessions`
-Create an anonymous session.
 
-Request:
+익명 세션을 생성한다.
+
+요청:
+
 ```json
 {
   "mode": "LIVE_BOOTH"
 }
 ```
 
-Response `201`:
+응답 `201`:
+
 ```json
 {
   "session": {
@@ -225,18 +238,22 @@ Response `201`:
 ```
 
 #### `GET /v1/sessions/{sessionId}`
-Get current session state.
+
+현재 세션 상태를 조회한다.
 
 #### `PATCH /v1/sessions/{sessionId}`
-Update mutable session state used by MVP.
 
-Allowed mutable fields:
+MVP에서 사용하는 변경 가능한 세션 상태를 갱신한다.
+
+허용되는 변경 필드:
+
 - `selectedFrameId`
 - `selectedShotAssetIds`
 - `mediaPreset`
 - `editState`
 
-Request example:
+요청 예시:
+
 ```json
 {
   "selectedFrameId": "frm_4cut_basic",
@@ -250,26 +267,32 @@ Request example:
 ```
 
 #### `DELETE /v1/sessions/{sessionId}`
-Internal lifecycle endpoint only. User-facing deletion must use `DeletionRequest`.
+
+내부 생명주기 전용 엔드포인트다. 사용자용 삭제는 반드시 `DeletionRequest`를 사용해야 한다.
 
 ### 4.2 Frames
 
 #### `GET /v1/frames`
-List active frames.
 
-Optional query params:
+활성 프레임 목록을 조회한다.
+
+선택 쿼리 파라미터:
+
 - `layoutType=4_cut|6_cut`
 - `active=true`
 
 #### `GET /v1/frames/{frameId}`
-Get frame details.
+
+프레임 상세를 조회한다.
 
 ### 4.3 Assets
 
 #### `POST /v1/sessions/{sessionId}/assets`
-Register a shot or video asset for the session.
 
-Request example:
+세션의 컷 이미지 또는 영상 자산을 등록한다.
+
+요청 예시:
+
 ```json
 {
   "assetType": "photo",
@@ -279,21 +302,26 @@ Request example:
 ```
 
 #### `GET /v1/sessions/{sessionId}/assets`
-List all assets for a session.
 
-Optional query params:
+세션의 전체 자산을 조회한다.
+
+선택 쿼리 파라미터:
+
 - `assetType=photo|video`
 - `assetRole=raw_shot|final_photo|making_video`
 
 #### `GET /v1/sessions/{sessionId}/assets/{assetId}`
-Get single asset metadata.
+
+단일 자산 메타데이터를 조회한다.
 
 ### 4.4 Consents
 
 #### `POST /v1/sessions/{sessionId}/consents`
-Create or update consent snapshot for the session.
 
-Request example:
+세션의 동의 스냅샷을 생성하거나 갱신한다.
+
+요청 예시:
+
 ```json
 {
   "serviceConsentAccepted": true,
@@ -303,29 +331,35 @@ Request example:
 ```
 
 #### `GET /v1/sessions/{sessionId}/consents`
-List consent snapshots for audit/debug.
+
+감사/디버그용 동의 스냅샷 목록을 조회한다.
 
 #### `GET /v1/sessions/{sessionId}/consents/{consentId}`
-Get single consent snapshot.
 
-### 4.5 Share links
+단일 동의 스냅샷을 조회한다.
+
+### 4.5 공유 링크
 
 #### `POST /v1/sessions/{sessionId}/shareLinks`
-Create share link for rendered outputs.
 
-Request example:
+렌더된 결과물을 위한 공유 링크를 생성한다.
+
+요청 예시:
+
 ```json
 {
   "expiresAt": "2026-03-21T12:00:00Z"
 }
 ```
 
-Validation:
-- reject if `expiresAt > retentionExpiresAt`
-- reject if session is `deleted`
-- reject if no rendered asset exists
+검증:
 
-Response `201`:
+- `expiresAt > retentionExpiresAt`이면 거부한다
+- 세션이 `deleted`이면 거부한다
+- 렌더된 자산이 없으면 거부한다
+
+응답 `201`:
+
 ```json
 {
   "shareLink": {
@@ -339,55 +373,68 @@ Response `201`:
 ```
 
 #### `GET /v1/sessions/{sessionId}/shareLinks`
-List share links.
+
+공유 링크 목록을 조회한다.
 
 #### `GET /v1/sessions/{sessionId}/shareLinks/{shareLinkId}`
-Get share link metadata.
 
-### 4.6 Export requests
+공유 링크 메타데이터를 조회한다.
+
+### 4.6 내보내기 요청
 
 #### `POST /v1/sessions/{sessionId}/exportRequests`
-Create export request.
 
-Validation:
-- reject if current time > `retentionExpiresAt`
-- reject if `deletionStatus = deleted`
+내보내기 요청을 생성한다.
+
+검증:
+
+- 현재 시간이 `retentionExpiresAt`를 넘으면 거부한다
+- `deletionStatus = deleted`이면 거부한다
 
 #### `GET /v1/sessions/{sessionId}/exportRequests`
-List export requests.
+
+내보내기 요청 목록을 조회한다.
 
 #### `GET /v1/sessions/{sessionId}/exportRequests/{exportRequestId}`
-Get export request status.
 
-### 4.7 Deletion requests
+내보내기 요청 상태를 조회한다.
+
+### 4.7 삭제 요청
 
 #### `POST /v1/sessions/{sessionId}/deletionRequests`
-Create deletion request.
 
-Validation:
-- reject if current time > `retentionExpiresAt`
-- reject if `deletionStatus = deleted`
-- when deletion becomes `completed` or `retentionExpiresAt` passes, set `session.status = deleted`, `deletionStatus = deleted`, invalidate all share links, and make assets unavailable
+삭제 요청을 생성한다.
+
+검증:
+
+- 현재 시간이 `retentionExpiresAt`를 넘으면 거부한다
+- `deletionStatus = deleted`이면 거부한다
+- 삭제가 `completed`가 되거나 `retentionExpiresAt`가 지나면 `session.status = deleted`, `deletionStatus = deleted`로 바꾸고, 모든 공유 링크를 무효화하며, 자산을 사용 불가 상태로 만든다
 
 #### `GET /v1/sessions/{sessionId}/deletionRequests`
-List deletion requests.
+
+삭제 요청 목록을 조회한다.
 
 #### `GET /v1/sessions/{sessionId}/deletionRequests/{requestId}`
-Get deletion request status.
 
-### 4.8 Custom methods
+삭제 요청 상태를 조회한다.
+
+### 4.8 커스텀 메서드
 
 #### `POST /v1/sessions/{sessionId}:render`
-Render final photo strip from current session state.
 
-Request example:
+현재 세션 상태에서 최종 포토 스트립을 렌더링한다.
+
+요청 예시:
+
 ```json
 {
   "selectedShotAssetIds": ["ast_1", "ast_2", "ast_3", "ast_4"]
 }
 ```
 
-Response example:
+응답 예시:
+
 ```json
 {
   "sessionId": "ses_123",
@@ -397,37 +444,39 @@ Response example:
 ```
 
 #### `POST /v1/sessions/{sessionId}:finalize`
-Mark session immutable for delivery flow.
 
-Validation:
-- require final photo asset
-- allow making video missing, but keep session finalizable with warning state
+전달 흐름을 위해 세션을 변경 불가 상태로 표시한다.
 
----
+검증:
 
-## 5) Endpoint-to-WWA Mapping (Step 5)
-
-| WWA Item | API Surface |
-|---|---|
-| Item 1 Start session and ready camera | `POST /v1/sessions`, `GET /v1/frames`, `PATCH /v1/sessions/{sessionId}` |
-| Item 2 Countdown multi-shot capture | `POST /v1/sessions/{sessionId}/assets`, `GET /v1/sessions/{sessionId}` |
-| Item 3 Making video recording | `POST /v1/sessions/{sessionId}/assets` |
-| Item 4 Review captured shots and set order | `PATCH /v1/sessions/{sessionId}` |
-| Item 5 Apply simple photo edits | `PATCH /v1/sessions/{sessionId}` |
-| Item 6 Render final photo strip | `POST /v1/sessions/{sessionId}:render` |
-| Item 7 Expose QR download page | `POST /v1/sessions/{sessionId}/shareLinks`, `GET /v1/sessions/{sessionId}/shareLinks/{shareLinkId}` |
-| Item 8 Save final assets locally | no new endpoint required; depends on session/asset metadata |
-| Item 9 Separate service consent and data-use consent | `POST /v1/sessions/{sessionId}/consents` |
-| Item 10 Support delete and export requests | `POST /v1/sessions/{sessionId}/exportRequests`, `POST /v1/sessions/{sessionId}/deletionRequests` |
-| Item 11a/11b API contracts | all above |
-| Item 12 Retention and metadata | all session/share/export/delete responses |
-| Item 13 Low-end preset | `PATCH /v1/sessions/{sessionId}` |
+- 최종 포토 스트립 자산이 필요하다
+- 메이킹 영상이 없어도 경고 상태와 함께 세션 `finalize`는 허용한다
 
 ---
 
-## 6) Non-Goals for MVP (Step 6)
+## 5) 엔드포인트-대-WWA 매핑 (5단계)
 
-- No authenticated user accounts
-- No public album listing API
-- No Album Edit API for existing photo upload flow
-- No advanced edit resources beyond session patch state
+| WWA 항목                                                     | API 표면                                                                                            |
+| ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| 항목 1 세션을 시작하고 카메라를 준비한다                     | `POST /v1/sessions`, `GET /v1/frames`, `PATCH /v1/sessions/{sessionId}`                             |
+| 항목 2 카운트다운 기반 다중 촬영을 진행한다                  | `POST /v1/sessions/{sessionId}/assets`, `GET /v1/sessions/{sessionId}`                              |
+| 항목 3 촬영 중 메이킹 영상을 기록한다                        | `POST /v1/sessions/{sessionId}/assets`                                                              |
+| 항목 4 촬영한 컷을 검토하고 순서를 정한다                    | `PATCH /v1/sessions/{sessionId}`                                                                    |
+| 항목 5 간단한 사진 편집을 적용한다                           | `PATCH /v1/sessions/{sessionId}`                                                                    |
+| 항목 6 최종 포토 스트립을 렌더링한다                         | `POST /v1/sessions/{sessionId}:render`                                                              |
+| 항목 7 QR 페이지를 제공한다                                  | `POST /v1/sessions/{sessionId}/shareLinks`, `GET /v1/sessions/{sessionId}/shareLinks/{shareLinkId}` |
+| 항목 8 최종 결과물을 로컬에 저장한다                         | 새 엔드포인트는 필요 없음; 세션/자산 메타데이터에 의존                                              |
+| 항목 9 서비스 이용 동의와 선택적 데이터 활용 동의를 분리한다 | `POST /v1/sessions/{sessionId}/consents`                                                            |
+| 항목 10 삭제 및 내보내기 요청을 지원한다                     | `POST /v1/sessions/{sessionId}/exportRequests`, `POST /v1/sessions/{sessionId}/deletionRequests`    |
+| 항목 11a/11b API 계약                                        | 위 전체                                                                                             |
+| 항목 12 보관 정책과 메타데이터                               | 모든 세션/공유/내보내기/삭제 응답                                                                   |
+| 항목 13 저사양 프리셋                                        | `PATCH /v1/sessions/{sessionId}`                                                                    |
+
+---
+
+## 6) MVP 비목표 (6단계)
+
+- 인증된 사용자 계정 없음
+- 공개 앨범 목록 API 없음
+- 기존 사진 업로드 흐름용 Album Edit API 없음
+- 세션 패치 상태를 넘는 고급 편집 리소스 없음

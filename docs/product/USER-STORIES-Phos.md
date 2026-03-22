@@ -1,268 +1,289 @@
-# User Stories: Phos MVP v1
+# 사용자 스토리: Phos MVP v1
 
-**Date**: 2026-03-20  
-**Product**: Phos  
-**Source Docs**: `docs/product/README.md`, `docs/product/PRD-Phos.md`, `docs/discovery/phos-discovery-plan.md`, `docs/discovery/phos-metrics-dashboard.md`  
-**Design**: TBD  
-**Scope**: MVP v1 only (Fast-follow stories are separated at the end)
+**날짜**: 2026-03-20  
+**제품**: Phos  
+**원본 문서**: `docs/product/README.md`, `docs/product/PRD-Phos.md`, `docs/discovery/phos-discovery-plan.md`, `docs/discovery/phos-metrics-dashboard.md`  
+**디자인**: TBD  
+**범위**: MVP v1만 포함 (후속 우선순위 스토리는 마지막에 분리)
 
 ---
 
-## 1) Story Set Overview (Step 1)
+## 1) 스토리 세트 개요 (1단계)
 
-이 문서는 `Phos` MVP v1 구현을 위한 user stories 모음입니다.  
-각 story는 한 스프린트 안에 끝낼 수 있는 크기로 나누었고, acceptance criteria는 테스트 가능한 문장으로 적었습니다.
+이 문서는 `Phos` MVP v1 구현을 위한 사용자 스토리 모음입니다.
+각 스토리는 한 스프린트 안에 끝낼 수 있는 크기로 나누었고, 인수 기준은 테스트 가능한 문장으로 적었습니다.
 
 주요 역할:
+
 - 사용자(촬영/저장/공유)
 - 운영 관점의 시스템(렌더/삭제/내보내기)
 
 ---
 
-## 2) MVP User Stories (Step 2)
+## 2) MVP 사용자 스토리 (2단계)
 
-### Story 1. Start Session, Select Frame, and Ready Camera
+### 스토리 1. 세션을 시작하고 프레임을 선택한 뒤 카메라를 준비한다
 
-**Description:** As a user, I want to start a session, choose a frame, and get to a ready camera quickly, so that I can begin shooting with minimal friction.
+**설명:** 사용자는 세션을 시작하고 프레임을 고른 뒤 카메라가 빠르게 준비되길 원한다. 그래야 최소한의 마찰로 촬영을 시작할 수 있다.
 
-**Design:** TBD
+**디자인:** TBD
 
-**Acceptance Criteria:**
-1. Starting Live Booth creates an anonymous session and records `session_started`.
-2. Before capture, the user can choose at least one 4-cut and one 6-cut frame.
-3. The selected frame is saved to the active session before the camera becomes usable.
-4. After frame selection, the camera becomes usable and the app records `camera_ready`.
-5. If camera preparation fails, the user sees a retry action and the saved frame remains attached to the session.
+**인수 기준:**
 
-### Story 2. Countdown Multi-Shot Capture
+1. Live Booth 시작 시 익명 세션이 생성되고 `session_started`가 기록된다.
+2. 촬영 전 사용자는 최소 1개의 4컷 프레임과 1개의 6컷 프레임 중에서 선택할 수 있다.
+3. 선택한 프레임은 카메라가 사용 가능해지기 전에 활성 세션에 저장된다.
+4. 프레임 선택 후 카메라가 사용 가능 상태가 되고 앱은 `camera_ready`를 기록한다.
+5. 카메라 준비에 실패하면 사용자는 재시도 액션을 보고, 저장된 프레임은 세션에 유지된다.
 
-**Description:** As a user, I want the app to guide me through countdown-based multi-shot capture, so that I can complete a photo strip easily.
+### 스토리 2. 카운트다운 기반 다중 촬영을 진행한다
 
-**Design:** TBD
+**설명:** 사용자는 앱이 카운트다운 기반 다중 촬영을 안내해 주길 원한다. 그래야 포토 스트립을 쉽게 완성할 수 있다.
 
-**Acceptance Criteria:**
-1. After capture starts, the app runs a countdown before each shot.
-2. The total shot count follows the selected frame type.
-3. Each captured image is stored as part of the active session.
-4. If capture is interrupted before completion, the system keeps the session in a recoverable or restartable state.
-5. The user can clearly tell which shot they are currently taking.
+**디자인:** TBD
 
-### Story 3. Making Video Recording During Capture
+**인수 기준:**
 
-**Description:** As a user, I want the app to record a making video while I take booth photos, so that I get a second keepsake from the same moment.
+1. 촬영 시작 후 앱은 각 컷 전에 카운트다운을 실행한다.
+2. 전체 컷 수는 선택한 프레임 타입을 따른다.
+3. 각 촬영 이미지는 활성 세션의 일부로 저장된다.
+4. 완료 전에 촬영이 중단되면 시스템은 세션을 복구 가능 또는 재시작 가능 상태로 유지한다.
+5. 사용자는 현재 몇 번째 컷을 찍고 있는지 명확히 알 수 있다.
 
-**Design:** TBD
+### 스토리 3. 촬영 중 메이킹 영상을 기록한다
 
-**Acceptance Criteria:**
-1. Making video recording starts together with the Live Booth capture flow.
-2. The making video is stored as a separate asset from the final photo strip.
-3. If video recording fails, the app still allows the photo flow to continue.
-4. The user is informed when the making video cannot be completed.
-5. The system can later link the making video to the same session as the final photo.
+**설명:** 사용자는 부스 사진을 찍는 동안 앱이 메이킹 영상을 함께 기록하길 원한다. 그래야 같은 순간에서 또 하나의 결과물을 얻을 수 있다.
 
-### Story 4. Shot Review and Order
+**디자인:** TBD
 
-**Description:** As a user, I want to review captured shots and set their order, so that I control the final strip before rendering.
+**인수 기준:**
 
-**Design:** TBD
+1. 메이킹 영상 기록은 Live Booth 촬영 흐름과 함께 시작된다.
+2. 메이킹 영상은 최종 포토 스트립과 별도의 결과물로 저장된다.
+3. 영상 기록이 실패해도 앱은 사진 흐름을 계속 진행할 수 있다.
+4. 메이킹 영상을 완료할 수 없을 때 사용자에게 안내가 제공된다.
+5. 시스템은 이후 메이킹 영상을 최종 포토 스트립과 같은 세션에 연결할 수 있다.
 
-**Acceptance Criteria:**
-1. After capture, the user sees every shot stored in the active session.
-2. The user can assign shots to strip slots and reorder them before rendering.
-3. The selected order is saved to the session state used for rendering.
-4. The user can proceed to render without using any edit tools.
-5. If the user leaves and returns before render, the last saved selection and order are restored.
+### 스토리 4. 촬영한 컷을 검토하고 순서를 정한다
 
-### Story 5. Simple Photo Edit
+**설명:** 사용자는 촬영한 컷을 검토하고 순서를 정하고 싶다. 그래야 렌더링 전에 최종 포토 스트립을 직접 제어할 수 있다.
 
-**Description:** As a user, I want a small set of quick edits, so that I can improve the strip without slowing down the flow.
+**디자인:** TBD
 
-**Design:** TBD
+**인수 기준:**
 
-**Acceptance Criteria:**
-1. The user can apply only the MVP edit actions: preset filter, one text overlay, and crop-to-frame.
-2. Each edit updates the session state used for rendering.
-3. Editing is optional and the user can skip directly to render.
-4. Advanced editing controls are not included.
-5. If an edit fails, the captured shots and saved order remain intact.
+1. 촬영 후 사용자는 활성 세션에 저장된 모든 컷을 본다.
+2. 사용자는 렌더링 전에 컷을 스트립 슬롯에 배치하고 순서를 바꿀 수 있다.
+3. 선택한 순서는 렌더링에 사용되는 세션 상태로 저장된다.
+4. 사용자는 편집 도구를 사용하지 않고도 렌더 단계로 진행할 수 있다.
+5. 렌더 전 사용자가 나갔다 돌아오면 마지막 저장 선택과 순서가 복원된다.
 
-### Story 6. Final Photo Strip Render
+### 스토리 5. 간단한 사진 편집을 적용한다
 
-**Description:** As a user, I want the app to generate my final photo strip from the selected shots and frame, so that I get a complete keepsake.
+**설명:** 사용자는 빠른 편집 몇 가지만 원한다. 그래야 흐름을 늦추지 않으면서 스트립 결과를 조금 더 다듬을 수 있다.
 
-**Design:** TBD
+**디자인:** TBD
 
-**Acceptance Criteria:**
-1. The system can trigger a render for the active session using the selected shots and chosen frame.
-2. The rendered output is saved as a final photo asset tied to the session.
-3. If rendering fails, the user sees a retry option.
-4. The render flow is measurable through a `render_succeeded` or failure event.
-5. The rendered result is available for local save and QR download after success.
+**인수 기준:**
 
-### Story 7. QR Download Page for Photo and Video
+1. 사용자는 MVP 편집 액션인 프리셋 필터, 텍스트 오버레이 1개, 프레임 크롭만 적용할 수 있다.
+2. 각 편집은 렌더링에 사용되는 세션 상태를 갱신한다.
+3. 편집은 선택 사항이며 사용자는 바로 렌더 단계로 넘어갈 수 있다.
+4. 고급 편집 제어는 포함하지 않는다.
+5. 편집에 실패해도 촬영된 컷과 저장된 순서는 유지된다.
 
-**Description:** As a user, I want a QR page where I can download my final photo and making video separately, so that I can keep or share each result easily.
+### 스토리 6. 최종 포토 스트립을 렌더링한다
 
-**Design:** TBD
+**설명:** 사용자는 선택한 컷과 프레임으로 최종 포토 스트립이 생성되길 원한다. 그래야 완성된 최종 결과물을 얻을 수 있다.
 
-**Acceptance Criteria:**
-1. After rendering is complete, the session can expose a QR download page.
-2. The QR page shows separate download actions for photo and video when both assets exist.
-3. The QR flow works without requiring account creation.
-4. The system records `qr_opened` when the QR page is accessed.
-5. Share link expiration never exceeds `retentionExpiresAt`.
-6. If an asset is expired or unavailable, the page shows a clear message instead of a broken state.
+**디자인:** TBD
 
-### Story 8. Local Save of Final Assets
+**인수 기준:**
 
-**Description:** As a user, I want to save my final result to my device, so that I can keep it even without reopening the share page.
+1. 시스템은 활성 세션에서 선택한 컷과 프레임으로 렌더를 시작할 수 있다.
+2. 렌더된 결과물은 세션에 연결된 최종 포토 스트립 결과물로 저장된다.
+3. 렌더링이 실패하면 사용자는 재시도 옵션을 본다.
+4. 렌더 흐름은 `render_succeeded` 또는 실패 이벤트로 계측 가능하다.
+5. 렌더 성공 후 결과물은 로컬 저장과 QR 다운로드에 사용할 수 있다.
 
-**Design:** TBD
+### 스토리 7. 사진과 영상을 위한 QR 페이지를 제공한다
 
-**Acceptance Criteria:**
-1. The user can start local save from the final result flow.
-2. The app confirms success or failure after the save attempt.
-3. The system records `local_save_tapped` and `local_save_succeeded` when applicable.
-4. A local save failure does not delete or corrupt the session assets.
-5. The save action works independently from QR download.
+**설명:** 사용자는 최종 포토 스트립과 메이킹 영상을 개별 다운로드할 수 있는 QR 페이지를 원한다. 그래야 두 자산을 쉽게 보관하거나 공유할 수 있다.
 
-### Story 9. Privacy Consent Separation
+**디자인:** TBD
 
-**Description:** As a user, I want service consent and data-use consent to be separate, so that I understand what is required and what is optional.
+**인수 기준:**
 
-**Design:** TBD
+1. 렌더 완료 후 세션은 QR 페이지를 노출할 수 있다.
+2. 두 자산이 모두 존재하면 QR 페이지는 사진과 영상에 대해 개별 다운로드 액션을 보여준다.
+3. QR 흐름은 계정 생성 없이 동작한다.
+4. QR 페이지에 접근하면 시스템은 `qr_opened`를 기록한다.
+5. 공유 링크 만료 시간은 `retentionExpiresAt`를 넘지 않는다.
+6. 자산이 만료되었거나 사용할 수 없으면 깨진 상태 대신 명확한 안내를 보여준다.
 
-**Acceptance Criteria:**
-1. The app shows service-use consent separately from optional data-use consent.
-2. `trainingOptIn` defaults to `false` for a new session.
-3. The system stores the consent state with `consentVersion` for the session.
-4. The user can proceed only when required service consent is accepted.
-5. Optional data-use consent is not pre-selected.
+### 스토리 8. 최종 결과물을 로컬에 저장한다
 
-### Story 10. Delete and Export Requests
+**설명:** 사용자는 최종 결과물을 로컬 저장하고 싶다. 그래야 QR 페이지를 다시 열지 않아도 결과물을 보관할 수 있다.
 
-**Description:** As a user, I want to request deletion or export of my session data, so that I stay in control of my content.
+**디자인:** TBD
 
-**Design:** TBD
+**인수 기준:**
 
-**Acceptance Criteria:**
-1. The user can trigger an export request for a session that is not yet deleted.
-2. The user can trigger a deletion request for a session that is still within its retention window.
-3. `exportRequest` can be created only before deletion is finalized.
-4. A deletion request invalidates the session's share links when deletion is confirmed.
-5. The session exposes `deletionStatus` so the system can show the current state.
-6. The system records `export_requested`, `export_completed`, `deletion_requested`, and `deletion_completed` as applicable.
+1. 사용자는 최종 결과 흐름에서 로컬 저장을 시작할 수 있다.
+2. 저장 시도 후 앱은 성공 또는 실패를 알려준다.
+3. 시스템은 필요할 때 `local_save_tapped`와 `local_save_succeeded`를 기록한다.
+4. 로컬 저장 실패가 세션 자산을 삭제하거나 손상시키지 않는다.
+5. 저장 액션은 QR 다운로드와 독립적으로 동작한다.
 
-### Story 11. MVP Session API Contract
+### 스토리 9. 프라이버시 동의를 분리한다
 
-**Description:** As a backend engineer, I want the minimum session-based API contract for capture, render, share, and privacy requests, so that client flows can ship against one stable MVP contract.
+**설명:** 사용자는 서비스 이용 동의와 선택적 데이터 활용 동의가 분리되길 원한다. 그래야 무엇이 필수이고 무엇이 선택인지 이해할 수 있다.
 
-**Design:** TBD
+**디자인:** TBD
 
-**Acceptance Criteria:**
-1. The API provides `POST /v1/sessions`, `GET /v1/sessions/{sessionId}`, and `PATCH /v1/sessions/{sessionId}`.
-2. The API provides `GET /v1/frames` and `GET /v1/frames/{frameId}`.
-3. The API provides session-scoped resource paths for `assets`, `consents`, `shareLinks`, `exportRequests`, and `deletionRequests` exactly as defined in the PRD.
-4. The only custom methods are `POST /v1/sessions/{sessionId}:render` and `POST /v1/sessions/{sessionId}:finalize`.
-5. User-facing deletion is requested through `DeletionRequest`; the MVP client flow does not rely on direct session deletion.
+**인수 기준:**
 
-### Story 12. Retention Enforcement and Privacy Metadata
+1. 앱은 서비스 이용 동의와 선택적 데이터 활용 동의를 분리해 보여준다.
+2. 새 세션에서 `trainingOptIn` 기본값은 `false`다.
+3. 시스템은 세션의 동의 상태를 `consentVersion`과 함께 저장한다.
+4. 사용자는 필수 서비스 이용 동의를 수락해야만 다음 단계로 진행할 수 있다.
+5. 선택적 데이터 활용 동의는 미리 선택되어 있지 않다.
 
-**Description:** As a system operator, I want each session to expire and delete automatically after 48 hours, so that Phos keeps its privacy promise without manual work.
+### 스토리 10. 삭제 및 내보내기 요청을 처리한다
 
-**Design:** TBD
+**설명:** 사용자는 세션 데이터에 대해 삭제 또는 내보내기 요청을 할 수 있길 원한다. 그래야 자신의 콘텐츠를 직접 통제할 수 있다.
 
-**Acceptance Criteria:**
-1. Each new session is assigned `retentionExpiresAt = createdAt + 48h`.
-2. `shareLink.expiresAt` is never later than `retentionExpiresAt`.
-3. When `retentionExpiresAt` passes, the session transitions to `deleted`, assets are no longer downloadable, and all share links are invalidated.
-4. Session-related responses include `retentionExpiresAt`, `trainingUsed`, `consentVersion`, and `deletionStatus` where relevant.
-5. Logs store `sessionId`, timestamp, action, `consentVersion`, and state changes, and do not store raw asset URLs or direct PII.
+**디자인:** TBD
 
-### Story 13. Low-End Media Preset in Live Booth
+**인수 기준:**
 
-**Description:** As a user on a low-end device, I want the app to switch to a lower media preset automatically, so that photo capture and making-video recording finish reliably.
+1. 사용자는 아직 삭제되지 않은 세션에 대해 내보내기 요청을 할 수 있다.
+2. 사용자는 보관 기간 안에 있는 세션에 대해 삭제 요청을 할 수 있다.
+3. `exportRequest`는 삭제가 확정되기 전에만 생성할 수 있다.
+4. 삭제 요청이 확정되면 해당 세션의 공유 링크가 무효화된다.
+5. 세션은 현재 상태를 보여주기 위해 `deletionStatus`를 노출한다.
+6. 시스템은 상황에 따라 `export_requested`, `export_completed`, `deletion_requested`, `deletion_completed`를 기록한다.
 
-**Design:** TBD
+### 스토리 11. MVP 세션 API 계약을 제공한다
 
-**Acceptance Criteria:**
-1. Before capture begins, the app selects either a default preset or a low-end preset based on a device capability check.
-2. The low-end preset reduces at least one of video resolution or frame-processing load for the session.
-3. The user does not need to choose technical settings manually.
-4. The selected preset is stored with the session for analysis.
-5. The preset is applied to both multi-shot capture and making-video recording.
+**설명:** 백엔드 엔지니어는 캡처, 렌더, 공유, 프라이버시 요청에 필요한 최소 세션 기반 API 계약을 원한다. 그래야 클라이언트 흐름이 하나의 안정된 MVP 계약 위에서 출시될 수 있다.
 
----
+**디자인:** TBD
 
-## 3) Soft-Launch Hardening Story (Step 3)
+**인수 기준:**
 
-### Story 14. Session Recovery After Short Interruption
+1. API는 `POST /v1/sessions`, `GET /v1/sessions/{sessionId}`, `PATCH /v1/sessions/{sessionId}`를 제공한다.
+2. API는 `GET /v1/frames`와 `GET /v1/frames/{frameId}`를 제공한다.
+3. API는 PRD에 정의된 그대로 `assets`, `consents`, `shareLinks`, `exportRequests`, `deletionRequests`의 세션 범위 리소스 경로를 제공한다.
+4. 커스텀 메서드는 `POST /v1/sessions/{sessionId}:render`와 `POST /v1/sessions/{sessionId}:finalize` 두 개뿐이다.
+5. 사용자용 삭제는 직접 세션 삭제가 아니라 `DeletionRequest`를 통해 요청한다.
 
-**Description:** As a user, I want the app to recover my unfinished session after a short interruption, so that I do not have to restart from zero.
+### 스토리 12. 보관 정책을 강제하고 프라이버시 메타데이터를 노출한다
 
-**Design:** TBD
+**설명:** 시스템 운영자는 각 세션이 48시간 후 자동 만료 및 삭제되길 원한다. 그래야 Phos가 수작업 없이 프라이버시 약속을 지킬 수 있다.
 
-**Acceptance Criteria:**
-1. If the app is backgrounded briefly before `finalize`, it can attempt session recovery on re-entry.
-2. If recovery succeeds, the user returns to the unfinished session state.
-3. If recovery fails, the app explains that the user must start a new session.
-4. This recovery flow is tracked as a soft-launch hardening item and not as a V1 release gate.
-5. Recovery behavior does not corrupt already rendered or finalized sessions.
+**디자인:** TBD
+
+**인수 기준:**
+
+1. 새 세션마다 `retentionExpiresAt = createdAt + 48h`가 부여된다.
+2. `shareLink.expiresAt`는 절대 `retentionExpiresAt`보다 늦지 않다.
+3. `retentionExpiresAt`가 지나면 세션은 `deleted`로 전이되고, 자산은 더 이상 다운로드할 수 없으며, 모든 공유 링크는 무효화된다.
+4. 세션 관련 응답은 관련 위치에서 `retentionExpiresAt`, `trainingUsed`, `consentVersion`, `deletionStatus`를 포함한다.
+5. 로그는 `sessionId`, 시각, 액션, `consentVersion`, 상태 변화만 저장하고, 원본 자산 URL이나 직접 PII는 저장하지 않는다.
+
+### 스토리 13. Live Booth에서 저사양 미디어 프리셋을 자동 적용한다
+
+**설명:** 저사양 기기 사용자는 앱이 자동으로 더 낮은 미디어 프리셋으로 전환되길 원한다. 그래야 사진 촬영과 메이킹 영상 기록이 안정적으로 완료된다.
+
+**디자인:** TBD
+
+**인수 기준:**
+
+1. 캡처 시작 전 앱은 기기 성능 점검을 기준으로 기본 프리셋 또는 저사양 프리셋 중 하나를 선택한다.
+2. 저사양 프리셋은 세션에서 비디오 해상도 또는 프레임 처리 부하 중 최소 하나를 낮춘다.
+3. 사용자는 기술 설정을 직접 고를 필요가 없다.
+4. 선택된 프리셋은 분석을 위해 세션과 함께 저장된다.
+5. 프리셋은 다중 촬영과 메이킹 영상 기록 양쪽에 모두 적용된다.
 
 ---
 
-## 4) Fast-Follow Story (Step 4)
+## 3) 소프트 런치 안정화 스토리 (3단계)
 
-### Story 15. Album Edit for Existing Photos
+### 스토리 14. 짧은 중단 후 세션을 복구한다
 
-**Description:** As a user, I want to place my existing photos into a Phos frame, so that I can create a strip even when I did not use Live Booth.
+**설명:** 사용자는 짧은 중단 후 미완료 세션이 복구되길 원한다. 그래야 처음부터 다시 시작하지 않아도 된다.
 
-**Design:** TBD
+**디자인:** TBD
 
-**Acceptance Criteria:**
-1. The user can import an existing photo into a frame slot.
-2. The user can do basic slot edits such as replace, crop, or rotate.
-3. This story is not required for MVP v1 release.
-4. The feature can be planned after the core Live Booth, privacy, and download flows are stable.
+**인수 기준:**
 
----
-
-## 5) Story Dependencies (Step 5)
-
-- Stories 1, 2, and 3 are the capture foundation for Stories 4, 5, 6, 7, and 8.
-- Story 6 depends on Stories 1, 2, 4, and optionally 5.
-- Story 7 depends on Story 6 and backend share-link support from Story 11.
-- Story 8 depends on Story 6.
-- Stories 9, 10, and 12 depend on the privacy and session model from Story 11.
-- Story 13 should ship together with Stories 2 and 3 as a stability layer.
-- Story 14 is soft-launch hardening and should not block V1 feature completion.
-- Story 15 is fast-follow and should stay out of MVP sprint commitments.
+1. 앱이 `finalize` 전에 잠시 백그라운드로 갔다가 다시 열리면 세션 복구를 시도할 수 있다.
+2. 복구에 성공하면 사용자는 미완료 세션 상태로 돌아간다.
+3. 복구에 실패하면 앱은 새 세션을 시작해야 한다고 안내한다.
+4. 이 복구 흐름은 소프트 런치 안정화 항목으로 추적하며 V1 출시 게이트에는 포함하지 않는다.
+5. 복구 동작이 이미 렌더링되었거나 finalized된 세션을 손상시키지 않는다.
 
 ---
 
-## 6) Suggested Delivery Order (Step 6)
+## 4) 후속 우선순위 스토리 (4단계)
 
-### Sprint 1 candidates
-- Story 1. Start Session, Select Frame, and Ready Camera
-- Story 2. Countdown Multi-Shot Capture
-- Story 11. MVP Session API Contract
+### 스토리 15. 기존 사진으로 Album Edit를 한다
 
-### Sprint 2 candidates
-- Story 3. Making Video Recording During Capture
-- Story 4. Shot Review and Order
-- Story 5. Simple Photo Edit
-- Story 6. Final Photo Strip Render
-- Story 13. Low-End Media Preset in Live Booth
+**설명:** 사용자는 기존 사진을 Phos 프레임에 넣고 싶다. 그래야 Live Booth를 사용하지 않았어도 스트립을 만들 수 있다.
 
-### Sprint 3 candidates
-- Story 7. QR Download Page for Photo and Video
-- Story 8. Local Save of Final Assets
-- Story 9. Privacy Consent Separation
-- Story 12. Retention Enforcement and Privacy Metadata
+**디자인:** TBD
 
-### Sprint 4 candidates
-- Story 10. Delete and Export Requests
-- Story 14. Session Recovery After Short Interruption
+**인수 기준:**
 
-### After MVP
-- Story 15. Album Edit for Existing Photos
+1. 사용자는 기존 사진을 프레임 슬롯에 가져올 수 있다.
+2. 사용자는 교체, 크롭, 회전 같은 기본 프레임 슬롯 편집을 할 수 있다.
+3. 이 스토리는 MVP v1 출시 필수 항목이 아니다.
+4. 기능은 핵심 Live Booth, 프라이버시, 다운로드 흐름이 안정된 뒤 계획할 수 있다.
+
+---
+
+## 5) 스토리 의존관계 (5단계)
+
+- 스토리 1, 2, 3은 스토리 4, 5, 6, 7, 8의 촬영 기반이다.
+- 스토리 6은 스토리 1, 2, 4와 선택적으로 스토리 5에 의존한다.
+- 스토리 7은 스토리 6과 스토리 11의 백엔드 share-link 지원에 의존한다.
+- 스토리 8은 스토리 6에 의존한다.
+- 스토리 9, 10, 12는 스토리 11의 프라이버시 및 세션 모델에 의존한다.
+- 스토리 13은 안정성 계층으로 스토리 2, 3과 함께 출시하는 것이 좋다.
+- 스토리 14는 소프트 런치 안정화 항목이며 V1 기능 완료를 막지 않아야 한다.
+- 스토리 15는 후속 우선순위 항목으로 MVP 스프린트 약속에서 제외해야 한다.
+
+---
+
+## 6) 권장 전달 순서 (6단계)
+
+### 스프린트 1 후보
+
+- 스토리 1. 세션을 시작하고 프레임을 선택한 뒤 카메라를 준비한다
+- 스토리 2. 카운트다운 기반 다중 촬영을 진행한다
+- 스토리 11. MVP 세션 API 계약을 제공한다
+
+### 스프린트 2 후보
+
+- 스토리 3. 촬영 중 메이킹 영상을 기록한다
+- 스토리 4. 촬영한 컷을 검토하고 순서를 정한다
+- 스토리 5. 간단한 사진 편집을 적용한다
+- 스토리 6. 최종 포토 스트립을 렌더링한다
+- 스토리 13. Live Booth에서 저사양 미디어 프리셋을 자동 적용한다
+
+### 스프린트 3 후보
+
+- 스토리 7. 사진과 영상을 위한 QR 페이지를 제공한다
+- 스토리 8. 최종 자산을 로컬에 저장한다
+- 스토리 9. 프라이버시 동의를 분리한다
+- 스토리 12. 보관 정책을 강제하고 프라이버시 메타데이터를 노출한다
+
+### 스프린트 4 후보
+
+- 스토리 10. 삭제 및 내보내기 요청을 처리한다
+- 스토리 14. 짧은 중단 후 세션을 복구한다
+
+### MVP 이후
+
+- 스토리 15. 기존 사진으로 Album Edit를 한다
