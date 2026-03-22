@@ -1,0 +1,27 @@
+enum FrameLayout {
+  FOUR_CUT @map("4_cut")
+  SIX_CUT  @map("6_cut")
+}
+
+/// Frame catalog item available to sessions.
+///
+/// @namespace FrameCatalog
+/// @erd SessionFlow
+model Frame {
+  /// Stable frame identifier.
+  frameId String @id
+
+  /// Layout variant exposed to clients.
+  layoutType FrameLayout
+
+  /// Human-friendly frame title.
+  title String
+
+  /// Number of capture slots available in the frame.
+  slotCount Int
+
+  /// Whether the frame is currently selectable.
+  isActive Boolean @default(true)
+
+  sessions Session[]
+}

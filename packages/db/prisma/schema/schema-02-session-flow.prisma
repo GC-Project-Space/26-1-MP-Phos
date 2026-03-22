@@ -1,0 +1,104 @@
+enum SessionMode {
+  LIVE_BOOTH
+}
+
+enum SessionStatus {
+  active
+  rendered
+  finalized
+  deleted
+}
+
+enum DeletionStatus {
+  active
+  export_requested
+  delete_requested
+  deleted
+}
+
+/// Core anonymous session aggregate.
+///
+/// @namespace SessionFlow
+/// @erd FrameCatalog
+/// @erd MediaAssets
+/// @erd PrivacyControls
+/// @erd DeliveryLifecycle
+model Session {
+  /// Anonymous session identifier.
+  sessionId String @id
+
+  /// Session mode for capture experience.
+  mode SessionMode
+
+  /// Session lifecycle status.
+  status SessionStatus @default(active)
+
+  /// Selected frame identifier.
+  selectedFrameId String
+
+  /// Selected frame relation.
+  selectedFrame Frame @relation(fields: [selectedFrameId], references: [frameId], onDelete: Restrict, onUpdate: Cascade)
+
+  /// Legacy compatibility snapshot for the current API implementation.
+  /// The ordered relational model should remain the source of truth.
+  selectedShotAssetIds String[]
+
+  /// Render input ordering for chosen raw shots.
+  selectedShots SessionShotSelection[]
+
+  /// Flexible edit payload for lightweight editing.
+  editState Json
+
+  /// Media preset applied for device-tier optimization.
+  mediaPreset String @default("default")
+
+  /// Rendered final photo asset.
+  finalPhotoAssetId String? @unique
+
+  /// Relation to rendered final photo asset.
+  finalPhotoAsset Asset? @relation("FinalPhotoAsset", fields: [finalPhotoAssetId], references: [assetId], onDelete: SetNull, onUpdate: Cascade)
+
+  /// Recorded making video asset.
+  makingVideoAssetId String? @unique
+
+  /// Relation to captured making video asset.
+  makingVideoAsset Asset? @relation("MakingVideoAsset", fields: [makingVideoAssetId], references: [assetId], onDelete: SetNull, onUpdate: Cascade)
+
+  /// Retention deadline for privacy cleanup.
+  retentionExpiresAt DateTime
+
+  /// Whether training data from this session has been used.
+  trainingUsed Boolean @default(false)
+
+  /// Latest active consent version snapshot.
+  consentVersion String?
+
+  /// Privacy/deletion workflow state.
+  deletionStatus DeletionStatus @default(active)
+
+  /// Session creation timestamp.
+  createdAt DateTime @default(now())
+
+  /// Last mutation timestamp.
+  updatedAt DateTime @updatedAt
+
+  /// Assets owned by the session.
+  assets Asset[]
+
+  /// Consent snapshots tied to the session.
+  consents Consent[]
+
+  /// Share links issued for the session.
+  shareLinks ShareLink[]
+
+  /// Export requests for the session.
+  exportRequests ExportRequest[]
+
+  /// Deletion requests for the session.
+  deletionRequests DeletionRequest[]
+
+  @@index([selectedFrameId])
+  @@index([status])
+  @@index([deletionStatus])
+  @@index([retentionExpiresAt])
+}
