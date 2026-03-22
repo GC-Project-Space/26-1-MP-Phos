@@ -51,7 +51,8 @@ Phos는 `pnpm` + `Turbo` 모노레포로 구성한 모바일 포토부스 제품
 
 - `@phos/shared`: 모바일과 API가 함께 사용하는 순수 TypeScript 인터페이스(DTO)와 상수를 담습니다.
 - `@phos/backend-contracts`: `@phos/shared`를 Typia decorator/function으로 감싸 백엔드 전용 검증을 제공합니다.
-- `@phos/db`: 중앙 Prisma 스키마, `prisma.config.ts`, 생성된 클라이언트를 제공합니다.
+- `@phos/db`: 도메인별 Prisma 스키마 디렉터리, `prisma.config.ts`, 생성된 클라이언트를 제공합니다.
+- `docs/architecture/ERD-Phos.md`: `packages/db/prisma/schema/`에서 `prisma-markdown`으로 생성한 ERD/모델 문서입니다.
 
 ### 백엔드 모듈 맵
 
@@ -86,6 +87,7 @@ Phos는 개발 경험과 성능을 함께 최적화하기 위해 "Validation Spl
 - `pnpm docker:up`: 로컬 Postgres와 API 컨테이너를 실행합니다.
 - `pnpm docker:down`: 로컬 Postgres와 API 컨테이너를 중지합니다.
 - `pnpm db:generate`: Prisma 클라이언트를 생성합니다.
+- `pnpm db:erd`: Prisma 스키마에서 Markdown ERD 문서를 다시 생성합니다.
 - `pnpm typecheck`: 워크스페이스 전체에서 TypeScript 컴파일러 검사를 실행합니다.
 - `pnpm lint`: ESLint를 실행합니다.
 - `pnpm test`: Turbo를 통해 전체 테스트를 실행합니다.
