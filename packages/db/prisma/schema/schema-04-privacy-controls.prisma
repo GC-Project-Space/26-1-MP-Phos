@@ -1,0 +1,56 @@
+/// Immutable consent snapshot for auditing privacy decisions.
+///
+/// @namespace PrivacyControls
+/// @erd SessionFlow
+model Consent {
+  /// Consent snapshot identifier.
+  consentId String @id
+
+  /// Parent session identifier.
+  sessionId String
+
+  /// Parent session relation.
+  session Session @relation(fields: [sessionId], references: [sessionId], onDelete: Cascade, onUpdate: Cascade)
+
+  /// Required service terms acceptance.
+  serviceConsentAccepted Boolean
+
+  /// Optional model-training opt-in.
+  trainingOptIn Boolean @default(false)
+
+  /// Consent version shown to the user.
+  consentVersion String
+
+  /// Snapshot creation time.
+  createdAt DateTime @default(now())
+
+  @@index([sessionId])
+  @@index([sessionId, consentVersion])
+}
+
+/// User-triggered request to delete the session and invalidate delivery artifacts.
+///
+/// @namespace PrivacyControls
+/// @erd SessionFlow
+model DeletionRequest {
+  /// Deletion request identifier.
+  requestId String @id
+
+  /// Parent session identifier.
+  sessionId String
+
+  /// Parent session relation.
+  session Session @relation(fields: [sessionId], references: [sessionId], onDelete: Cascade, onUpdate: Cascade)
+
+  /// Deletion workflow status.
+  status RequestStatus @default(requested)
+
+  /// Request creation time.
+  createdAt DateTime @default(now())
+
+  /// Completion timestamp.
+  completedAt DateTime?
+
+  @@index([sessionId])
+  @@index([status])
+}

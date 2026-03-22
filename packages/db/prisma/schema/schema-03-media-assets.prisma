@@ -1,0 +1,85 @@
+enum AssetType {
+  photo
+  video
+}
+
+enum AssetRole {
+  raw_shot
+  final_photo
+  making_video
+}
+
+enum AssetStatus {
+  available
+  expired
+  deleted
+}
+
+/// Media generated or uploaded within a session.
+///
+/// @namespace MediaAssets
+/// @erd SessionFlow
+model Asset {
+  /// Stable asset identifier.
+  assetId String @id
+
+  /// Owning session identifier.
+  sessionId String
+
+  /// Parent session relation.
+  session Session @relation(fields: [sessionId], references: [sessionId], onDelete: Cascade, onUpdate: Cascade)
+
+  /// Physical media kind.
+  assetType AssetType
+
+  /// Functional role within the session flow.
+  assetRole AssetRole
+
+  /// MIME type served to clients.
+  mimeType String
+
+  /// Availability status.
+  status AssetStatus @default(available)
+
+  /// Optional duration for video assets.
+  durationMs Int?
+
+  /// Creation timestamp.
+  createdAt DateTime @default(now())
+
+  /// Sessions that reference this asset as the final photo.
+  finalPhotoFor Session? @relation("FinalPhotoAsset")
+
+  /// Sessions that reference this asset as the making video.
+  makingVideoFor Session? @relation("MakingVideoAsset")
+
+  /// Ordered selection records used for rendering.
+  selectedInSessions SessionShotSelection[]
+
+  @@index([sessionId])
+  @@index([sessionId, assetRole])
+  @@index([sessionId, assetType])
+  @@index([status])
+}
+
+/// Snapshot of the ordered raw shots selected for rendering.
+///
+/// @namespace MediaAssets
+/// @erd SessionFlow
+model SessionShotSelection {
+  /// Parent session identifier.
+  sessionId String
+
+  /// Selected raw shot asset identifier.
+  assetId String
+
+  /// Zero-based render order.
+  position Int
+
+  session Session @relation(fields: [sessionId], references: [sessionId], onDelete: Cascade, onUpdate: Cascade)
+  asset   Asset   @relation(fields: [assetId], references: [assetId], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([sessionId, assetId])
+  @@unique([sessionId, position])
+  @@index([assetId])
+}
