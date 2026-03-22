@@ -3,24 +3,24 @@ enum FrameLayout {
   SIX_CUT  @map("6_cut")
 }
 
-/// Frame catalog item available to sessions.
+/// 세션에서 사용할 수 있는 프레임 카탈로그 항목.
 ///
 /// @namespace FrameCatalog
 /// @erd SessionFlow
 model Frame {
-  /// Stable frame identifier.
+  /// 변경되지 않는 프레임 식별자.
   frameId String @id
 
-  /// Layout variant exposed to clients.
+  /// 클라이언트에 노출되는 레이아웃 변형.
   layoutType FrameLayout
 
-  /// Human-friendly frame title.
+  /// 사람이 읽기 쉬운 프레임 제목.
   title String
 
-  /// Number of capture slots available in the frame.
+  /// 프레임에서 사용할 수 있는 촬영 슬롯 수.
   slotCount Int
 
-  /// Whether the frame is currently selectable.
+  /// 현재 선택 가능한 프레임인지 여부.
   isActive Boolean @default(true)
 
   sessions Session[]

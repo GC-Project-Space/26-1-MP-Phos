@@ -10,30 +10,30 @@ enum RequestStatus {
   failed
 }
 
-/// Downloadable share link for rendered session outputs.
+/// 렌더링된 세션 결과물을 내려받을 수 있는 공유 링크.
 ///
 /// @namespace DeliveryLifecycle
 /// @erd SessionFlow
 model ShareLink {
-  /// Share link identifier.
+  /// 공유 링크 식별자.
   shareLinkId String @id
 
-  /// Parent session identifier.
+  /// 상위 세션 식별자.
   sessionId String
 
-  /// Parent session relation.
+  /// 상위 세션 관계.
   session Session @relation(fields: [sessionId], references: [sessionId], onDelete: Cascade, onUpdate: Cascade)
 
-  /// Link availability status.
+  /// 링크 사용 가능 상태.
   status ShareLinkStatus @default(active)
 
-  /// Public URL served to end users.
+  /// 최종 사용자에게 제공되는 공개 URL.
   url String @unique
 
-  /// Expiration timestamp constrained by session retention.
+  /// 세션 보관 정책에 따라 제한되는 만료 시각.
   expiresAt DateTime
 
-  /// Link creation time.
+  /// 링크 생성 시각.
   createdAt DateTime @default(now())
 
   @@index([sessionId])
@@ -41,27 +41,27 @@ model ShareLink {
   @@index([expiresAt])
 }
 
-/// Request to export the session before deletion.
+/// 삭제 전에 세션을 내보내기 위한 요청.
 ///
 /// @namespace DeliveryLifecycle
 /// @erd SessionFlow
 model ExportRequest {
-  /// Export request identifier.
+  /// 내보내기 요청 식별자.
   exportRequestId String @id
 
-  /// Parent session identifier.
+  /// 상위 세션 식별자.
   sessionId String
 
-  /// Parent session relation.
+  /// 상위 세션 관계.
   session Session @relation(fields: [sessionId], references: [sessionId], onDelete: Cascade, onUpdate: Cascade)
 
-  /// Export workflow status.
+  /// 내보내기 워크플로 상태.
   status RequestStatus @default(requested)
 
-  /// Request creation time.
+  /// 요청 생성 시각.
   createdAt DateTime @default(now())
 
-  /// Completion timestamp.
+  /// 완료 시각.
   completedAt DateTime?
 
   @@index([sessionId])
