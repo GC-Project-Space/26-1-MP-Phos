@@ -1,0 +1,15 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "library"
+  output     = "../../generated/client"
+}
+
+generator markdown {
+  provider = "prisma-markdown"
+  output   = "../../../../docs/architecture/ERD-Phos.md"
+  title    = "Phos Data Model"
+}
+
+datasource db {
+  provider = "postgresql"
+}
