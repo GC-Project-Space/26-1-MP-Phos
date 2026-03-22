@@ -75,6 +75,7 @@ pnpm dev:mobile
 ## 문서 안내
 
 - **[기술 아키텍처](docs/architecture/ARCHITECTURE-Phos.md)**: 현재 모노레포 구조, 기술 스택, 검증 전략
+- **[ERD](docs/architecture/ERD-Phos.md)**: `packages/db/prisma/schema/` 도메인 스키마에서 `prisma-markdown`으로 생성한 데이터 모델 문서
 - **[제품 문서 인덱스](docs/product/README.md)**: 제품 문서 읽는 순서와 각 문서 역할 안내
 - **[PRD](docs/product/PRD-Phos.md)**: MVP 목표, 핵심 기능, 범위
 - **[API 명세](docs/product/API-SPEC-Phos.md)**: 세션 중심 API 계약
@@ -109,6 +110,7 @@ docs/
 | `pnpm docker:up`      | 로컬 Postgres + API Docker 실행  |
 | `pnpm docker:down`    | 로컬 Docker 서비스 종료          |
 | `pnpm db:generate`    | Prisma 클라이언트 생성           |
+| `pnpm db:erd`         | Prisma 기반 ERD Markdown 생성    |
 | `pnpm db:migrate:dev` | Prisma 개발 마이그레이션 실행    |
 | `pnpm typecheck`      | 워크스페이스 전체 타입 점검      |
 | `pnpm lint`           | ESLint 실행                      |
