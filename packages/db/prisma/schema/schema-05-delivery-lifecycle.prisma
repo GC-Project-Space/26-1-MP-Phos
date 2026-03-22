@@ -1,0 +1,69 @@
+enum ShareLinkStatus {
+  active
+  expired
+  revoked
+}
+
+enum RequestStatus {
+  requested
+  completed
+  failed
+}
+
+/// Downloadable share link for rendered session outputs.
+///
+/// @namespace DeliveryLifecycle
+/// @erd SessionFlow
+model ShareLink {
+  /// Share link identifier.
+  shareLinkId String @id
+
+  /// Parent session identifier.
+  sessionId String
+
+  /// Parent session relation.
+  session Session @relation(fields: [sessionId], references: [sessionId], onDelete: Cascade, onUpdate: Cascade)
+
+  /// Link availability status.
+  status ShareLinkStatus @default(active)
+
+  /// Public URL served to end users.
+  url String @unique
+
+  /// Expiration timestamp constrained by session retention.
+  expiresAt DateTime
+
+  /// Link creation time.
+  createdAt DateTime @default(now())
+
+  @@index([sessionId])
+  @@index([status])
+  @@index([expiresAt])
+}
+
+/// Request to export the session before deletion.
+///
+/// @namespace DeliveryLifecycle
+/// @erd SessionFlow
+model ExportRequest {
+  /// Export request identifier.
+  exportRequestId String @id
+
+  /// Parent session identifier.
+  sessionId String
+
+  /// Parent session relation.
+  session Session @relation(fields: [sessionId], references: [sessionId], onDelete: Cascade, onUpdate: Cascade)
+
+  /// Export workflow status.
+  status RequestStatus @default(requested)
+
+  /// Request creation time.
+  createdAt DateTime @default(now())
+
+  /// Completion timestamp.
+  completedAt DateTime?
+
+  @@index([sessionId])
+  @@index([status])
+}
