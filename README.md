@@ -4,16 +4,16 @@ Phos는 재미 중심의 모바일 인생네컷 포토부스 제품을 만들기
 
 ## 제품 요약
 
-- **제품 정의**: 촬영, 간단 편집, 저장, 공유까지 한 흐름에서 끝내는 모바일 포토부스 앱입니다.
+- **제품 정의**: 촬영, 간단 편집, 저장까지 한 흐름에서 끝내는 모바일 포토부스 앱입니다.
 - **MVP 핵심 모드**: `Live Booth` 중심으로, 최종 포토 스트립과 메이킹 영상을 함께 결과물로 제공합니다.
 - **목표 경험**: 가입 없이 시작하고, 약 2분 안에 결과물을 자기 기기에 확보할 수 있어야 합니다.
-- **차별점**: 사진 + 메이킹 영상 동시 제공, QR 기반 다운로드, 빠른 완주 경험, 프라이버시 우선 기본값.
+- **차별점**: 사진 + 메이킹 영상 동시 제공, 앱 내 결과 저장 중심의 빠른 완주 경험, 프라이버시 우선 기본값.
 - **프라이버시 원칙**: 익명 `sessionId` 기반 사용, `trainingOptIn=false` 기본값, 48시간 보관, 즉시 삭제/내보내기 지원.
 
 ## 제품 목표
 
 - 첫 세션 완주율: `>= 70%`
-- 공유 전환율: `>= 35%`
+- 결과물 확보 전환율: `>= 80%`
 - 다운로드 성공률: `>= 97%`
 - 세션 실패율: `< 3%`
 - 노스스타 지표: `2-Minute Keepsake Secured Rate`
@@ -28,7 +28,7 @@ Phos는 재미 중심의 모바일 인생네컷 포토부스 제품을 만들기
   -> 촬영 중 메이킹 영상 동시 기록
   -> 컷 선택 / 재배치 / 간단 편집
   -> 최종 포토 스트립 렌더링
-  -> QR 페이지에서 사진/영상 다운로드
+  -> 앱 내 결과 화면에서 사진/영상 확인
   -> 필요 시 로컬 저장 / 삭제 요청 / 내보내기 요청
 ```
 
@@ -69,7 +69,8 @@ pnpm dev:mobile
 - Expo 관리 패키지(`expo-status-bar`, `react`, `react-dom`, `react-native`, `react-native-safe-area-context`)는 레지스트리 최신값보다 현재 설치된 Expo SDK가 요구하는 호환 버전을 우선합니다.
 - 현재 모바일 앱은 다음 메이저 선행 검증을 위해 `expo@56.0.0-canary-20260305-5163746`를 사용합니다. Expo 56 안정판 출시 후에는 canary 태그를 정식 `56.x` 버전으로 치환하는 후속 정리가 필요합니다.
 - `apps/mobile/app.json`의 루트 `splash` 설정은 Expo 56 canary 스키마 검증에 맞춰 제거된 상태입니다. 안정판 전환 시 스키마 허용 여부를 다시 확인한 뒤 복원 여부를 판단해야 합니다.
-- Prisma `7.5.0`부터 연결 URL은 `packages/db/prisma.config.ts`에서 관리하며, `packages/db/prisma/schema.prisma`의 datasource 블록에는 provider만 유지합니다.
+- Prisma CLI 연결 URL은 `packages/db/prisma.config.ts`에서 관리하며, `packages/db/prisma/schema/` 아래 datasource 블록에는 provider만 유지합니다.
+- API 런타임은 `DATABASE_URL`을 직접 읽고, 값이 없으면 로컬 기본 스키마 `phos_dev`를 사용합니다.
 - 모바일 의존성 정합성 확인은 `pnpm --dir apps/mobile run doctor`로 수행합니다.
 
 ## 문서 안내
@@ -80,6 +81,7 @@ pnpm dev:mobile
 - **[PRD](docs/product/PRD-Phos.md)**: MVP 목표, 핵심 기능, 범위
 - **[API 명세](docs/product/API-SPEC-Phos.md)**: 세션 중심 API 계약
 - **[사용자 스토리](docs/product/USER-STORIES-Phos.md)**: 구현 단위 사용자 요구사항
+- **[테스트 시나리오](docs/product/TEST-SCENARIOS-Phos.md)**: MVP QA 및 데이터 직교성 검증 시나리오
 - **[디스커버리 계획](docs/discovery/phos-discovery-plan.md)**: 초기 검증 질문과 실험 계획
 - **[지표 대시보드](docs/discovery/phos-metrics-dashboard.md)**: 노스스타 및 핵심 운영 지표
 
