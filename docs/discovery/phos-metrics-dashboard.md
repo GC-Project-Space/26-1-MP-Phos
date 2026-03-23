@@ -1,7 +1,7 @@
 # 지표 대시보드: Phos (모바일 인생네컷)
 
 **날짜**: 2026-03-20  
-**범위**: 제품 전체 (MVP v1: Live Booth + 메이킹 영상 + QR 사진/영상 다운로드 + 프라이버시 흐름)  
+**범위**: 제품 전체 (MVP v1: Live Booth + 메이킹 영상 + 앱 내 결과 저장 + 프라이버시 흐름)  
 **단계**: 출시 전 -> 출시 초기 전환 구간  
 **주요 목표**: `재미 중심 경험`을 2분 내 완주하고 결과물을 저장/공유하게 만드는 것
 
@@ -9,7 +9,7 @@
 
 ## 1) 무엇을 측정하는가 (1단계)
 
-- **제품/기능 영역**: Live Booth 촬영, 렌더링, QR 다운로드, 프라이버시 제어(동의/삭제/내보내기)
+- **제품/기능 영역**: Live Booth 촬영, 렌더링, 결과 저장, 프라이버시 제어(동의/삭제/내보내기)
 - **현재 비즈니스 목표 / OKRs (도출값)**:
   - 첫 세션 완주율 >= 70%
   - 공유 전환율 >= 35%
@@ -33,14 +33,14 @@
 KSR = (2분 안에 capture -> render를 완료하고 최종 결과물을 최소 1개 확보한 세션 수)
       / (`sessions_started` 수)
 
-"secure"는 `local_save_succeeded` 또는 `photo_download_succeeded` 또는 `video_download_succeeded`를 뜻함
+"secure"는 `local_save_succeeded`를 뜻함
 집계 창: 일간, 추세 확인용 최근 7일 이동 뷰
 ```
 
 **이 노스스타를 쓰는 이유**
 
 - 사용자 가치(결과물을 내 손에 확보)와 제품 목표(재미+완주)를 직접 반영
-- QR 같은 전달 채널에 과도하게 종속되지 않아 운영 안정성이 높음
+- 별도 전달 채널 의존성이 낮아 운영 안정성이 높음
 - 퍼널 단계별 레버가 명확해 팀별 액션으로 연결 가능
 
 **목표값 (출시 전 가설값 -> 보정값)**
@@ -51,13 +51,13 @@ KSR = (2분 안에 capture -> render를 완료하고 최종 결과물을 최소 
 
 ### 입력 지표 (레버)
 
-| 지표                      | 정의                                                                                                  | 담당          | 목표   | 현재 |
-| ------------------------- | ----------------------------------------------------------------------------------------------------- | ------------- | ------ | ---- |
-| 카메라 2초 이내 준비 비율 | `# sessions with camera_ready_time <=2s / # sessions_started`                                         | 클라이언트    | >= 80% | TBD  |
-| 촬영 완료 비율            | `# sessions_capture_completed / # sessions_started`                                                   | 클라이언트    | >= 85% | TBD  |
-| 렌더 10초 이내 준비 비율  | `# sessions where render_succeeded and render_elapsed_ms <=10000 / # sessions_capture_completed`      | 미디어/백엔드 | >= 90% | TBD  |
-| 결과 접근 시작 비율       | `# sessions with local_save_tapped or qr_opened / # sessions_render_succeeded`                        | 제품          | >= 80% | TBD  |
-| 결과 저장 완료 비율       | `# sessions with local_save_succeeded or successful_download / # sessions_with_result_access_started` | 백엔드/웹     | >= 95% | TBD  |
+| 지표                      | 정의                                                                                             | 담당          | 목표   | 현재 |
+| ------------------------- | ------------------------------------------------------------------------------------------------ | ------------- | ------ | ---- |
+| 카메라 2초 이내 준비 비율 | `# sessions with camera_ready_time <=2s / # sessions_started`                                    | 클라이언트    | >= 80% | TBD  |
+| 촬영 완료 비율            | `# sessions_capture_completed / # sessions_started`                                              | 클라이언트    | >= 85% | TBD  |
+| 렌더 10초 이내 준비 비율  | `# sessions where render_succeeded and render_elapsed_ms <=10000 / # sessions_capture_completed` | 미디어/백엔드 | >= 90% | TBD  |
+| 결과 접근 시작 비율       | `# sessions with local_save_tapped or result_view_opened / # sessions_render_succeeded`          | 제품          | >= 80% | TBD  |
+| 결과 저장 완료 비율       | `# sessions with local_save_succeeded / # sessions_with_result_access_started`                   | 백엔드/웹     | >= 95% | TBD  |
 
 ### 상태 지표 (가드레일)
 
@@ -81,11 +81,11 @@ KSR = (2분 안에 capture -> render를 완료하고 최종 결과물을 최소 
 
 ### 비즈니스 지표 (PM/Leadership용)
 
-| 지표                | 정의                                    | 주기 |
-| ------------------- | --------------------------------------- | ---- |
-| 주간 활성 제작자 수 | 주간 기준 1회 이상 세션 완주 사용자 수  | 주간 |
-| 공유-초대 전환율    | 공유 링크 노출 대비 신규 유입 발생 비율 | 주간 |
-| 완주 세션당 비용    | 인프라 비용 / 완주 세션 수              | 주간 |
+| 지표                | 정의                                   | 주기 |
+| ------------------- | -------------------------------------- | ---- |
+| 주간 활성 제작자 수 | 주간 기준 1회 이상 세션 완주 사용자 수 | 주간 |
+| 결과물 확보 전환율  | 렌더 성공 대비 로컬 저장 완료 비율     | 주간 |
+| 완주 세션당 비용    | 인프라 비용 / 완주 세션 수             | 주간 |
 
 ## 3) 알림 임계치 (3단계)
 
@@ -118,19 +118,19 @@ KSR = (2분 안에 capture -> render를 완료하고 최종 결과물을 최소 
 ## 4) 대시보드 명세 (4단계)
 
 **노스스타 지표**: 2-Minute Keepsake Secured Rate (KSR)  
-**정의**: `sessions_started` 대비, 2분 안에 캡처 -> 렌더 -> 확보(로컬 저장 또는 사진/영상 다운로드)를 완료한 비율  
+**정의**: `sessions_started` 대비, 2분 안에 캡처 -> 렌더 -> 확보(로컬 저장)를 완료한 비율  
 **현재 값**: TBD (출시 후 캘리브레이션)  
 **목표**: W2 30%, D+30 45%, D+90 55%
 
 ### 입력 지표
 
-| 지표                      | 정의                              | 담당          | 목표   | 현재 |
-| ------------------------- | --------------------------------- | ------------- | ------ | ---- |
-| 카메라 2초 이내 준비 비율 | camera_ready_time <=2s 비율       | 클라이언트    | >= 80% | TBD  |
-| 촬영 완료 비율            | 촬영 완료 비율                    | 클라이언트    | >= 85% | TBD  |
-| 렌더 10초 이내 준비 비율  | 렌더 성공 + 10초 이내 완료 비율   | 미디어/백엔드 | >= 90% | TBD  |
-| 결과 접근 시작 비율       | 로컬 저장 또는 QR 열람 시작 비율  | 제품          | >= 80% | TBD  |
-| 결과 저장 완료 비율       | 로컬 저장 또는 다운로드 성공 비율 | 백엔드/웹     | >= 95% | TBD  |
+| 지표                      | 정의                                       | 담당          | 목표   | 현재 |
+| ------------------------- | ------------------------------------------ | ------------- | ------ | ---- |
+| 카메라 2초 이내 준비 비율 | camera_ready_time <=2s 비율                | 클라이언트    | >= 80% | TBD  |
+| 촬영 완료 비율            | 촬영 완료 비율                             | 클라이언트    | >= 85% | TBD  |
+| 렌더 10초 이내 준비 비율  | 렌더 성공 + 10초 이내 완료 비율            | 미디어/백엔드 | >= 90% | TBD  |
+| 결과 접근 시작 비율       | 로컬 저장 탭 또는 결과 화면 열람 시작 비율 | 제품          | >= 80% | TBD  |
+| 결과 저장 완료 비율       | 로컬 저장 성공 비율                        | 백엔드/웹     | >= 95% | TBD  |
 
 ### 상태 지표
 
@@ -169,7 +169,7 @@ KSR = (2분 안에 capture -> render를 완료하고 최종 결과물을 최소 
 - **데이터 소스**:
   - App event log: `session_started`, `camera_ready`, `capture_completed`, `render_succeeded`, `app_backgrounded`, `session_restored`
   - App event log (save): `local_save_tapped`, `local_save_succeeded`, `local_save_failed`
-  - Share web log: `qr_opened`, `photo_download_started/succeeded/failed`, `video_download_started/succeeded/failed`, `asset_access_after_expiry_blocked`
+  - App event log (result): `result_view_opened`, `asset_access_after_expiry_blocked`
   - Privacy log: `consent_updated`, `export_requested/completed`, `deletion_requested/completed`
 - **필수 속성**:
   - `sessionId`, `deviceTier`, `networkType`, `elapsedMs`, `errorCode`
@@ -185,7 +185,7 @@ KSR = (2분 안에 capture -> render를 완료하고 최종 결과물을 최소 
 
 ### 리뷰 주기
 
-- **일간**: 노스스타 지표 + 크래시/다운로드/프라이버시 상태 지표 확인
+- **일간**: 노스스타 지표 + 크래시/저장/프라이버시 상태 지표 확인
 - **주간**: 입력 지표 드라이버 리뷰 + 실험 결과 공유
 - **월간**: 노스스타 지표와 목표 갭 분석, 팀별 액션 재할당
 - **분기별**: 지표 프레임워크 재검토(지표 폐기/추가)
@@ -218,4 +218,4 @@ KSR = (2분 안에 capture -> render를 완료하고 최종 결과물을 최소 
 
 - 분석 도구 확정(PostHog vs Amplitude)
 - 익명 사용자 식별 정책(세션 기준 vs 설치 기준)
-- 공유 링크 만료 기본값(예: 24h)과 48시간 보관 정책 정합성
+- 보관 만료 정책과 결과물 접근 차단 정책 정합성
