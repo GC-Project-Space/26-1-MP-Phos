@@ -9,7 +9,7 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - phos-postgres-data:/var/lib/postgresql/data
+      - phos-postgres18-data:/var/lib/postgresql
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U phos -d phos']
       interval: 5s
@@ -26,11 +26,11 @@ services:
         condition: service_healthy
     environment:
       PORT: 3000
-      DATABASE_URL: postgresql://phos:phos@postgres:5432/phos?schema=public
+      DATABASE_URL: postgresql://phos:phos@postgres:5432/phos?schema=phos_dev
     ports:
       - '3000:3000'
     command: >-
-      sh -c "pnpm --filter @phos/db db:push && pnpm --filter api start:prod"
+      sh -c "pnpm --filter @phos/db db:migrate:deploy && pnpm --filter api start:prod"
 
 volumes:
-  phos-postgres-data:
+  phos-postgres18-data:
