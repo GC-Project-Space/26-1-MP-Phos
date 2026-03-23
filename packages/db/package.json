@@ -15,9 +15,10 @@
     "db:generate": "prisma generate --generator client",
     "db:erd": "prisma generate --generator markdown",
     "db:migrate:dev": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "typecheck": "sh -c 'DATABASE_URL=postgresql://phos:phos@localhost:5432/phos?schema=public prisma validate'",
+    "typecheck": "sh -c 'DATABASE_URL=postgresql://phos:phos@localhost:5432/phos?schema=phos_dev prisma validate'",
     "clean": "rm -rf generated"
   },
   "dependencies": {

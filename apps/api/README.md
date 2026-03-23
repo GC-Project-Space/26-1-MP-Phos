@@ -50,8 +50,9 @@ pnpm db:migrate:dev
 
 ## Prisma 메모
 
-- Prisma `7.5.0`부터 DB 연결 설정은 `packages/db/prisma.config.ts`에서 읽습니다.
-- `packages/db/prisma/schema.prisma`의 datasource 블록에는 provider만 유지합니다.
+- Prisma CLI(`migrate`, `generate`, `validate`)는 `packages/db/prisma.config.ts`에서 DB 연결 설정을 읽습니다.
+- API 런타임은 `DATABASE_URL`을 직접 읽고, 값이 없으면 로컬 기본 스키마 `phos_dev`를 사용합니다.
+- `packages/db/prisma/schema/` 아래 datasource 블록에는 provider만 유지합니다.
 - Prisma client 재생성은 루트에서 `pnpm db:generate`로 실행합니다.
 
 ## 참고 문서
