@@ -1,10 +1,13 @@
 # 사용자 스토리: Phos MVP v1
 
-**날짜**: 2026-03-20  
-**제품**: Phos  
-**원본 문서**: `docs/product/README.md`, `docs/product/PRD-Phos.md`, `docs/discovery/phos-discovery-plan.md`, `docs/discovery/phos-metrics-dashboard.md`  
-**디자인**: TBD  
-**범위**: MVP v1만 포함 (후속 우선순위 스토리는 마지막에 분리)
+- **Status**: Review
+- **Owner**: @luke
+- **Last Updated**: 2026-03-23
+- **문서 역할**: PRD, UX, 컴포넌트 책임 문서를 스프린트 단위 사용자 가치와 인수 기준으로 분해하는 문서
+- **Upstream**: [PRD-Phos.md](./PRD-Phos.md), [UI-UX-REQUIREMENTS-Phos.md](./UI-UX-REQUIREMENTS-Phos.md), [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md)
+- **Downstream**: [WWA-Backlog-Phos.md](./WWA-Backlog-Phos.md), [TEST-SCENARIOS-Phos.md](./TEST-SCENARIOS-Phos.md)
+- **Traceability Prefix**: `US-xx`
+- **범위**: MVP v1만 포함 (후속 우선순위 스토리는 마지막에 분리)
 
 ---
 
@@ -22,11 +25,13 @@
 
 ## 2) MVP 사용자 스토리 (2단계)
 
-### 스토리 1. 세션을 시작하고 프레임을 선택한 뒤 카메라를 준비한다
+### US-01. 세션을 시작하고 프레임을 선택한 뒤 카메라를 준비한다
 
 **설명:** 사용자는 세션을 시작하고 프레임을 고른 뒤 카메라가 빠르게 준비되길 원한다. 그래야 최소한의 마찰로 촬영을 시작할 수 있다.
 
-**디자인:** TBD
+**근거:** `PRD-01`, `PRD-F-01`, `PRD-F-02`, `UX-10`, `UX-16`, `UX-17`, `COMP-03`
+
+**디자인/구현 참조:** [DESIGN-SYSTEM-Phos.md](./DESIGN-SYSTEM-Phos.md), [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md)
 
 **인수 기준:**
 
@@ -36,11 +41,13 @@
 4. 프레임 선택 후 카메라가 사용 가능 상태가 되고 앱은 `camera_ready`를 기록한다.
 5. 카메라 준비에 실패하면 사용자는 재시도 액션을 보고, 저장된 프레임은 세션에 유지된다.
 
-### 스토리 2. 카운트다운 기반 다중 촬영을 진행한다
+### US-02. 카운트다운 기반 다중 촬영을 진행한다
 
 **설명:** 사용자는 앱이 카운트다운 기반 다중 촬영을 안내해 주길 원한다. 그래야 포토 스트립을 쉽게 완성할 수 있다.
 
-**디자인:** TBD
+**근거:** `PRD-01`, `PRD-F-02`, `UX-18`, `UX-33`, `COMP-04`
+
+**디자인/구현 참조:** [DESIGN-SYSTEM-Phos.md](./DESIGN-SYSTEM-Phos.md), [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md)
 
 **인수 기준:**
 
@@ -50,11 +57,13 @@
 4. 완료 전에 촬영이 중단되면 시스템은 세션을 복구 가능 또는 재시작 가능 상태로 유지한다.
 5. 사용자는 현재 몇 번째 컷을 찍고 있는지 명확히 알 수 있다.
 
-### 스토리 3. 촬영 중 메이킹 영상을 기록한다
+### US-03. 촬영 중 메이킹 영상을 기록한다
 
 **설명:** 사용자는 부스 사진을 찍는 동안 앱이 메이킹 영상을 함께 기록하길 원한다. 그래야 같은 순간에서 또 하나의 결과물을 얻을 수 있다.
 
-**디자인:** TBD
+**근거:** `PRD-01`, `PRD-F-03`, `UX-18`, `UX-40`, `COMP-14`
+
+**디자인/구현 참조:** [DESIGN-SYSTEM-Phos.md](./DESIGN-SYSTEM-Phos.md), [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md)
 
 **인수 기준:**
 
@@ -64,11 +73,13 @@
 4. 메이킹 영상을 완료할 수 없을 때 사용자에게 안내가 제공된다.
 5. 시스템은 이후 메이킹 영상을 최종 포토 스트립과 같은 세션에 연결할 수 있다.
 
-### 스토리 4. 촬영한 컷을 검토하고 순서를 정한다
+### US-04. 촬영한 컷을 검토하고 순서를 정한다
 
 **설명:** 사용자는 촬영한 컷을 검토하고 순서를 정하고 싶다. 그래야 렌더링 전에 최종 포토 스트립을 직접 제어할 수 있다.
 
-**디자인:** TBD
+**근거:** `PRD-F-04`, `PRD-F-05`, `UX-19`, `COMP-15`
+
+**디자인/구현 참조:** [DESIGN-SYSTEM-Phos.md](./DESIGN-SYSTEM-Phos.md), [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md)
 
 **인수 기준:**
 
@@ -78,11 +89,13 @@
 4. 사용자는 편집 도구를 사용하지 않고도 렌더 단계로 진행할 수 있다.
 5. 렌더 전 사용자가 나갔다 돌아오면 마지막 저장 선택과 순서가 복원된다.
 
-### 스토리 5. 간단한 사진 편집을 적용한다
+### US-05. 간단한 사진 편집을 적용한다
 
 **설명:** 사용자는 빠른 편집 몇 가지만 원한다. 그래야 흐름을 늦추지 않으면서 스트립 결과를 조금 더 다듬을 수 있다.
 
-**디자인:** TBD
+**근거:** `PRD-F-04`, `UX-20`, `PRD-NG-01`, `COMP-16`
+
+**디자인/구현 참조:** [DESIGN-SYSTEM-Phos.md](./DESIGN-SYSTEM-Phos.md), [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md)
 
 **인수 기준:**
 
@@ -92,11 +105,13 @@
 4. 고급 편집 제어는 포함하지 않는다.
 5. 편집에 실패해도 촬영된 컷과 저장된 순서는 유지된다.
 
-### 스토리 6. 최종 포토 스트립을 렌더링한다
+### US-06. 최종 포토 스트립을 렌더링한다
 
 **설명:** 사용자는 선택한 컷과 프레임으로 최종 포토 스트립이 생성되길 원한다. 그래야 완성된 최종 결과물을 얻을 수 있다.
 
-**디자인:** TBD
+**근거:** `PRD-F-05`, `UX-21`, `UX-45`, `COMP-17`
+
+**디자인/구현 참조:** [DESIGN-SYSTEM-Phos.md](./DESIGN-SYSTEM-Phos.md), [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md)
 
 **인수 기준:**
 
@@ -106,11 +121,13 @@
 4. 렌더 흐름은 `render_succeeded` 또는 실패 이벤트로 계측 가능하다.
 5. 렌더 성공 후 결과물은 앱 내 결과 화면 확인과 로컬 저장에 사용할 수 있다.
 
-### 스토리 7. 사진과 영상을 앱 내 결과 화면에서 확인한다
+### US-07. 사진과 영상을 앱 내 결과 화면에서 확인한다
 
 **설명:** 사용자는 최종 포토 스트립과 메이킹 영상을 앱 내 결과 화면에서 바로 확인하고 저장하고 싶다. 그래야 추가 페이지 전환 없이 결과물을 확보할 수 있다.
 
-**디자인:** TBD
+**근거:** `PRD-F-03`, `PRD-F-05`, `UX-22`, `COMP-18`
+
+**디자인/구현 참조:** [DESIGN-SYSTEM-Phos.md](./DESIGN-SYSTEM-Phos.md), [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md)
 
 **인수 기준:**
 
@@ -120,11 +137,13 @@
 4. 결과 화면에 접근하면 시스템은 `result_view_opened`를 기록한다.
 5. 자산이 만료되었거나 사용할 수 없으면 깨진 상태 대신 명확한 안내를 보여준다.
 
-### 스토리 8. 최종 결과물을 로컬에 저장한다
+### US-08. 최종 결과물을 로컬에 저장한다
 
 **설명:** 사용자는 최종 결과물을 로컬 저장하고 싶다. 그래야 결과 화면에서 바로 보관을 완료할 수 있다.
 
-**디자인:** TBD
+**근거:** `PRD-01`, `PRD-F-06`, `UX-22`, `COMP-18`
+
+**디자인/구현 참조:** [DESIGN-SYSTEM-Phos.md](./DESIGN-SYSTEM-Phos.md), [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md)
 
 **인수 기준:**
 
@@ -134,11 +153,13 @@
 4. 로컬 저장 실패가 세션 자산을 삭제하거나 손상시키지 않는다.
 5. 저장 액션은 다른 후속 처리(내보내기/삭제 요청)와 독립적으로 동작한다.
 
-### 스토리 9. 프라이버시 동의를 분리한다
+### US-09. 프라이버시 동의를 분리한다
 
 **설명:** 사용자는 서비스 이용 동의와 선택적 데이터 활용 동의가 분리되길 원한다. 그래야 무엇이 필수이고 무엇이 선택인지 이해할 수 있다.
 
-**디자인:** TBD
+**근거:** `PRD-F-07`, `UX-23`, `UX-31`, `COMP-19`
+
+**디자인/구현 참조:** [DESIGN-SYSTEM-Phos.md](./DESIGN-SYSTEM-Phos.md), [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md)
 
 **인수 기준:**
 
@@ -148,11 +169,13 @@
 4. 사용자는 필수 서비스 이용 동의를 수락해야만 다음 단계로 진행할 수 있다.
 5. 선택적 데이터 활용 동의는 미리 선택되어 있지 않다.
 
-### 스토리 10. 삭제 및 내보내기 요청을 처리한다
+### US-10. 삭제 및 내보내기 요청을 처리한다
 
 **설명:** 사용자는 세션 데이터에 대해 삭제 또는 내보내기 요청을 할 수 있길 원한다. 그래야 자신의 콘텐츠를 직접 통제할 수 있다.
 
-**디자인:** TBD
+**근거:** `PRD-F-07`, `UX-24`, `COMP-10`, `COMP-19`
+
+**디자인/구현 참조:** [DESIGN-SYSTEM-Phos.md](./DESIGN-SYSTEM-Phos.md), [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md)
 
 **인수 기준:**
 
@@ -163,11 +186,13 @@
 5. 세션은 현재 상태를 보여주기 위해 `deletionStatus`를 노출한다.
 6. 시스템은 상황에 따라 `export_requested`, `export_completed`, `deletion_requested`, `deletion_completed`를 기록한다.
 
-### 스토리 11. MVP 세션 API 계약을 제공한다
+### US-11. MVP 세션 API 계약을 제공한다
 
 **설명:** 백엔드 엔지니어는 캡처, 렌더, 결과물 확보, 프라이버시 요청에 필요한 최소 세션 기반 API 계약을 원한다. 그래야 클라이언트 흐름이 하나의 안정된 MVP 계약 위에서 출시될 수 있다.
 
-**디자인:** TBD
+**근거:** `PRD-F-01`, `PRD-F-05`, `PRD-CON-03`, `PRD-CON-05`, `UX-10`, `UX-17`
+
+**디자인/구현 참조:** [API-SPEC-Phos.md](./API-SPEC-Phos.md), [EVENT-SCHEMA-Phos.md](./EVENT-SCHEMA-Phos.md)
 
 **인수 기준:**
 
@@ -177,11 +202,13 @@
 4. 커스텀 메서드는 `POST /v1/sessions/{sessionId}:render`와 `POST /v1/sessions/{sessionId}:finalize` 두 개뿐이다.
 5. 사용자용 삭제는 직접 세션 삭제가 아니라 `DeletionRequest`를 통해 요청한다.
 
-### 스토리 12. 보관 정책을 강제하고 프라이버시 메타데이터를 노출한다
+### US-12. 보관 정책을 강제하고 프라이버시 메타데이터를 노출한다
 
 **설명:** 시스템 운영자는 각 세션이 48시간 후 자동 만료 및 삭제되길 원한다. 그래야 Phos가 수작업 없이 프라이버시 약속을 지킬 수 있다.
 
-**디자인:** TBD
+**근거:** `PRD-CON-04`, `PRD-CON-05`, `PRD-F-07`, `UX-23`, `UX-24`
+
+**디자인/구현 참조:** [API-SPEC-Phos.md](./API-SPEC-Phos.md), [EVENT-SCHEMA-Phos.md](./EVENT-SCHEMA-Phos.md), [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md)
 
 **인수 기준:**
 
@@ -190,11 +217,13 @@
 3. 세션 관련 응답은 관련 위치에서 `retentionExpiresAt`, `trainingUsed`, `consentVersion`, `deletionStatus`를 포함한다.
 4. 로그는 `sessionId`, 시각, 액션, `consentVersion`, 상태 변화만 저장하고, 원본 자산 URL이나 직접 PII는 저장하지 않는다.
 
-### 스토리 13. Live Booth에서 저사양 미디어 프리셋을 자동 적용한다
+### US-13. Live Booth에서 저사양 미디어 프리셋을 자동 적용한다
 
 **설명:** 저사양 기기 사용자는 앱이 자동으로 더 낮은 미디어 프리셋으로 전환되길 원한다. 그래야 사진 촬영과 메이킹 영상 기록이 안정적으로 완료된다.
 
-**디자인:** TBD
+**근거:** `PRD-CON-01`, `PRD-F-02`, `PRD-F-03`, `UX-18`, `UX-43`, `UX-44`
+
+**디자인/구현 참조:** [API-SPEC-Phos.md](./API-SPEC-Phos.md), [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md)
 
 **인수 기준:**
 
@@ -208,11 +237,13 @@
 
 ## 3) 소프트 런치 안정화 스토리 (3단계)
 
-### 스토리 14. 짧은 중단 후 세션을 복구한다
+### US-14. 짧은 중단 후 세션을 복구한다
 
 **설명:** 사용자는 짧은 중단 후 미완료 세션이 복구되길 원한다. 그래야 처음부터 다시 시작하지 않아도 된다.
 
-**디자인:** TBD
+**근거:** `PRD-F-08`, `PRD-NG-05`, `UX-27`, `COMP-20`
+
+**디자인/구현 참조:** [DESIGN-SYSTEM-Phos.md](./DESIGN-SYSTEM-Phos.md), [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md)
 
 **인수 기준:**
 
@@ -226,11 +257,13 @@
 
 ## 4) 후속 우선순위 스토리 (4단계)
 
-### 스토리 15. 기존 사진으로 Album Edit를 한다
+### US-15. 기존 사진으로 Album Edit를 한다
 
 **설명:** 사용자는 기존 사진을 Phos 프레임에 넣고 싶다. 그래야 Live Booth를 사용하지 않았어도 스트립을 만들 수 있다.
 
-**디자인:** TBD
+**근거:** `PRD-F-09`, `PRD-NG-04`, `UX-20`
+
+**디자인/구현 참조:** [DESIGN-SYSTEM-Phos.md](./DESIGN-SYSTEM-Phos.md), [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md)
 
 **인수 기준:**
 
@@ -243,14 +276,14 @@
 
 ## 5) 스토리 의존관계 (5단계)
 
-- 스토리 1, 2, 3은 스토리 4, 5, 6, 7, 8의 촬영 기반이다.
-- 스토리 6은 스토리 1, 2, 4와 선택적으로 스토리 5에 의존한다.
-- 스토리 7은 스토리 6의 렌더 완료와 결과 화면 상태 구성에 의존한다.
-- 스토리 8은 스토리 6에 의존한다.
-- 스토리 9, 10, 12는 스토리 11의 프라이버시 및 세션 모델에 의존한다.
-- 스토리 13은 안정성 계층으로 스토리 2, 3과 함께 출시하는 것이 좋다.
-- 스토리 14는 소프트 런치 안정화 항목이며 V1 기능 완료를 막지 않아야 한다.
-- 스토리 15는 후속 우선순위 항목으로 MVP 스프린트 약속에서 제외해야 한다.
+- `US-01`, `US-02`, `US-03`은 `US-04`, `US-05`, `US-06`, `US-07`, `US-08`의 촬영 기반이다.
+- `US-06`은 `US-01`, `US-02`, `US-04`와 선택적으로 `US-05`에 의존한다.
+- `US-07`은 `US-06`의 렌더 완료와 결과 화면 상태 구성에 의존한다.
+- `US-08`은 `US-06`에 의존한다.
+- `US-09`, `US-10`, `US-12`는 `US-11`의 프라이버시 및 세션 모델에 의존한다.
+- `US-13`은 안정성 계층으로 `US-02`, `US-03`과 함께 출시하는 것이 좋다.
+- `US-14`는 소프트 런치 안정화 항목이며 V1 기능 완료를 막지 않아야 한다.
+- `US-15`는 후속 우선순위 항목으로 MVP 스프린트 약속에서 제외해야 한다.
 
 ---
 
@@ -258,30 +291,30 @@
 
 ### 스프린트 1 후보
 
-- 스토리 1. 세션을 시작하고 프레임을 선택한 뒤 카메라를 준비한다
-- 스토리 2. 카운트다운 기반 다중 촬영을 진행한다
-- 스토리 11. MVP 세션 API 계약을 제공한다
+- `US-01`. 세션을 시작하고 프레임을 선택한 뒤 카메라를 준비한다
+- `US-02`. 카운트다운 기반 다중 촬영을 진행한다
+- `US-11`. MVP 세션 API 계약을 제공한다
 
 ### 스프린트 2 후보
 
-- 스토리 3. 촬영 중 메이킹 영상을 기록한다
-- 스토리 4. 촬영한 컷을 검토하고 순서를 정한다
-- 스토리 5. 간단한 사진 편집을 적용한다
-- 스토리 6. 최종 포토 스트립을 렌더링한다
-- 스토리 13. Live Booth에서 저사양 미디어 프리셋을 자동 적용한다
+- `US-03`. 촬영 중 메이킹 영상을 기록한다
+- `US-04`. 촬영한 컷을 검토하고 순서를 정한다
+- `US-05`. 간단한 사진 편집을 적용한다
+- `US-06`. 최종 포토 스트립을 렌더링한다
+- `US-13`. Live Booth에서 저사양 미디어 프리셋을 자동 적용한다
 
 ### 스프린트 3 후보
 
-- 스토리 7. 사진과 영상을 앱 내 결과 화면에서 확인한다
-- 스토리 8. 최종 자산을 로컬에 저장한다
-- 스토리 9. 프라이버시 동의를 분리한다
-- 스토리 12. 보관 정책을 강제하고 프라이버시 메타데이터를 노출한다
+- `US-07`. 사진과 영상을 앱 내 결과 화면에서 확인한다
+- `US-08`. 최종 자산을 로컬에 저장한다
+- `US-09`. 프라이버시 동의를 분리한다
+- `US-12`. 보관 정책을 강제하고 프라이버시 메타데이터를 노출한다
 
 ### 스프린트 4 후보
 
-- 스토리 10. 삭제 및 내보내기 요청을 처리한다
-- 스토리 14. 짧은 중단 후 세션을 복구한다
+- `US-10`. 삭제 및 내보내기 요청을 처리한다
+- `US-14`. 짧은 중단 후 세션을 복구한다
 
 ### MVP 이후
 
-- 스토리 15. 기존 사진으로 Album Edit를 한다
+- `US-15`. 기존 사진으로 Album Edit를 한다
