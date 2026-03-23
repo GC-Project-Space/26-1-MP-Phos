@@ -54,6 +54,7 @@ pnpm dev:mobile
 - **Node.js**: `25.x` (Docker API 런타임 `node:25-alpine` 기준, 로컬 실행은 `>=22`)
 - **pnpm**: `10.32.1` (`corepack` 사용 권장)
 - **Docker Desktop**: 로컬 `postgres:18-alpine` + API 스택 실행 시 필요
+- **Android 로컬 빌드 (macOS)**: `pnpm mobile:android:run`은 `JAVA_HOME`이 없을 때 macOS 기본 JDK 탐지(`/usr/libexec/java_home`)를 먼저 시도하고, 실패하면 Android Studio 번들 JBR를 자동으로 사용합니다.
 
 ## 기술 스택
 
