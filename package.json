@@ -5,6 +5,12 @@
   "scripts": {
     "dev": "turbo run dev --parallel --filter=mobile --filter=api",
     "dev:mobile": "pnpm --filter mobile start",
+    "mobile:android:run": "pnpm --filter mobile run android",
+    "mobile:android:start": "pnpm --filter mobile exec expo start --dev-client --android",
+    "mobile:android": "pnpm mobile:android:run && pnpm mobile:android:start",
+    "mobile:ios:run": "pnpm --filter mobile exec expo run:ios",
+    "mobile:ios:start": "pnpm --filter mobile exec expo start --dev-client --ios",
+    "mobile:ios": "pnpm mobile:ios:run && pnpm mobile:ios:start",
     "dev:api": "pnpm --filter api start:dev",
     "db:generate": "pnpm --filter @phos/db db:generate",
     "db:erd": "pnpm --filter @phos/db db:erd",
