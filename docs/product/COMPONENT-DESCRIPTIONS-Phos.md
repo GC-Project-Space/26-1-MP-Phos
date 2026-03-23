@@ -25,7 +25,6 @@
 | `EditScreen`            | 예정 | 빠른 편집 도구 제공                                                | 편집 적용 / 건너뛰기 |
 | `RenderScreen`          | 예정 | 렌더 진행 상태와 결과 전환                                         | 다시 시도            |
 | `ResultScreen`          | 예정 | 최종 포토 스트립/영상 확보 액션 제공                               | 로컬 저장            |
-| `QRDownloadScreen`      | 예정 | QR 페이지 진입 후 사진/영상 다운로드를 분리 제공                   | 자산 다운로드        |
 | `PrivacyControlsScreen` | 예정 | 동의와 보관 정책 안내 및 제어                                      | 동의 저장            |
 | `DataControlsScreen`    | 예정 | 삭제/내보내기 요청과 상태 제어                                     | 요청 실행            |
 
@@ -114,22 +113,16 @@
 ### 4.8 결과 미리보기 / 결과 액션 바
 
 - **목적**: 최종 포토 스트립과 메이킹 영상 이용 가능 상태를 보여주고 결과물 확보 행동을 묶기
-- **행동**: `로컬 저장`, `QR 다운로드`
+- **행동**: `로컬 저장`
 - **규칙**: 로컬 저장을 기본 행동으로 둔다
 
-### 4.9 QRDownloadPanel
-
-- **목적**: 사진/영상 자산별 다운로드를 분리 제공
-- **상태**: 자산 모두 사용 가능 / 사진만 사용 가능 / 영상만 사용 가능 / 만료됨 / 사용 불가
-- **계약 메모**: 현재 공용 패키지에는 자산/share-link DTO가 없으므로 예정된 UI 범위다
-
-### 4.10 ConsentSection / PrivacyActionPanel
+### 4.9 ConsentSection / PrivacyActionPanel
 
 - **목적**: 서비스 이용 동의와 선택적 데이터 활용 동의를 분리하고, 삭제/내보내기 요청과 상태를 노출
 - **상태**: active / export_requested / delete_requested / deleted
 - **계약 메모**: 현재 모바일 세션 계약은 일부 메타만 직접 노출하므로 상세 DTO는 별도 계약 정의가 필요하다
 
-### 4.11 RecoveryNotice
+### 4.10 RecoveryNotice
 
 - **목적**: 짧은 중단 이후 미완료 세션 복구 가능 여부 안내
 - **상태**: 복구 가능 / 복구 실패 / finalized 세션은 복구 불가
