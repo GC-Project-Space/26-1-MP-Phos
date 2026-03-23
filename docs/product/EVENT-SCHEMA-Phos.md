@@ -54,6 +54,7 @@
 | `render_started`            | 렌더 시작                             | `sessionId`                                   | WWA 항목 6           |
 | `render_succeeded`          | 렌더 완료                             | `sessionId`, `elapsedMs`, `finalPhotoAssetId` | WWA 항목 6, KSR 입력 |
 | `render_failed`             | 렌더 실패                             | `sessionId`, `errorCode`                      | WWA 항목 6           |
+| `result_view_opened`        | 사용자가 결과 화면을 열었음           | `sessionId`                                   | WWA 항목 7, KSR 입력 |
 | `local_save_tapped`         | 사용자가 로컬 저장 시작               | `sessionId`, `assetType`                      | WWA 항목 8, KSR 입력 |
 | `local_save_succeeded`      | 로컬 저장 성공                        | `sessionId`, `assetType`                      | WWA 항목 8, KSR 입력 |
 | `local_save_failed`         | 로컬 저장 실패                        | `sessionId`, `assetType`, `errorCode`         | WWA 항목 8           |
@@ -61,19 +62,11 @@
 | `app_backgrounded`          | 활성 세션 중 앱이 백그라운드로 전환됨 | `sessionId`                                   | 소프트 런치          |
 | `session_restored`          | 미완료 세션 복구                      | `sessionId`                                   | 소프트 런치          |
 
-## 4) 공유 및 다운로드 이벤트 (4단계)
+## 4) 결과 접근 이벤트 (4단계)
 
-| 이벤트                              | 트리거              | 필수 속성                               | 매핑 대상                       |
-| ----------------------------------- | ------------------- | --------------------------------------- | ------------------------------- |
-| `share_link_created`                | QR 공유 링크 생성   | `sessionId`, `shareLinkId`, `expiresAt` | WWA 항목 7                      |
-| `qr_opened`                         | QR 페이지 열림      | `sessionId`, `shareLinkId`              | WWA 항목 7, KSR 입력            |
-| `photo_download_started`            | 사진 다운로드 시작  | `sessionId`, `shareLinkId`              | WWA 항목 7                      |
-| `photo_download_succeeded`          | 사진 다운로드 성공  | `sessionId`, `shareLinkId`, `elapsedMs` | WWA 항목 7, KSR 입력            |
-| `photo_download_failed`             | 사진 다운로드 실패  | `sessionId`, `shareLinkId`, `errorCode` | WWA 항목 7                      |
-| `video_download_started`            | 영상 다운로드 시작  | `sessionId`, `shareLinkId`              | WWA 항목 7                      |
-| `video_download_succeeded`          | 영상 다운로드 성공  | `sessionId`, `shareLinkId`, `elapsedMs` | WWA 항목 7, KSR 입력            |
-| `video_download_failed`             | 영상 다운로드 실패  | `sessionId`, `shareLinkId`, `errorCode` | WWA 항목 7                      |
-| `asset_access_after_expiry_blocked` | 만료 자산 접근 차단 | `sessionId`, `shareLinkId`, `assetType` | WWA 항목 7, 프라이버시 가드레일 |
+| 이벤트                              | 트리거                        | 필수 속성                | 매핑 대상                       |
+| ----------------------------------- | ----------------------------- | ------------------------ | ------------------------------- |
+| `asset_access_after_expiry_blocked` | 보관 만료 이후 자산 접근 차단 | `sessionId`, `assetType` | WWA 항목 7, 프라이버시 가드레일 |
 
 ## 5) 동의 및 프라이버시 이벤트 (5단계)
 
@@ -89,32 +82,32 @@
 
 ## 6) 파생 지표 매핑 (6단계)
 
-| 지표                     | 공식                                                        | 필요한 이벤트                                                                                                             |
-| ------------------------ | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `KSR`                    | 2분 안에 최소 1개 자산을 확보한 sessions / sessions_started | `session_started`, `render_succeeded`, `local_save_succeeded` or `photo_download_succeeded` or `video_download_succeeded` |
-| Time-to-camera <=2s      | 2000 ms 이내 `camera_ready` / sessions_started              | `session_started`, `camera_ready`                                                                                         |
-| Capture completion rate  | capture_completed / sessions_started                        | `session_started`, `capture_completed`                                                                                    |
-| Render ready <=10s rate  | 10초 이내 render_succeeded / capture_completed              | `capture_completed`, `render_succeeded`                                                                                   |
-| Result access start rate | local_save_tapped 또는 qr_opened / render_succeeded         | `render_succeeded`, `local_save_tapped`, `qr_opened`                                                                      |
-| 결과 저장 완료 비율      | save/download success / result access started               | `local_save_succeeded`, `photo_download_succeeded`, `video_download_succeeded`                                            |
+| 지표                     | 공식                                                         | 필요한 이벤트                                                 |
+| ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------- |
+| `KSR`                    | 2분 안에 최소 1개 자산을 확보한 sessions / sessions_started  | `session_started`, `render_succeeded`, `local_save_succeeded` |
+| Time-to-camera <=2s      | 2000 ms 이내 `camera_ready` / sessions_started               | `session_started`, `camera_ready`                             |
+| Capture completion rate  | capture_completed / sessions_started                         | `session_started`, `capture_completed`                        |
+| Render ready <=10s rate  | 10초 이내 render_succeeded / capture_completed               | `capture_completed`, `render_succeeded`                       |
+| Result access start rate | local_save_tapped 또는 result_view_opened / render_succeeded | `render_succeeded`, `local_save_tapped`, `result_view_opened` |
+| 결과 저장 완료 비율      | save success / result access started                         | `local_save_succeeded`                                        |
 
 ## 7) 이벤트-대-WWA 매핑 (7단계)
 
-| WWA 항목 | 이벤트                                                                                  |
-| -------- | --------------------------------------------------------------------------------------- |
-| 항목 1   | `session_started`, `camera_ready`, `camera_prepare_failed`, `frame_selected`            |
-| 항목 2   | `capture_countdown_started`, `capture_completed`, `capture_interrupted`                 |
-| 항목 3   | `making_video_started`, `making_video_failed`                                           |
-| 항목 4   | `shot_order_updated`                                                                    |
-| 항목 5   | `simple_edit_applied`                                                                   |
-| 항목 6   | `render_started`, `render_succeeded`, `render_failed`                                   |
-| 항목 7   | `share_link_created`, `qr_opened`, 다운로드 이벤트, `asset_access_after_expiry_blocked` |
-| 항목 8   | `local_save_tapped`, `local_save_succeeded`, `local_save_failed`                        |
-| 항목 9   | `consent_updated`                                                                       |
-| 항목 10  | `export_requested`, `export_completed`, `deletion_requested`, `deletion_completed`      |
-| 항목 12  | `retention_expired`, `training_usage_blocked`                                           |
-| 항목 13  | `media_preset_selected`                                                                 |
-| 항목 14  | `app_backgrounded`, `session_restored`                                                  |
+| WWA 항목 | 이벤트                                                                             |
+| -------- | ---------------------------------------------------------------------------------- |
+| 항목 1   | `session_started`, `camera_ready`, `camera_prepare_failed`, `frame_selected`       |
+| 항목 2   | `capture_countdown_started`, `capture_completed`, `capture_interrupted`            |
+| 항목 3   | `making_video_started`, `making_video_failed`                                      |
+| 항목 4   | `shot_order_updated`                                                               |
+| 항목 5   | `simple_edit_applied`                                                              |
+| 항목 6   | `render_started`, `render_succeeded`, `render_failed`                              |
+| 항목 7   | `result_view_opened`, `asset_access_after_expiry_blocked`                          |
+| 항목 8   | `local_save_tapped`, `local_save_succeeded`, `local_save_failed`                   |
+| 항목 9   | `consent_updated`                                                                  |
+| 항목 10  | `export_requested`, `export_completed`, `deletion_requested`, `deletion_completed` |
+| 항목 12  | `retention_expired`, `training_usage_blocked`                                      |
+| 항목 13  | `media_preset_selected`                                                            |
+| 항목 14  | `app_backgrounded`, `session_restored`                                             |
 
 ## 8) MVP 비목표 (8단계)
 

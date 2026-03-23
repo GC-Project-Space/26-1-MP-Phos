@@ -25,7 +25,7 @@
 8. [`EVENT-SCHEMA-Phos.md`](./EVENT-SCHEMA-Phos.md)
    - 제품/운영/프라이버시 이벤트 정의를 정리합니다.
 9. [`TEST-SCENARIOS-Phos.md`](./TEST-SCENARIOS-Phos.md)
-   - MVP QA 시나리오와 검증 범위를 정리합니다.
+   - MVP QA 시나리오와 데이터 직교성(Source of Truth) 검증 범위를 정리합니다.
 
 ## 문서 역할 맵
 
@@ -39,7 +39,7 @@
 | [`WWA-Backlog-Phos.md`](./WWA-Backlog-Phos.md)                       | 백로그 우선순위와 인수 기준 정리        | 스프린트/작업 단위를 정할 때             |
 | [`API-SPEC-Phos.md`](./API-SPEC-Phos.md)                             | API 리소스와 메서드 계약                | 백엔드/클라이언트 인터페이스를 설계할 때 |
 | [`EVENT-SCHEMA-Phos.md`](./EVENT-SCHEMA-Phos.md)                     | 이벤트/계측 정의                        | 분석/운영 계측을 붙일 때                 |
-| [`TEST-SCENARIOS-Phos.md`](./TEST-SCENARIOS-Phos.md)                 | QA 시나리오와 테스트 우선순위           | 기능 검증과 QA 범위를 잡을 때            |
+| [`TEST-SCENARIOS-Phos.md`](./TEST-SCENARIOS-Phos.md)                 | QA 시나리오와 직교성 검증 우선순위      | 기능 검증과 데이터 정합성 범위를 잡을 때 |
 
 ## 관련 문서
 
