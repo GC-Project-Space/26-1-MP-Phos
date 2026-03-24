@@ -21,3 +21,17 @@
 
 - [x] `pnpm --filter mobile typecheck`
 - [x] `pnpm --filter mobile test`
+
+## Mobile test infrastructure readiness
+
+- [x] **R1** Jest 설정이 React Native Testing Library 기반 컴포넌트/화면 테스트를 안정적으로 지원한다.
+- [x] **R2** primitive, provider, data, screen 계층에 각각 의미 있는 테스트가 있다.
+- [x] **R3** missing provider, invalid payload 같은 실패 케이스가 실제 fixture 기반으로 검증된다.
+- [x] **R4** trivial assertion 대신 UI 노출, context 의존성, validation 실패 같은 실제 동작을 검증한다.
+
+## Test infrastructure traceability
+
+- [x] **T1** primitive render (`src/shared/ui/shared-ui-primitives.test.tsx`)
+- [x] **T2** provider missing (`src/app/providers/AppProviders.test.tsx`, `src/app/App.test.tsx`)
+- [x] **T3** data validation fail (`src/shared/contracts/session.test.ts`, `src/__fixtures__/sessionSummary.ts`)
+- [x] **T4** screen integration (`src/pages/booth-home/ui/BoothHomeScreen.test.tsx`, `src/app/App.test.tsx`)
