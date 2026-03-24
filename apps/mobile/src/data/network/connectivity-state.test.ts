@@ -12,6 +12,12 @@ type NetInfoListener = (state: {
   isInternetReachable: boolean | null;
 }) => void;
 
+type NetInfoSnapshot = {
+  type: 'unknown' | 'none' | 'wifi' | 'cellular';
+  isConnected: boolean | null;
+  isInternetReachable: boolean | null;
+};
+
 jest.mock('@react-native-community/netinfo', () => ({
   __esModule: true,
   default: {
@@ -59,6 +65,25 @@ describe('connectivity-state holder', () => {
 
     unsubscribe();
     holder.dispose();
+  });
+
+  it('starts NetInfo observation only after subscribe or refresh', async () => {
+    const holder = createConnectivityStateHolder();
+
+    expect(mockNetInfo.addEventListener).not.toHaveBeenCalled();
+    expect(mockNetInfo.fetch).not.toHaveBeenCalled();
+
+    const unsubscribe = holder.subscribe(jest.fn());
+
+    expect(mockNetInfo.addEventListener).toHaveBeenCalledTimes(1);
+    expect(mockNetInfo.fetch).toHaveBeenCalledTimes(1);
+
+    unsubscribe();
+    holder.dispose();
+
+    await holder.refresh();
+
+    expect(mockNetInfo.addEventListener).toHaveBeenCalledTimes(1);
   });
 
   it('transitions offline and then online from NetInfo events', () => {
@@ -112,6 +137,55 @@ describe('connectivity-state holder', () => {
 
     expect(mockNetInfo.fetch).toHaveBeenCalled();
     expect(refreshed.status).toBe('online');
+
+    holder.dispose();
+  });
+
+  it('ignores stale bootstrap fetch result when a newer listener event already applied', async () => {
+    let resolveBootstrap: ((value: NetInfoSnapshot) => void) | undefined;
+
+    const bootstrapPromise = new Promise<NetInfoSnapshot>((resolve) => {
+      resolveBootstrap = resolve;
+    });
+
+    mockNetInfo.fetch.mockImplementationOnce(() => bootstrapPromise);
+
+    const holder = createConnectivityStateHolder();
+    const observedStatuses: string[] = [];
+
+    holder.subscribe((state) => {
+      observedStatuses.push(state.status);
+    });
+
+    const registeredListener = mockNetInfo.addEventListener.mock.calls[0]?.[0] as
+      | NetInfoListener
+      | undefined;
+
+    if (!registeredListener) {
+      throw new Error('Expected NetInfo listener to be registered');
+    }
+
+    registeredListener({
+      type: 'wifi',
+      isConnected: true,
+      isInternetReachable: true,
+    });
+
+    const bootstrapResolver = resolveBootstrap;
+
+    if (!bootstrapResolver) {
+      throw new Error('Expected bootstrap fetch resolver');
+    }
+
+    bootstrapResolver({
+      type: 'unknown',
+      isConnected: null,
+      isInternetReachable: null,
+    });
+
+    await Promise.resolve();
+
+    expect(observedStatuses[observedStatuses.length - 1]).toBe('online');
 
     holder.dispose();
   });
