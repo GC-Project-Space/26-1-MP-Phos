@@ -1,9 +1,7 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import React from 'react';
-import { act, create, type ReactTestRenderer } from 'react-test-renderer';
+import { describe, beforeEach, expect, it, jest } from '@jest/globals';
+import { act, renderHook } from '@testing-library/react-native';
 
 import { useConnectivityState } from './useConnectivityState';
-import type { ConnectivityState } from '../data/network/connectivity-state';
 
 type NetInfoListener = (state: {
   type: 'unknown' | 'none' | 'wifi' | 'cellular';
@@ -34,34 +32,6 @@ const mockNetInfoModule = jest.requireMock('@react-native-community/netinfo') as
 
 const mockNetInfo = mockNetInfoModule.default;
 
-interface HookProbeProps {
-  onState: (state: ConnectivityState) => void;
-  onRefresh: (refresh: () => Promise<ConnectivityState>) => void;
-}
-
-function HookProbe({ onRefresh, onState }: HookProbeProps) {
-  const { connectivityState, refresh } = useConnectivityState();
-
-  onState(connectivityState);
-  onRefresh(refresh);
-
-  return null;
-}
-
-function render(ui: React.ReactElement): ReactTestRenderer {
-  let renderer: ReactTestRenderer | null = null;
-
-  act(() => {
-    renderer = create(ui);
-  });
-
-  if (!renderer) {
-    throw new Error('Expected test renderer to be created');
-  }
-
-  return renderer;
-}
-
 describe('useConnectivityState', () => {
   beforeEach(() => {
     mockNetInfo.addEventListener.mockReset();
@@ -74,15 +44,13 @@ describe('useConnectivityState', () => {
   });
 
   it('starts with unknown state and updates from offline to online events', () => {
-    mockNetInfo.addEventListener.mockImplementation((listener) => {
-      return jest.fn();
-    });
+    const unsubscribe = jest.fn();
 
-    const snapshots: ConnectivityState[] = [];
+    mockNetInfo.addEventListener.mockImplementation(() => unsubscribe);
 
-    render(<HookProbe onState={(state) => snapshots.push(state)} onRefresh={jest.fn()} />);
+    const { result, unmount } = renderHook(() => useConnectivityState());
 
-    expect(snapshots[0].status).toBe('unknown');
+    expect(result.current.connectivityState.status).toBe('unknown');
 
     const registeredListener = mockNetInfo.addEventListener.mock.calls[0]?.[0] as
       | NetInfoListener
@@ -100,6 +68,8 @@ describe('useConnectivityState', () => {
       });
     });
 
+    expect(result.current.connectivityState.status).toBe('offline');
+
     act(() => {
       registeredListener({
         type: 'wifi',
@@ -108,9 +78,11 @@ describe('useConnectivityState', () => {
       });
     });
 
-    const statuses = snapshots.map((state) => state.status);
-    expect(statuses).toContain('offline');
-    expect(statuses).toContain('online');
+    expect(result.current.connectivityState.status).toBe('online');
+
+    unmount();
+
+    expect(unsubscribe).toHaveBeenCalledTimes(1);
   });
 
   it('exposes refresh that re-fetches and returns latest state', async () => {
@@ -121,26 +93,14 @@ describe('useConnectivityState', () => {
       isInternetReachable: true,
     });
 
-    let refreshCallback: (() => Promise<ConnectivityState>) | undefined;
+    const { result } = renderHook(() => useConnectivityState());
 
-    render(
-      <HookProbe
-        onState={jest.fn()}
-        onRefresh={(refreshFn) => {
-          refreshCallback = refreshFn;
-        }}
-      />,
-    );
-
-    const capturedRefresh = refreshCallback;
-
-    if (!capturedRefresh) {
-      throw new Error('Expected refresh callback to be captured');
-    }
-
-    const refreshed = await capturedRefresh();
+    await act(async () => {
+      const refreshed = await result.current.refresh();
+      expect(refreshed.status).toBe('online');
+    });
 
     expect(mockNetInfo.fetch).toHaveBeenCalled();
-    expect(refreshed.status).toBe('online');
+    expect(result.current.connectivityState.status).toBe('online');
   });
 });
