@@ -1,48 +1,13 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import React from 'react';
-import { act, create, type ReactTestRenderer } from 'react-test-renderer';
+import { fireEvent, screen } from '@testing-library/react-native';
+import { describe, beforeEach, expect, it, jest } from '@jest/globals';
 
 import { BoothHomeScreen } from './BoothHomeScreen';
 import { useConnectivityState } from '../../../hooks/useConnectivityState';
-
-jest.mock('react-native', () => {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const ReactInstance = require('react');
-
-  const createPrimitive = (displayName: string) => {
-    const Primitive = ReactInstance.forwardRef((props: Record<string, unknown>, ref: unknown) =>
-      ReactInstance.createElement(displayName, { ...props, ref }, props.children),
-    );
-
-    Primitive.displayName = displayName;
-    return Primitive;
-  };
-
-  return {
-    Pressable: createPrimitive('Pressable'),
-    StyleSheet: { create: (styles: Record<string, unknown>) => styles },
-    Text: createPrimitive('Text'),
-    View: createPrimitive('View'),
-  };
-});
+import { renderWithProviders } from '../../../test-utils/render';
 
 jest.mock('../../../hooks/useConnectivityState', () => ({
   useConnectivityState: jest.fn(),
 }));
-
-function render(ui: React.ReactElement): ReactTestRenderer {
-  let renderer: ReactTestRenderer | null = null;
-
-  act(() => {
-    renderer = create(ui);
-  });
-
-  if (!renderer) {
-    throw new Error('Expected test renderer to be created');
-  }
-
-  return renderer;
-}
 
 describe('BoothHomeScreen offline integration', () => {
   const useConnectivityStateMock = jest.mocked(useConnectivityState);
@@ -69,19 +34,13 @@ describe('BoothHomeScreen offline integration', () => {
       refresh: retry,
     });
 
-    const renderer = render(<BoothHomeScreen />);
+    renderWithProviders(<BoothHomeScreen />);
 
     expect(
-      renderer.root.findByProps({
-        children: '인터넷 연결이 없습니다. 일부 부스 기능을 사용할 수 없어요.',
-      }),
-    ).toBeDefined();
+      screen.getByText('인터넷 연결이 없습니다. 일부 부스 기능을 사용할 수 없어요.'),
+    ).toBeTruthy();
 
-    const retryButton = renderer.root.findByProps({ accessibilityRole: 'button' });
-
-    act(() => {
-      retryButton.props.onPress();
-    });
+    fireEvent.press(screen.getByRole('button', { name: '재시도' }));
 
     expect(retry).toHaveBeenCalledTimes(1);
   });
@@ -104,16 +63,13 @@ describe('BoothHomeScreen offline integration', () => {
       refresh: onlineRefresh,
     });
 
-    const renderer = render(<BoothHomeScreen />);
+    renderWithProviders(<BoothHomeScreen />);
 
-    expect(renderer.root.findByProps({ children: 'Phos MVP' })).toBeDefined();
-    expect(renderer.root.findByProps({ children: '프레임 프리셋' })).toBeDefined();
-    expect(renderer.root.findByProps({ children: '세션 계약' })).toBeDefined();
-
-    expect(() => {
-      renderer.root.findByProps({
-        children: '인터넷 연결이 없습니다. 일부 부스 기능을 사용할 수 없어요.',
-      });
-    }).toThrow();
+    expect(screen.getByText('Phos MVP')).toBeTruthy();
+    expect(screen.getByText('프레임 프리셋')).toBeTruthy();
+    expect(screen.getByText('세션 계약')).toBeTruthy();
+    expect(
+      screen.queryByText('인터넷 연결이 없습니다. 일부 부스 기능을 사용할 수 없어요.'),
+    ).toBeNull();
   });
 });
