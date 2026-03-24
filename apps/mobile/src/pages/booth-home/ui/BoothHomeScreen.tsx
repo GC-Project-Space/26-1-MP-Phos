@@ -2,6 +2,7 @@ import { FRAME_CATALOG } from '@phos/shared';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useConnectivityState } from '../../../hooks/useConnectivityState';
+import { useAppRuntime } from '../../../app/providers/AppProviders';
 import { ExperienceOverview } from '../../../widgets/experience-overview/ui/ExperienceOverview';
 import { SessionReadiness } from '../../../widgets/session-readiness/ui/SessionReadiness';
 import { palette } from '../../../shared/config/theme';
@@ -9,14 +10,15 @@ import { OfflineBanner } from '../../../shared/ui/OfflineBanner';
 
 export function BoothHomeScreen() {
   const { connectivityState, refresh } = useConnectivityState();
+  const { appDisplayName, offlineBannerEnabled } = useAppRuntime();
   const isOffline = connectivityState.status === 'offline';
 
   return (
     <View style={styles.screen}>
-      <OfflineBanner isOffline={isOffline} onRetry={refresh} />
+      <OfflineBanner isOffline={offlineBannerEnabled && isOffline} onRetry={refresh} />
 
       <View style={styles.hero}>
-        <Text style={styles.kicker}>Phos MVP</Text>
+        <Text style={styles.kicker}>{appDisplayName}</Text>
         <Text style={styles.title}>기능 개발 전에 포토부스 흐름을 먼저 점검하세요.</Text>
         <Text style={styles.description}>
           모바일 앱은 FSD 레이어 구조로 구성되어 있고, Nest API가 제공하는 프레임/세션 계약을 이미
