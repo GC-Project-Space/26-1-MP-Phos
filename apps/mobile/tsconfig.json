@@ -1,7 +1,13 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    "baseUrl": ".",
+    "jsx": "react-jsx",
+    "lib": ["ES2020"],
+    "paths": {
+      "@phos/shared": ["../../packages/shared/src/index.ts"]
+    },
     "strict": true,
-    "types": ["react", "react-native"]
+    "types": ["react", "react-native", "jest"]
   }
 }
