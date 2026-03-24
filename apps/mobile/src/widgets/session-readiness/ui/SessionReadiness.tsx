@@ -35,13 +35,13 @@ const validatedPreview: MobileSessionSummary | null = validationResult.success
 
 export function SessionReadiness() {
   return (
-    <InfoCard title="Session contract" subtitle="Valibot validates API-shaped payloads on mobile">
+    <InfoCard title="세션 계약" subtitle="모바일에서 Valibot으로 API 형태 페이로드를 검증합니다">
       <View style={styles.row}>
         <View>
-          <Text style={styles.label}>Preview payload</Text>
-          <Text style={styles.value}>{validatedPreview ? 'Validated' : 'Invalid'}</Text>
+          <Text style={styles.label}>미리보기 페이로드</Text>
+          <Text style={styles.value}>{validatedPreview ? '검증 완료' : '검증 실패'}</Text>
         </View>
-        <Text style={styles.badge}>{validatedPreview ? 'valibot ok' : 'needs review'}</Text>
+        <Text style={styles.badge}>{validatedPreview ? '검증 정상' : '검토 필요'}</Text>
       </View>
     </InfoCard>
   );

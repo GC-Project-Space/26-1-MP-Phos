@@ -10,17 +10,17 @@ interface ExperienceOverviewProps {
 
 export function ExperienceOverview({ frames }: ExperienceOverviewProps) {
   return (
-    <InfoCard title="Frame presets" subtitle="Shared contract data from @phos/shared">
+    <InfoCard title="프레임 프리셋" subtitle="@phos/shared의 공통 계약 데이터">
       <View style={styles.list}>
         {frames.map((frame) => (
           <View key={frame.frameId} style={styles.item}>
             <View>
               <Text style={styles.itemTitle}>{frame.title}</Text>
               <Text style={styles.itemMeta}>
-                {frame.layoutType} · {frame.slotCount} shots
+                {frame.layoutType} · {frame.slotCount}컷
               </Text>
             </View>
-            <Text style={styles.itemState}>{frame.isActive ? 'Ready' : 'Paused'}</Text>
+            <Text style={styles.itemState}>{frame.isActive ? '사용 가능' : '일시 중지'}</Text>
           </View>
         ))}
       </View>
