@@ -10,7 +10,7 @@ export interface OfflineBannerProps {
 
 export function OfflineBanner({
   isOffline,
-  message = 'No internet connection. Some booth actions are unavailable.',
+  message = '인터넷 연결이 없습니다. 일부 부스 기능을 사용할 수 없어요.',
   onRetry,
 }: OfflineBannerProps) {
   if (!isOffline) {
@@ -22,7 +22,7 @@ export function OfflineBanner({
       <Text style={styles.message}>{message}</Text>
       {onRetry ? (
         <Pressable accessibilityRole="button" onPress={onRetry} style={styles.retryButton}>
-          <Text style={styles.retryText}>Retry</Text>
+          <Text style={styles.retryText}>재시도</Text>
         </Pressable>
       ) : null}
     </View>

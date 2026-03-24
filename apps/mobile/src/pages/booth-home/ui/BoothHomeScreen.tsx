@@ -17,10 +17,10 @@ export function BoothHomeScreen() {
 
       <View style={styles.hero}>
         <Text style={styles.kicker}>Phos MVP</Text>
-        <Text style={styles.title}>Capture the booth flow before feature work starts.</Text>
+        <Text style={styles.title}>기능 개발 전에 포토부스 흐름을 먼저 점검하세요.</Text>
         <Text style={styles.description}>
-          The mobile app is structured with FSD layers and already shares the frame/session
-          contracts that the Nest API exposes.
+          모바일 앱은 FSD 레이어 구조로 구성되어 있고, Nest API가 제공하는 프레임/세션 계약을 이미
+          공유합니다.
         </Text>
       </View>
 

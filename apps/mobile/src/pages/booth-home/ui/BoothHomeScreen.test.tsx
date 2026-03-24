@@ -73,7 +73,7 @@ describe('BoothHomeScreen offline integration', () => {
 
     expect(
       renderer.root.findByProps({
-        children: 'No internet connection. Some booth actions are unavailable.',
+        children: '인터넷 연결이 없습니다. 일부 부스 기능을 사용할 수 없어요.',
       }),
     ).toBeDefined();
 
@@ -107,12 +107,12 @@ describe('BoothHomeScreen offline integration', () => {
     const renderer = render(<BoothHomeScreen />);
 
     expect(renderer.root.findByProps({ children: 'Phos MVP' })).toBeDefined();
-    expect(renderer.root.findByProps({ children: 'Frame presets' })).toBeDefined();
-    expect(renderer.root.findByProps({ children: 'Session contract' })).toBeDefined();
+    expect(renderer.root.findByProps({ children: '프레임 프리셋' })).toBeDefined();
+    expect(renderer.root.findByProps({ children: '세션 계약' })).toBeDefined();
 
     expect(() => {
       renderer.root.findByProps({
-        children: 'No internet connection. Some booth actions are unavailable.',
+        children: '인터넷 연결이 없습니다. 일부 부스 기능을 사용할 수 없어요.',
       });
     }).toThrow();
   });
