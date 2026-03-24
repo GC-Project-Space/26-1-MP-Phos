@@ -22,3 +22,7 @@ export const sessionSummarySchema = v.object({
   createdAt: v.string(),
   updatedAt: v.string(),
 });
+
+export function validateSessionSummary(input: unknown) {
+  return v.safeParse(sessionSummarySchema, input);
+}
