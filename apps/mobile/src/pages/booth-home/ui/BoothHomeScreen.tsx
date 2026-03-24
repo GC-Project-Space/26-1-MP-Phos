@@ -1,13 +1,20 @@
 import { FRAME_CATALOG } from '@phos/shared';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useConnectivityState } from '../../../hooks/useConnectivityState';
 import { ExperienceOverview } from '../../../widgets/experience-overview/ui/ExperienceOverview';
 import { SessionReadiness } from '../../../widgets/session-readiness/ui/SessionReadiness';
 import { palette } from '../../../shared/config/theme';
+import { OfflineBanner } from '../../../shared/ui/OfflineBanner';
 
 export function BoothHomeScreen() {
+  const { connectivityState, refresh } = useConnectivityState();
+  const isOffline = connectivityState.status === 'offline';
+
   return (
     <View style={styles.screen}>
+      <OfflineBanner isOffline={isOffline} onRetry={refresh} />
+
       <View style={styles.hero}>
         <Text style={styles.kicker}>Phos MVP</Text>
         <Text style={styles.title}>Capture the booth flow before feature work starts.</Text>
