@@ -1,4 +1,4 @@
-import NetInfo, { type NetInfoState, type NetInfoStateType } from '@react-native-community/netinfo';
+import NetInfo, { NetInfoStateType, type NetInfoState } from '@react-native-community/netinfo';
 
 export type ConnectivityStatus = 'unknown' | 'offline' | 'online';
 
@@ -42,11 +42,15 @@ const normalizeConnectivityState = (state: NetInfoState): ConnectivityState => {
     status: 'unknown',
   };
 
-  if (state.type === 'unknown' || state.isConnected === null) {
+  if (state.type === NetInfoStateType.unknown || state.isConnected === null) {
     return normalizedState;
   }
 
-  if (state.isConnected === false || state.type === 'none' || state.isInternetReachable === false) {
+  if (
+    state.isConnected === false ||
+    state.type === NetInfoStateType.none ||
+    state.isInternetReachable === false
+  ) {
     return {
       ...normalizedState,
       status: 'offline',
