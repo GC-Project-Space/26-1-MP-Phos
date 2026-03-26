@@ -16,11 +16,20 @@ export function useConnectivityState(): UseConnectivityStateResult {
     return createConnectivityStateHolder();
   }, []);
 
-  const connectivityState = useSyncExternalStore(
-    connectivityStateHolder.subscribe,
-    connectivityStateHolder.getState,
-    connectivityStateHolder.getState,
+  const subscribe = useCallback(
+    (onStoreChange: () => void) => {
+      return connectivityStateHolder.subscribe(() => {
+        onStoreChange();
+      });
+    },
+    [connectivityStateHolder],
   );
+
+  const getSnapshot = useCallback(() => {
+    return connectivityStateHolder.getState();
+  }, [connectivityStateHolder]);
+
+  const connectivityState = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
   useEffect(() => {
     return () => {

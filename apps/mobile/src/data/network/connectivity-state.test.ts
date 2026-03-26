@@ -19,6 +19,12 @@ type NetInfoSnapshot = {
 };
 
 jest.mock('@react-native-community/netinfo', () => ({
+  NetInfoStateType: {
+    cellular: 'cellular',
+    none: 'none',
+    unknown: 'unknown',
+    wifi: 'wifi',
+  },
   __esModule: true,
   default: {
     addEventListener: jest.fn(),
@@ -26,7 +32,13 @@ jest.mock('@react-native-community/netinfo', () => ({
   },
 }));
 
-const mockNetInfoModule = jest.requireMock('@react-native-community/netinfo') as {
+const mockNetInfoModule: {
+  NetInfoStateType: {
+    cellular: 'cellular';
+    none: 'none';
+    unknown: 'unknown';
+    wifi: 'wifi';
+  };
   default: {
     addEventListener: jest.MockedFunction<(listener: NetInfoListener) => () => void>;
     fetch: jest.MockedFunction<
@@ -37,7 +49,7 @@ const mockNetInfoModule = jest.requireMock('@react-native-community/netinfo') as
       }>
     >;
   };
-};
+} = jest.requireMock('@react-native-community/netinfo');
 
 const mockNetInfo = mockNetInfoModule.default;
 
