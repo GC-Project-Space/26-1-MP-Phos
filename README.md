@@ -120,3 +120,9 @@ docs/
 | `pnpm test`           | 전체 테스트 실행                 |
 | `pnpm test:e2e`       | API e2e 테스트 실행              |
 | `pnpm clean`          | 산출물과 설치 파일 정리          |
+
+## 모바일 테스트 메모
+
+- `pnpm --filter mobile test`는 React Native Testing Library 기반으로 mobile primitive/provider/data/screen 계층을 검증합니다.
+- 대표 범위는 `shared/ui`, `app/providers`, `shared/contracts`, `pages/booth-home`, `app/App` 테스트입니다.
+- negative fixture는 `apps/mobile/src/__fixtures__/sessionSummary.ts`에서 관리합니다.
