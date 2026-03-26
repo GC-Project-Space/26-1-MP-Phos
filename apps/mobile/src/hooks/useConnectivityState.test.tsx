@@ -5,6 +5,12 @@ import { act, create, type ReactTestRenderer } from 'react-test-renderer';
 import { useConnectivityState } from './useConnectivityState';
 import type { ConnectivityState } from '../data/network/connectivity-state';
 
+const hookTestGlobal = globalThis as typeof globalThis & {
+  IS_REACT_ACT_ENVIRONMENT?: boolean;
+};
+
+hookTestGlobal.IS_REACT_ACT_ENVIRONMENT = true;
+
 type NetInfoListener = (state: {
   type: 'unknown' | 'none' | 'wifi' | 'cellular';
   isConnected: boolean | null;
@@ -12,6 +18,12 @@ type NetInfoListener = (state: {
 }) => void;
 
 jest.mock('@react-native-community/netinfo', () => ({
+  NetInfoStateType: {
+    cellular: 'cellular',
+    none: 'none',
+    unknown: 'unknown',
+    wifi: 'wifi',
+  },
   __esModule: true,
   default: {
     addEventListener: jest.fn(),
@@ -19,7 +31,13 @@ jest.mock('@react-native-community/netinfo', () => ({
   },
 }));
 
-const mockNetInfoModule = jest.requireMock('@react-native-community/netinfo') as {
+const mockNetInfoModule: {
+  NetInfoStateType: {
+    cellular: 'cellular';
+    none: 'none';
+    unknown: 'unknown';
+    wifi: 'wifi';
+  };
   default: {
     addEventListener: jest.MockedFunction<(listener: NetInfoListener) => () => void>;
     fetch: jest.MockedFunction<
@@ -30,7 +48,7 @@ const mockNetInfoModule = jest.requireMock('@react-native-community/netinfo') as
       }>
     >;
   };
-};
+} = jest.requireMock('@react-native-community/netinfo');
 
 const mockNetInfo = mockNetInfoModule.default;
 
@@ -74,7 +92,7 @@ describe('useConnectivityState', () => {
   });
 
   it('starts with unknown state and updates from offline to online events', () => {
-    mockNetInfo.addEventListener.mockImplementation((listener) => {
+    mockNetInfo.addEventListener.mockImplementation((_listener) => {
       return jest.fn();
     });
 
