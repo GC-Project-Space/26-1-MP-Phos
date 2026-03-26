@@ -17,12 +17,14 @@ describe('BoothHomeScreen offline integration', () => {
   });
 
   it('shows offline banner in offline state and triggers retry callback', () => {
-    const retry = jest.fn(async () => ({
-      connectionType: null,
-      isConnected: false,
-      isInternetReachable: false,
-      status: 'offline' as const,
-    }));
+    const retry = jest.fn(() =>
+      Promise.resolve({
+        connectionType: null,
+        isConnected: false,
+        isInternetReachable: false,
+        status: 'offline' as const,
+      }),
+    );
 
     useConnectivityStateMock.mockReturnValue({
       connectivityState: {
@@ -46,12 +48,14 @@ describe('BoothHomeScreen offline integration', () => {
   });
 
   it('keeps existing hero and widgets visible in online state without offline banner', () => {
-    const onlineRefresh = jest.fn(async () => ({
-      connectionType: null,
-      isConnected: true,
-      isInternetReachable: true,
-      status: 'online' as const,
-    }));
+    const onlineRefresh = jest.fn(() =>
+      Promise.resolve({
+        connectionType: null,
+        isConnected: true,
+        isInternetReachable: true,
+        status: 'online' as const,
+      }),
+    );
 
     useConnectivityStateMock.mockReturnValue({
       connectivityState: {

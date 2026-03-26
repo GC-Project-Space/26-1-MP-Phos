@@ -1,5 +1,18 @@
 # Mobile release checklist
 
+## Smoke flow readiness
+
+- [x] **R1** `test:smoke`가 launch → booth → offline → recover 핵심 흐름을 하나의 deterministic 시나리오로 재현한다.
+- [x] **R2** smoke harness가 실패 fixture를 통해 어느 stage에서 깨졌는지 명확한 메시지로 남긴다.
+- [x] **R3** smoke 실행 결과를 `.sisyphus/evidence/task-13-mobile-smoke.txt`에 저장한다.
+
+## Smoke test traceability
+
+- [x] **T1** happy flow 검증 (`apps/mobile/src/smoke.test.tsx`)
+- [x] **T2** offline 단계 검증 (`apps/mobile/src/smoke.test.tsx`)
+- [x] **T3** recover 단계 검증 (`apps/mobile/src/smoke.test.tsx`)
+- [x] **T4** failure logging 검증 (`apps/mobile/src/smoke.test.tsx`)
+
 ## Offline connectivity readiness
 
 - [x] **R1** Booth 화면에서 `unknown`/`offline`/`online` 상태를 일관된 connectivity 계층으로 처리한다.
@@ -19,6 +32,7 @@
 
 ## Verification
 
+- [x] `pnpm --filter mobile test:smoke`
 - [x] `pnpm --filter mobile typecheck`
 - [x] `pnpm --filter mobile test`
 
