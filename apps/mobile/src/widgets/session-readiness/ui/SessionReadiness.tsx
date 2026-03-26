@@ -1,34 +1,14 @@
 import type { InferOutput } from 'valibot';
-import { safeParse } from 'valibot';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { sessionSummarySchema } from '../../../shared/contracts/session';
+import { validSessionSummaryFixture } from '../../../__fixtures__/sessionSummary';
+import { sessionSummarySchema, validateSessionSummary } from '../../../shared/contracts/session';
 import { InfoCard } from '../../../shared/ui/InfoCard';
 import { palette } from '../../../shared/config/theme';
 
-const sessionPreview = {
-  sessionId: 'ses_preview',
-  mode: 'LIVE_BOOTH',
-  status: 'active',
-  selectedFrameId: 'frm_4cut_basic',
-  selectedShotAssetIds: [],
-  editState: {
-    filterPreset: null,
-    textOverlay: null,
-    cropToFrame: false,
-  },
-  mediaPreset: 'default',
-  retentionExpiresAt: '2026-03-23T00:00:00.000Z',
-  trainingUsed: false,
-  consentVersion: null,
-  deletionStatus: 'active',
-  createdAt: '2026-03-21T00:00:00.000Z',
-  updatedAt: '2026-03-21T00:00:00.000Z',
-};
-
 type MobileSessionSummary = InferOutput<typeof sessionSummarySchema>;
 
-const validationResult = safeParse(sessionSummarySchema, sessionPreview);
+const validationResult = validateSessionSummary(validSessionSummaryFixture);
 const validatedPreview: MobileSessionSummary | null = validationResult.success
   ? validationResult.output
   : null;
