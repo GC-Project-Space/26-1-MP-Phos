@@ -124,8 +124,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/shared
       '@react-native-community/netinfo':
-        specifier: 11.5.2
-        version: 11.5.2(react-native@0.84.1(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3))(react@19.2.3)
+        specifier: 12.0.1
+        version: 12.0.1(react-native@0.84.1(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3))(react@19.2.3)
       expo:
         specifier: 56.0.0-canary-20260305-5163746
         version: 56.0.0-canary-20260305-5163746(@babel/core@7.29.0)(@expo/dom-webview@56.0.0-canary-20260305-5163746)(react-dom@19.2.3(react@19.2.3))(react-native@0.84.1(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3))(react@19.2.3)(typescript@6.0.2)
@@ -150,7 +150,7 @@ importers:
     devDependencies:
       '@testing-library/react-native':
         specifier: 13.3.3
-        version: 13.3.3(jest@30.3.0(@types/node@25.5.0)(ts-node@10.9.2(@types/node@25.5.0)(typescript@6.0.2)))(react-native@0.84.1(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3))(react-test-renderer@19.2.3(react@19.2.3))(react@19.2.3)
+        version: 13.3.3(jest@30.3.0)(react-native@0.84.1(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3))(react-test-renderer@19.2.3(react@19.2.3))(react@19.2.3)
       '@types/react':
         specifier: ~19.2.14
         version: 19.2.14
@@ -165,7 +165,7 @@ importers:
         version: 30.3.0(@types/node@25.5.0)(ts-node@10.9.2(@types/node@25.5.0)(typescript@6.0.2))
       jest-expo:
         specifier: 56.0.0-canary-20260305-5163746
-        version: 56.0.0-canary-20260305-5163746(@babel/core@7.29.0)(expo@56.0.0-canary-20260305-5163746)(jest@30.3.0(@types/node@25.5.0)(ts-node@10.9.2(@types/node@25.5.0)(typescript@6.0.2)))(react-native@0.84.1(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3))(react@19.2.3)(typescript@6.0.2)
+        version: 56.0.0-canary-20260305-5163746(@babel/core@7.29.0)(expo@56.0.0-canary-20260305-5163746)(jest@30.3.0)(react-native@0.84.1(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3))(react@19.2.3)(typescript@6.0.2)
       react-test-renderer:
         specifier: 19.2.3
         version: 19.2.3(react@19.2.3)
@@ -193,17 +193,18 @@ importers:
     dependencies:
       '@prisma/client':
         specifier: ^7.6.0
-        version: 7.6.0(prisma@7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3)
+        version: 7.6.0(prisma@7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2)
     devDependencies:
       dotenv:
         specifier: ^17.3.1
         version: 17.3.1
       prisma:
         specifier: ^7.6.0
-        version: 7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
+        version: 7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2)
       prisma-markdown:
         specifier: ^4.0.0
-        version: 4.0.0(@prisma/client@7.6.0(prisma@7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(prisma@7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))
+        version: 4.0.0(@prisma/client@7.6.0(prisma@7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2))(prisma@7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))
+
   packages/shared:
     devDependencies:
       typescript:
@@ -1491,8 +1492,8 @@ packages:
       '@types/react':
         optional: true
 
-  '@react-native-community/netinfo@11.5.2':
-    resolution: {integrity: sha512-/g0m65BtX9HU+bPiCH2517bOHpEIUsGrWFXDzi1a5nNKn5KujQgm04WhL7/OSXWKHyrT8VVtUoJA0XKRxueBpQ==}
+  '@react-native-community/netinfo@12.0.1':
+    resolution: {integrity: sha512-P/3caXIvfYSJG8AWJVefukg+ZGRPs+M4Lp3pNJtgcTYoJxCjWrKQGNnCkj/Cz//zWa/avGed0i/wzm0T8vV2IQ==}
     peerDependencies:
       react: '*'
       react-native: '>=0.59'
@@ -7123,12 +7124,13 @@ snapshots:
 
   '@prisma/client-runtime-utils@7.6.0': {}
 
-  '@prisma/client@7.6.0(prisma@7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3)':
+  '@prisma/client@7.6.0(prisma@7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2)':
     dependencies:
       '@prisma/client-runtime-utils': 7.6.0
     optionalDependencies:
-      prisma: 7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
+      prisma: 7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2)
       typescript: 6.0.2
+
   '@prisma/config@7.6.0':
     dependencies:
       c12: 3.1.0
@@ -7144,7 +7146,7 @@ snapshots:
 
   '@prisma/debug@7.6.0': {}
 
-  '@prisma/dev@0.24.3(typescript@5.9.3)':
+  '@prisma/dev@0.24.3(typescript@6.0.2)':
     dependencies:
       '@electric-sql/pglite': 0.4.1
       '@electric-sql/pglite-socket': 0.1.1(@electric-sql/pglite@0.4.1)
@@ -7276,7 +7278,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.14
 
-  '@react-native-community/netinfo@11.5.2(react-native@0.84.1(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3))(react@19.2.3)':
+  '@react-native-community/netinfo@12.0.1(react-native@0.84.1(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3))(react@19.2.3)':
     dependencies:
       react: 19.2.3
       react-native: 0.84.1(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3)
@@ -7415,7 +7417,7 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
-  '@testing-library/react-native@13.3.3(jest@30.3.0(@types/node@25.5.0)(ts-node@10.9.2(@types/node@25.5.0)(typescript@6.0.2)))(react-native@0.84.1(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3))(react-test-renderer@19.2.3(react@19.2.3))(react@19.2.3)':
+  '@testing-library/react-native@13.3.3(jest@30.3.0)(react-native@0.84.1(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3))(react-test-renderer@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
       jest-matcher-utils: 30.3.0
       picocolors: 1.1.1
@@ -9570,7 +9572,7 @@ snapshots:
       jest-util: 30.3.0
       jest-validate: 30.3.0
 
-  jest-expo@56.0.0-canary-20260305-5163746(@babel/core@7.29.0)(expo@56.0.0-canary-20260305-5163746)(jest@30.3.0(@types/node@25.5.0)(ts-node@10.9.2(@types/node@25.5.0)(typescript@6.0.2)))(react-native@0.84.1(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3))(react@19.2.3)(typescript@6.0.2):
+  jest-expo@56.0.0-canary-20260305-5163746(@babel/core@7.29.0)(expo@56.0.0-canary-20260305-5163746)(jest@30.3.0)(react-native@0.84.1(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3))(react@19.2.3)(typescript@6.0.2):
     dependencies:
       '@expo/config': 56.0.0-canary-20260305-5163746(typescript@6.0.2)
       '@expo/json-file': 10.0.13-canary-20260305-5163746
@@ -9581,7 +9583,7 @@ snapshots:
       jest-environment-jsdom: 29.7.0
       jest-snapshot: 29.7.0
       jest-watch-select-projects: 2.0.0
-      jest-watch-typeahead: 2.2.1(jest@30.3.0(@types/node@25.5.0)(ts-node@10.9.2(@types/node@25.5.0)(typescript@6.0.2)))
+      jest-watch-typeahead: 2.2.1(jest@30.3.0)
       json5: 2.2.3
       lodash: 4.17.23
       react-native: 0.84.1(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3)
@@ -9859,7 +9861,7 @@ snapshots:
       chalk: 3.0.0
       prompts: 2.4.2
 
-  jest-watch-typeahead@2.2.1(jest@30.3.0(@types/node@25.5.0)(ts-node@10.9.2(@types/node@25.5.0)(typescript@6.0.2))):
+  jest-watch-typeahead@2.2.1(jest@30.3.0):
     dependencies:
       ansi-escapes: 6.2.1
       chalk: 4.1.2
@@ -10887,16 +10889,16 @@ snapshots:
       ansi-styles: 5.2.0
       react-is: 18.3.1
 
-  prisma-markdown@4.0.0(@prisma/client@7.6.0(prisma@7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3))(prisma@7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)):
+  prisma-markdown@4.0.0(@prisma/client@7.6.0(prisma@7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2))(prisma@7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2)):
     dependencies:
-      '@prisma/client': 7.6.0(prisma@7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3)
+      '@prisma/client': 7.6.0(prisma@7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2))(typescript@6.0.2)
       '@prisma/generator-helper': 7.5.0
-      prisma: 7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
+      prisma: 7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2)
 
-  prisma@7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3):
+  prisma@7.6.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@6.0.2):
     dependencies:
       '@prisma/config': 7.6.0
-      '@prisma/dev': 0.24.3(typescript@5.9.3)
+      '@prisma/dev': 0.24.3(typescript@6.0.2)
       '@prisma/engines': 7.6.0
       '@prisma/studio-core': 0.27.3(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       mysql2: 3.15.3
