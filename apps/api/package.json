@@ -23,9 +23,9 @@
     "clean": "rm -rf dist coverage"
   },
   "dependencies": {
-    "@nestjs/common": "^11.1.17",
-    "@nestjs/core": "^11.1.17",
-    "@nestjs/platform-express": "^11.1.17",
+    "@nestjs/common": "^11.1.18",
+    "@nestjs/core": "^11.1.18",
+    "@nestjs/platform-express": "^11.1.18",
     "@phos/backend-contracts": "workspace:*",
     "@phos/db": "workspace:*",
     "@phos/shared": "workspace:*",
