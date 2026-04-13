@@ -29,7 +29,7 @@
     "@phos/backend-contracts": "workspace:*",
     "@phos/db": "workspace:*",
     "@phos/shared": "workspace:*",
-    "@prisma/adapter-pg": "^7.6.0",
+    "@prisma/adapter-pg": "^7.7.0",
     "pg": "^8.20.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2"
