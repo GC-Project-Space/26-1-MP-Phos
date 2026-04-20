@@ -22,11 +22,11 @@
     "clean": "rm -rf generated"
   },
   "dependencies": {
-    "@prisma/client": "^7.6.0"
+    "@prisma/client": "^7.7.0"
   },
   "devDependencies": {
-    "dotenv": "^17.3.1",
-    "prisma": "^7.6.0",
+    "dotenv": "^17.4.2",
+    "prisma": "^7.7.0",
     "prisma-markdown": "^4.0.0"
   }
 }
