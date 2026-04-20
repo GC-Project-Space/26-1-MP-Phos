@@ -30,7 +30,7 @@
     "@types/react-test-renderer": "^19.1.0",
     "expo-doctor": "^1.18.13",
     "jest": "^30.3.0",
-    "jest-expo": "56.0.0-canary-20260305-5163746",
+    "jest-expo": "56.0.0-canary-20260417-141204f",
     "react-test-renderer": "19.2.3",
     "typescript": "~6.0.2"
   },
