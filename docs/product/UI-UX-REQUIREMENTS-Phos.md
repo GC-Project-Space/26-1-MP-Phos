@@ -269,7 +269,7 @@ Phos는 `2분 안에 촬영을 끝내고 결과물을 확보하는 재미 중심
 
 ## 11) 현재 레포 상태 기준 참고 메모 (비권한 부록)
 
-- 현재 모바일 앱은 `BoothHomeScreen`, `ExperienceOverview`, `SessionReadiness`, `InfoCard` 중심의 스캐폴드 상태다
+- 현재 모바일 앱은 Flutter 기반 `HomeScreen`, `FrameSelectionScreen`, `ResultScreen`, `GalleryScreen` 중심의 스캐폴드 상태다
 - 현재 화면은 요구사항 설명용 홈에 가깝고, 실제 촬영 플로우 화면은 아직 구현 전이다
 - 따라서 이 문서는 `현재 구현 설명서`라기보다 `현재 요구사항을 구현하기 위한 UX 기준 문서`로 사용해야 한다
 

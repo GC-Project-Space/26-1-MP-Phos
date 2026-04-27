@@ -2,7 +2,7 @@ import {
   assertCreateSessionRequest,
   assertUpdateSessionRequest,
   validateSessionSummary,
-} from '@phos/backend-contracts';
+} from '../../contracts/session.validators';
 import { Body, Controller, Get, NotFoundException, Param, Patch, Post } from '@nestjs/common';
 
 import { assertBody, assertResponse } from '../../common/http/typia-assert';

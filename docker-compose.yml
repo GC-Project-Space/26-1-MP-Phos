@@ -30,7 +30,7 @@ services:
     ports:
       - '3000:3000'
     command: >-
-      sh -c "pnpm --filter @phos/db db:migrate:deploy && pnpm --filter api start:prod"
+      sh -c "pnpm --filter api db:migrate:deploy && pnpm --filter api start:prod"
 
 volumes:
   phos-postgres18-data:

@@ -1,51 +1,20 @@
 # Mobile release checklist
 
-## Smoke flow readiness
+## Flutter readiness
 
-- [x] **R1** `test:smoke`가 launch → booth → offline → recover 핵심 흐름을 하나의 deterministic 시나리오로 재현한다.
-- [x] **R2** smoke harness가 실패 fixture를 통해 어느 stage에서 깨졌는지 명확한 메시지로 남긴다.
-- [x] **R3** smoke 실행 결과를 `.sisyphus/evidence/task-13-mobile-smoke.txt`에 저장한다.
-
-## Smoke test traceability
-
-- [x] **T1** happy flow 검증 (`apps/mobile/src/smoke.test.tsx`)
-- [x] **T2** offline 단계 검증 (`apps/mobile/src/smoke.test.tsx`)
-- [x] **T3** recover 단계 검증 (`apps/mobile/src/smoke.test.tsx`)
-- [x] **T4** failure logging 검증 (`apps/mobile/src/smoke.test.tsx`)
-
-## Offline connectivity readiness
-
-- [x] **R1** Booth 화면에서 `unknown`/`offline`/`online` 상태를 일관된 connectivity 계층으로 처리한다.
-- [x] **R1/T1** 앱 초기 NetInfo `null`/`unknown` 상태를 `offline`으로 오판하지 않는다.
-- [x] **R2** `useConnectivityState()` 훅으로 화면이 connectivity 상태와 refresh 진입점을 사용한다.
-- [x] **R3/T2** Booth 상단에 offline 상태 안내 배너를 노출하고 offline→online 전환에 맞춰 상태를 갱신한다.
-- [x] **R5/T4** offline 배너의 retry 액션이 refresh 콜백을 호출한다.
-- [x] **R4/T5** online 상태에서 기존 hero/프레임/세션 위젯 UI가 유지된다.
-
-## Test case traceability
-
-- [x] **T1** 초기 unknown 상태 노출 검증 (`connectivity-state.test.ts`, `useConnectivityState.test.tsx`)
-- [x] **T2** offline 배너 노출 검증 (`BoothHomeScreen.test.tsx`)
-- [x] **T3** offline 이후 online 복귀 검증 (`connectivity-state.test.ts`, `useConnectivityState.test.tsx`)
-- [x] **T4** retry 콜백 호출 검증 (`BoothHomeScreen.test.tsx`)
-- [x] **T5** online 시 기존 UI 회귀 방지 검증 (`BoothHomeScreen.test.tsx`)
+- [ ] **R1** `apps/mobile`이 Flutter 앱의 단일 모바일 프론트엔드 경로다.
+- [ ] **R2** Dart package는 `phos_mobile`, native bundle/application ID는 `com.phos.mobile`이다.
+- [ ] **R3** 홈, 프레임 선택, 변환, 결과, 갤러리 흐름이 Flutter 화면에서 유지된다.
 
 ## Verification
 
-- [x] `pnpm --filter mobile test:smoke`
-- [x] `pnpm --filter mobile typecheck`
-- [x] `pnpm --filter mobile test`
+- [ ] `cd apps/mobile && flutter pub get`
+- [ ] `cd apps/mobile && flutter analyze`
+- [ ] `cd apps/mobile && flutter test`
+- [ ] 필요한 대상에서 `pnpm mobile:android`, `pnpm mobile:ios`, 또는 `pnpm mobile:web` 수동 기동 확인
 
-## Mobile test infrastructure readiness
+## React Native removal checks
 
-- [x] **R1** Jest 설정이 React Native Testing Library 기반 컴포넌트/화면 테스트를 안정적으로 지원한다.
-- [x] **R2** primitive, provider, data, screen 계층에 각각 의미 있는 테스트가 있다.
-- [x] **R3** missing provider, invalid payload 같은 실패 케이스가 실제 fixture 기반으로 검증된다.
-- [x] **R4** trivial assertion 대신 UI 노출, context 의존성, validation 실패 같은 실제 동작을 검증한다.
-
-## Test infrastructure traceability
-
-- [x] **T1** primitive render (`src/shared/ui/shared-ui-primitives.test.tsx`)
-- [x] **T2** provider missing (`src/app/providers/AppProviders.test.tsx`, `src/app/App.test.tsx`)
-- [x] **T3** data validation fail (`src/shared/contracts/session.test.ts`, `src/__fixtures__/sessionSummary.ts`)
-- [x] **T4** screen integration (`src/pages/booth-home/ui/BoothHomeScreen.test.tsx`, `src/app/App.test.tsx`)
+- [ ] Expo/React Native 앱 코드와 Jest smoke harness가 제거되어 있다.
+- [ ] 루트 명령어는 Flutter CLI 기준으로 동작한다.
+- [ ] 문서와 lockfile에 Expo/React Native 모바일 앱 의존성이 남아 있지 않다.

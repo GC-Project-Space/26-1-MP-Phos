@@ -4,9 +4,9 @@ import {
   type SessionEditState,
   type SessionSummary,
   type UpdateSessionRequest,
-} from '@phos/shared';
+} from '../../contracts/session';
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import type { Prisma, Session as SessionRecord, SessionStatus } from '@phos/db';
+import type { Prisma, Session as SessionRecord, SessionStatus } from '#db';
 import { randomUUID } from 'crypto';
 
 import { FramesService } from '../frames/frames.service';
