@@ -4,17 +4,27 @@
   "description": "Phos NestJS API",
   "private": true,
   "license": "UNLICENSED",
+  "imports": {
+    "#db": {
+      "types": "./generated/client/index.d.ts",
+      "default": "./generated/client/index.js"
+    }
+  },
   "scripts": {
-    "build": "nest build",
+    "build": "tspc -p tsconfig.build.json",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start": "ts-patch install -s && nest start",
+    "start:dev": "ts-patch install -s && nest start --watch",
+    "start:debug": "ts-patch install -s && nest start --debug --watch",
+    "start:prod": "node dist/src/main",
     "typecheck": "tsc --noEmit",
-    "db:generate": "pnpm --filter @phos/db db:generate",
-    "db:migrate:dev": "pnpm --filter @phos/db db:migrate:dev",
-    "db:push": "pnpm --filter @phos/db db:push",
+    "db:generate": "prisma generate --generator client",
+    "db:erd": "prisma generate --generator markdown",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "db:validate": "sh -c 'DATABASE_URL=postgresql://phos:phos@localhost:5432/phos?schema=phos_dev prisma validate'",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -26,13 +36,12 @@
     "@nestjs/common": "^11.1.17",
     "@nestjs/core": "^11.1.17",
     "@nestjs/platform-express": "^11.1.17",
-    "@phos/backend-contracts": "workspace:*",
-    "@phos/db": "workspace:*",
-    "@phos/shared": "workspace:*",
     "@prisma/adapter-pg": "^7.6.0",
+    "@prisma/client": "^7.6.0",
     "pg": "^8.20.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.2"
+    "rxjs": "^7.8.2",
+    "typia": "^12.0.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.16",
@@ -42,13 +51,17 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^25.5.0",
     "@types/supertest": "^7.2.0",
+    "dotenv": "^17.3.1",
     "jest": "^30.3.0",
     "prettier": "^3.8.1",
+    "prisma": "^7.6.0",
+    "prisma-markdown": "^4.0.0",
     "source-map-support": "^0.5.21",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.6",
     "ts-loader": "^9.5.4",
     "ts-node": "^10.9.2",
+    "ts-patch": "^3.3.0",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^6.0.2"
   },
@@ -61,7 +74,12 @@
     "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
+      "^.+\\.(t|j)s$": [
+        "ts-jest",
+        {
+          "compiler": "ts-patch/compiler"
+        }
+      ]
     },
     "collectCoverageFrom": [
       "src/**/*.(t|j)s"

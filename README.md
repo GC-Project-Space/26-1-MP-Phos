@@ -46,38 +46,37 @@ pnpm dev:mobile
 
 `corepack`이 없는 환경에서는 `npx pnpm@10.32.1 install` 같은 형태로 동일 버전의 pnpm을 직접 호출할 수 있습니다.
 
-- `pnpm docker:up`: 백엔드 로컬 스택(`postgres` + `api`)을 포그라운드로 실행
-- `pnpm dev:mobile`: 별도 터미널에서 Expo 모바일 앱 개발 서버 실행
+- `pnpm docker:up`: 백엔드 로컬 스택(`postgres` + `api`)을 실행
+- `pnpm dev:api`: Docker 밖에서 NestJS API 개발 서버 실행
+- `pnpm dev:mobile`: 별도 터미널에서 Flutter 모바일 앱 실행
 
 ## 개발 환경 기준
 
 - **Node.js**: `25.x` (Docker API 런타임 `node:25-alpine` 기준, 로컬 실행은 `>=22`)
 - **pnpm**: `10.32.1` (`corepack` 사용 권장)
+- **Flutter**: `apps/mobile` 실행, 분석, 테스트에 필요
 - **Docker Desktop**: 로컬 `postgres:18-alpine` + API 스택 실행 시 필요
-- **Android 로컬 빌드 (macOS)**: `pnpm mobile:android:run`은 `JAVA_HOME`이 없을 때 macOS 기본 JDK 탐지(`/usr/libexec/java_home`)를 먼저 시도하고, 실패하면 Android Studio 번들 JBR를 자동으로 사용합니다.
 
 ## 기술 스택
 
 - **모노레포**: `pnpm@10.32.1` workspaces + `turbo@2.8.20`
-- **프론트엔드**: `apps/mobile` - `expo@56.0.0-canary-20260305-5163746`, `react-native@0.84.1`, `react@19.2.3`, TypeScript, FSD-inspired 구조
+- **프론트엔드**: `apps/mobile` - Flutter/Dart 기반 모바일 앱
 - **백엔드**: `apps/api` - `@nestjs/common@11.1.17`, TypeScript, 멀티모듈 MVC 구조
-- **데이터베이스**: `packages/db` - `@prisma/client@7.5.0` + 로컬 컨테이너 `postgres:18-alpine`
-- **타입 검증**: 모바일은 `valibot@1.3.1`, 백엔드는 `typia@12.0.1`
-- **공유 패키지**: `packages/shared`는 DTO/상수, `packages/backend-contracts`는 Typia 검증기
+- **데이터베이스**: `apps/api/prisma` - `@prisma/client@7.6.0` + 로컬 컨테이너 `postgres:18-alpine`
+- **타입 검증**: 백엔드는 `typia@12.0.1`
+- **서버 계약**: `apps/api/src/contracts`는 DTO/상수와 Typia 검증기를 관리합니다.
 
 ## 의존성 업데이트 메모
 
-- Expo 관리 패키지(`expo-status-bar`, `react`, `react-dom`, `react-native`, `react-native-safe-area-context`)는 레지스트리 최신값보다 현재 설치된 Expo SDK가 요구하는 호환 버전을 우선합니다.
-- 현재 모바일 앱은 다음 메이저 선행 검증을 위해 `expo@56.0.0-canary-20260305-5163746`를 사용합니다. Expo 56 안정판 출시 후에는 canary 태그를 정식 `56.x` 버전으로 치환하는 후속 정리가 필요합니다.
-- `apps/mobile/app.json`의 루트 `splash` 설정은 Expo 56 canary 스키마 검증에 맞춰 제거된 상태입니다. 안정판 전환 시 스키마 허용 여부를 다시 확인한 뒤 복원 여부를 판단해야 합니다.
-- Prisma CLI 연결 URL은 `packages/db/prisma.config.ts`에서 관리하며, `packages/db/prisma/schema/` 아래 datasource 블록에는 provider만 유지합니다.
+- 모바일 앱 의존성은 `apps/mobile/pubspec.yaml`과 `apps/mobile/pubspec.lock`에서 관리합니다.
+- 모바일 의존성 설치와 검증은 `cd apps/mobile && flutter pub get`, `flutter analyze`, `flutter test`로 수행합니다.
+- Prisma CLI 연결 URL은 `apps/api/prisma.config.ts`에서 관리하며, `apps/api/prisma/schema/` 아래 datasource 블록에는 provider만 유지합니다.
 - API 런타임은 `DATABASE_URL`을 직접 읽고, 값이 없으면 로컬 기본 스키마 `phos_dev`를 사용합니다.
-- 모바일 의존성 정합성 확인은 `pnpm --dir apps/mobile run doctor`로 수행합니다.
 
 ## 문서 안내
 
 - **[기술 아키텍처](docs/architecture/ARCHITECTURE-Phos.md)**: 현재 모노레포 구조, 기술 스택, 검증 전략
-- **[ERD](docs/architecture/ERD-Phos.md)**: `packages/db/prisma/schema/` 도메인 스키마에서 `prisma-markdown`으로 생성한 데이터 모델 문서
+- **[ERD](docs/architecture/ERD-Phos.md)**: `apps/api/prisma/schema/` 도메인 스키마에서 `prisma-markdown`으로 생성한 데이터 모델 문서
 - **[제품 문서 인덱스](docs/product/README.md)**: 제품 문서 읽는 순서와 각 문서 역할 안내
 - **[PRD](docs/product/PRD-Phos.md)**: MVP 목표, 핵심 기능, 범위
 - **[API 명세](docs/product/API-SPEC-Phos.md)**: 세션 중심 API 계약
@@ -91,11 +90,7 @@ pnpm dev:mobile
 ```text
 apps/
   api/                # NestJS 백엔드
-  mobile/             # Expo React Native 프론트엔드
-packages/
-  backend-contracts/  # Typia 기반 백엔드 검증기
-  db/                 # Prisma 스키마와 클라이언트
-  shared/             # 공유 DTO와 상수
+  mobile/             # Flutter 모바일 앱
 docs/
   architecture/       # 기술 아키텍처 문서
   discovery/          # 제품 디스커버리와 리서치
@@ -107,8 +102,13 @@ docs/
 | 명령어                | 설명                             |
 | --------------------- | -------------------------------- |
 | `pnpm install`        | 전체 의존성 설치                 |
-| `pnpm dev`            | 모바일 + API 동시 개발 모드 실행 |
-| `pnpm dev:mobile`     | 모바일 앱만 실행                 |
+| `pnpm dev`            | API 개발 서버 실행               |
+| `pnpm dev:mobile`     | Flutter 모바일 앱 실행           |
+| `pnpm mobile:android` | Flutter Android 실행             |
+| `pnpm mobile:ios`     | Flutter iOS 실행                 |
+| `pnpm mobile:web`     | Flutter web 실행                 |
+| `pnpm mobile:analyze` | Flutter 정적 분석                |
+| `pnpm mobile:test`    | Flutter 테스트 실행              |
 | `pnpm dev:api`        | API만 실행                       |
 | `pnpm docker:up`      | 로컬 Postgres + API Docker 실행  |
 | `pnpm docker:down`    | 로컬 Docker 서비스 종료          |
@@ -123,6 +123,5 @@ docs/
 
 ## 모바일 테스트 메모
 
-- `pnpm --filter mobile test`는 React Native Testing Library 기반으로 mobile primitive/provider/data/screen 계층을 검증합니다.
-- 대표 범위는 `shared/ui`, `app/providers`, `shared/contracts`, `pages/booth-home`, `app/App` 테스트입니다.
-- negative fixture는 `apps/mobile/src/__fixtures__/sessionSummary.ts`에서 관리합니다.
+- `pnpm mobile:analyze`는 Flutter/Dart 정적 분석을 실행합니다.
+- `pnpm mobile:test`는 `apps/mobile/test`의 Flutter 위젯/단위 테스트를 실행합니다.

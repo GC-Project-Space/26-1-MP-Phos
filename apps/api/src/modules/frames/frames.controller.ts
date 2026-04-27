@@ -1,5 +1,6 @@
-import { FRAME_CATALOG } from '@phos/shared';
 import { Controller, Get } from '@nestjs/common';
+
+import { FRAME_CATALOG } from '../../contracts/frame';
 
 import { FramesService } from './frames.service';
 

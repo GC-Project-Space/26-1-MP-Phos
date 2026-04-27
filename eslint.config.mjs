@@ -9,12 +9,9 @@ export default tseslint.config(
       '**/dist/**',
       '**/coverage/**',
       '**/node_modules/**',
-      '**/.expo/**',
       '**/.turbo/**',
-      'packages/db/generated/**',
-      'packages/db/prisma.config.ts',
-      'apps/mobile/android/**',
-      'apps/mobile/ios/**',
+      'apps/api/generated/**',
+      'apps/api/prisma.config.ts',
     ],
   },
   js.configs.recommended,
@@ -55,14 +52,6 @@ export default tseslint.config(
           caughtErrorsIgnorePattern: '^_',
         },
       ],
-    },
-  },
-  {
-    files: ['apps/mobile/**/*.{ts,tsx}'],
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-      },
     },
   },
   {

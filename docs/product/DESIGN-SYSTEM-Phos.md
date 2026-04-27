@@ -5,7 +5,7 @@
 - **Last Updated**: 2026-03-23
 - **문서 역할**: `UI-UX-REQUIREMENTS-Phos.md`를 시각 규칙, 토큰, 상호작용 기준으로 해석하는 하위 규칙 문서
 - **Upstream**: [UI-UX-REQUIREMENTS-Phos.md](./UI-UX-REQUIREMENTS-Phos.md) (`UX-15` ~ `UX-24`, `UX-32` ~ `UX-45`), [PRD-Phos.md](./PRD-Phos.md) (`PRD-01`, `PRD-02`)
-- **Downstream**: [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md) (컴포넌트 책임/상태), 구현 코드 기준점 `apps/mobile/src/shared/config/theme.ts`, `apps/mobile/src/shared/ui/InfoCard.tsx`, `apps/mobile/src/pages/booth-home/ui/BoothHomeScreen.tsx`
+- **Downstream**: [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md) (컴포넌트 책임/상태), Flutter 구현 코드 기준점 `apps/mobile/lib/core/constants.dart`, `apps/mobile/lib/screens/home_screen.dart`, `apps/mobile/lib/screens/main_layout.dart`
 - **Traceability Prefix**: `DS-xx`
 
 ---
@@ -55,9 +55,9 @@
 
 ### 4.1 색상 토큰
 
-현재 구현 토큰은 `apps/mobile/src/shared/config/theme.ts`에 정의되어 있습니다.
+현재 구현 토큰은 `apps/mobile/lib/core/constants.dart`에 정의되어 있습니다.
 
-- 코드 기준점: `apps/mobile/src/shared/config/theme.ts`
+- 코드 기준점: `apps/mobile/lib/core/constants.dart`
 - 관련 UX 요구: `UX-15`, `UX-22`, `UX-23`, `UX-35`, `UX-36`
 
 | 토큰            | 값        | 사용처                  |
@@ -81,7 +81,7 @@
 
 현재 코드 기준 자주 쓰는 스케일은 `12 / 13 / 15 / 16 / 18 / 28`입니다.
 
-- 코드 기준점: `apps/mobile/src/pages/booth-home/ui/BoothHomeScreen.tsx`, `apps/mobile/src/shared/ui/InfoCard.tsx`
+- 코드 기준점: `apps/mobile/lib/screens/home_screen.dart`, `apps/mobile/lib/screens/main_layout.dart`
 - 관련 UX 요구: `UX-15`, `UX-28`, `UX-31`, `UX-35`
 
 | 역할        | 크기 | 두께 | 사용처                          |
@@ -124,7 +124,7 @@
 - 모서리 반경은 부드럽지만 과장되지 않게 유지한다
 - 테두리는 구조를 설명할 때만 사용한다
 - 그림자보다 색 대비와 간격으로 위계를 만든다
-- 관련 코드 기준점: `apps/mobile/src/shared/ui/InfoCard.tsx`
+- 관련 코드 기준점: `apps/mobile/lib/screens/home_screen.dart`
 
 ## 5) 레이아웃 시스템
 
@@ -133,7 +133,7 @@
 - 화면은 `header -> primary content -> action zone`의 3단 구조를 기본으로 한다
 - 홈/결과 화면은 설명 영역과 행동 영역을 명확히 분리한다
 - 촬영 화면은 카메라 프리뷰와 진행 정보가 시각 중심이 된다
-- `InfoCard` 패턴은 정보 패널의 기본형으로 사용한다
+- Flutter 화면의 카드/버튼 패턴은 정보 패널의 기본형으로 사용한다
 
 이 레이아웃 규칙은 `UX-15`, `UX-18`, `UX-21`, `UX-22`, `UX-38`을 시각적으로 구현하기 위한 기준입니다.
 
@@ -210,10 +210,10 @@ UI 카피 예시:
 | 현재 코드 기준점       | 현재 역할           | 미래 시스템 역할                  |
 | ---------------------- | ------------------- | --------------------------------- |
 | `palette`              | 최소 색상 토큰      | 정식 의미 기반 색상 토대          |
-| `InfoCard`             | 정보 패널 공통형    | 패널 기본 단위                    |
-| `ExperienceOverview`   | 프레임 목록 샘플    | 프레임 선택 미리보기/목록 패턴    |
-| `SessionReadiness`     | 계약/상태 검증 샘플 | 세션 상태 카드 / 디버그 보조 도구 |
-| `BoothHomeScreen` hero | 소개형 스캐폴드     | 진입 화면 콘텐츠 블록             |
+| `HomeScreen`           | 시작 화면           | 진입 화면 콘텐츠 블록             |
+| `FrameSelectionScreen` | 프레임 선택         | 프레임 선택 미리보기/목록 패턴    |
+| `GalleryScreen`        | 갤러리              | 촬영 결과 목록과 재방문 동선      |
+| `ResultScreen`         | 결과 화면           | 저장/확인 중심의 결과 확보 흐름   |
 
 현재 코드 기준점은 토큰과 패널 언어의 출발점일 뿐이며, 실제 컴포넌트 책임 정의는 [COMPONENT-DESCRIPTIONS-Phos.md](./COMPONENT-DESCRIPTIONS-Phos.md)에서 이어집니다.
 
