@@ -36,16 +36,23 @@ dependencies:
   cupertino_icons: ^1.0.8
   image_picker: ^1.2.1 # 카메라 불러오기용
   path_provider: ^2.1.2        # 로컬 경로 획득용
-  permission_handler: ^11.3.0  # 저장 권한 요청용
+  permission_handler: ^12.0.1  # 저장 권한 요청용
   gal: ^2.3.0 # 갤러리 저장 패키지
   shared_preferences: ^2.5.5
+
+  # ML Packages
+  google_mlkit_face_detection: ^0.13.2 # 1. 이미지에서 얼굴 '위치'를 찾는 역할
+  tflite_flutter: ^0.12.1             # 2. tflite 모델을 직접 실행하는 역할
+  image: ^4.2.0                       # 3. 이미지 크롭, 리사이즈 등 전처리 역할
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
+  flutter:
+    sdk: flutter
+  # ... 기존 패-키지들 ...
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
@@ -63,10 +70,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/ml/ # ml 폴더 전체를 등록
   #   - images/a_dot_ham.jpeg
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
@@ -92,3 +98,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
