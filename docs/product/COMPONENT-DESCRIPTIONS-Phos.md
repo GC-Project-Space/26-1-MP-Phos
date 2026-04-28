@@ -5,7 +5,7 @@
 - **Last Updated**: 2026-03-23
 - **문서 역할**: UX 흐름과 디자인 규칙을 화면/컴포넌트 책임, 상태, 데이터 의존성으로 분해하는 문서
 - **Upstream**: [UI-UX-REQUIREMENTS-Phos.md](./UI-UX-REQUIREMENTS-Phos.md) (`UX-15` ~ `UX-24`, `UX-25` ~ `UX-45`), [DESIGN-SYSTEM-Phos.md](./DESIGN-SYSTEM-Phos.md) (`DS-01` ~ `DS-03`)
-- **Downstream**: [USER-STORIES-Phos.md](./USER-STORIES-Phos.md) (구현 단위 분해), 구현 코드 `apps/mobile/src/app/App.tsx`, `apps/mobile/src/pages/booth-home/ui/BoothHomeScreen.tsx`, `apps/mobile/src/widgets/experience-overview/ui/ExperienceOverview.tsx`, `apps/mobile/src/widgets/session-readiness/ui/SessionReadiness.tsx`, `apps/mobile/src/shared/ui/InfoCard.tsx`
+- **Downstream**: [USER-STORIES-Phos.md](./USER-STORIES-Phos.md) (구현 단위 분해), Flutter 구현 코드 `apps/mobile/lib/main.dart`, `apps/mobile/lib/screens/main_layout.dart`, `apps/mobile/lib/screens/home_screen.dart`, `apps/mobile/lib/screens/frame_selection_screen.dart`, `apps/mobile/lib/screens/result_screen.dart`
 - **Traceability Prefix**: `COMP-xx`
 
 ---
@@ -22,67 +22,54 @@
 
 | ID        | 컴포넌트                | 상태 | 목적                                                               | 주요 액션            | Upstream                  |
 | --------- | ----------------------- | ---- | ------------------------------------------------------------------ | -------------------- | ------------------------- |
-| `COMP-01` | `AppRootShell`          | 현재 | safe area, status bar, scroll container를 제공하는 앱 루트 셸 패턴 | 없음                 | `UX-25`, `UX-38`, `DS-01` |
-| `COMP-02` | `BoothHomeScreen`       | 현재 | 현재 요구사항과 시스템 준비 상태를 요약하는 엔트리 화면            | 없음 - CTA 예정      | `UX-15`, `UX-32`, `DS-01` |
-| `COMP-03` | `FrameSelectionScreen`  | 예정 | 프레임 선택과 세션 반영                                            | 프레임 선택 완료     | `UX-16`, `DS-03`          |
-| `COMP-04` | `CaptureScreen`         | 예정 | 카운트다운 연속 촬영과 메이킹 영상 기록                            | 촬영 시작 / 재시작   | `UX-18`, `UX-33`, `UX-41` |
-| `COMP-05` | `ReviewScreen`          | 예정 | 촬영 결과 검토와 스트립 슬롯 순서 조정                             | 렌더로 이동          | `UX-19`, `DS-03`          |
-| `COMP-06` | `EditScreen`            | 예정 | 빠른 편집 도구 제공                                                | 편집 적용 / 건너뛰기 | `UX-20`, `DS-03`          |
-| `COMP-07` | `RenderScreen`          | 예정 | 렌더 진행 상태와 결과 전환                                         | 다시 시도            | `UX-21`, `UX-45`          |
-| `COMP-08` | `ResultScreen`          | 예정 | 최종 포토 스트립/영상 확보 액션 제공                               | 로컬 저장            | `UX-22`, `UX-32`          |
+| `COMP-01` | `PhotoBoothApp`         | 현재 | Flutter 앱 진입점과 전역 테마 제공                                 | 없음                 | `UX-25`, `UX-38`, `DS-01` |
+| `COMP-02` | `MainLayout`            | 현재 | 홈/갤러리/스튜디오 탭 구조 제공                                    | 탭 전환              | `UX-25`, `UX-38`, `DS-01` |
+| `COMP-03` | `HomeScreen`            | 현재 | 브랜드, 시작 액션, 최근 촬영 목록을 제공                           | 촬영 시작            | `UX-15`, `UX-32`, `DS-01` |
+| `COMP-04` | `FrameSelectionScreen`  | 현재 | 프레임 선택과 촬영 진입                                            | 프레임 선택          | `UX-16`, `DS-03`          |
+| `COMP-05` | `FrameConversionScreen` | 현재 | 프레임 변환/촬영 후 처리 흐름                                      | 결과로 이동          | `UX-19`, `UX-21`          |
+| `COMP-06` | `ResultScreen`          | 현재 | 최종 포토 스트립 저장과 확인                                       | 로컬 저장            | `UX-22`, `UX-32`          |
+| `COMP-07` | `GalleryScreen`         | 현재 | 저장된 결과 목록과 재확인 흐름                                     | 결과 확인            | `UX-22`, `UX-32`          |
 | `COMP-09` | `PrivacyControlsScreen` | 예정 | 동의와 보관 정책 안내 및 제어                                      | 동의 저장            | `UX-23`, `UX-39`          |
 | `COMP-10` | `DataControlsScreen`    | 예정 | 삭제/내보내기 요청과 상태 제어                                     | 요청 실행            | `UX-24`, `UX-39`          |
 
 ## 3) 현재 컴포넌트
 
-### 3.1 AppRootShell
+### 3.1 PhotoBoothApp / MainLayout
 
-**코드 기준점**: `apps/mobile/src/app/App.tsx`
+**코드 기준점**: `apps/mobile/lib/main.dart`, `apps/mobile/lib/screens/main_layout.dart`
 
 - **ID / 연결**: `COMP-01` ← `UX-25`, `UX-38`, `DS-01`
 
-- **책임**: safe area 적용, 상태 바 스타일 지정, 세로 스크롤 컨테이너 제공, 첫 페이지 마운트
-- **UX 메모**: 현재는 `App.tsx` 안 인라인 루트 셸 패턴이며, 실제 촬영 화면은 전용 풀스크린 레이아웃이 필요할 수 있다
+- **책임**: MaterialApp, 전역 테마, 홈/갤러리/스튜디오 탭 구조 제공
+- **UX 메모**: 실제 촬영 화면은 전용 풀스크린 레이아웃이 필요할 수 있다
 
-### 3.2 BoothHomeScreen
+### 3.2 HomeScreen
 
-**코드 기준점**: `apps/mobile/src/pages/booth-home/ui/BoothHomeScreen.tsx`
+**코드 기준점**: `apps/mobile/lib/screens/home_screen.dart`
 
 - **ID / 연결**: `COMP-02` ← `UX-15`, `UX-32`, `DS-01`
 
-- **책임**: MVP 방향 소개, 프레임 개요와 세션 준비 상태를 한 화면에 표시
-- **현재 상태**: 실제 CTA는 아직 없고 진입용 스캐폴드 역할에 가깝다
+- **책임**: 브랜드, 촬영 시작 CTA, 최근 촬영 목록을 한 화면에 표시
+- **현재 상태**: `Take a Shot` CTA로 프레임 선택 흐름에 진입한다
 - **필요 변화**: 소개형 카피를 행동형 카피와 CTA 중심 구조로 전환, `브랜드 -> 가치 -> 시작 액션` 순서 유지
 
-### 3.3 ExperienceOverview
+### 3.3 FrameSelectionScreen
 
-**코드 기준점**: `apps/mobile/src/widgets/experience-overview/ui/ExperienceOverview.tsx`
+**코드 기준점**: `apps/mobile/lib/screens/frame_selection_screen.dart`
 
 - **ID / 연결**: `COMP-03`의 현재 기반 ← `UX-16`, `DS-03`
 
-- **책임**: `FRAME_CATALOG`를 읽어 프레임 목록을 보여주고 이름/레이아웃/컷 수/활성 상태를 전달
-- **입력**: `frames: FrameSummary[]`
-- **미래 역할**: 실제 프레임 선택 리스트의 기초 패턴, 선택/썸네일/비활성 사유/현재 선택 상태 추가 필요
+- **책임**: 프레임 선택 옵션을 보여주고 이후 변환/결과 흐름으로 연결
+- **미래 역할**: 선택/썸네일/비활성 사유/현재 선택 상태 강화 필요
 
-### 3.4 SessionReadiness
+### 3.4 ResultScreen / GalleryScreen
 
-**코드 기준점**: `apps/mobile/src/widgets/session-readiness/ui/SessionReadiness.tsx`
+**코드 기준점**: `apps/mobile/lib/screens/result_screen.dart`, `apps/mobile/lib/screens/gallery_screen.dart`
 
 - **ID / 연결**: `COMP-04`, `COMP-07`, `COMP-10`의 상태 기반 샘플 ← `UX-17`, `UX-21`, `UX-24`
 
-- **책임**: 세션 페이로드 미리보기를 스키마로 검증하고 모바일에서 세션 계약 해석 가능성을 보여줌
-- **미래 역할**: 운영용 디버그 영역 또는 세션 상태 패널로 분리 가능, 사용자용 화면에서는 기술적 표현을 쉬운 상태 안내로 바꿀 필요가 있다
-
-### 3.5 InfoCard
-
-**코드 기준점**: `apps/mobile/src/shared/ui/InfoCard.tsx`
-
-- **ID / 연결**: `COMP-02`, `COMP-09`, `COMP-10`의 공통 패널 기반 ← `DS-01`, `DS-02`
-
-- **책임**: 공통 정보 패널 컨테이너, 제목 + 부제목 + 본문 영역 제공
-- **입력**: `title: string`, `subtitle: string`, `children`
-- **시각 역할**: `surface`, `border`, `24px radius` 기반 패널 언어 형성
-- **사용 규칙**: 정보 요약에는 적합하지만 모든 상호작용 영역에 무분별하게 적용하면 안 된다
+- **책임**: 촬영 결과 저장, 저장된 결과 목록 표시, 결과 재확인 흐름 제공
+- **미래 역할**: 삭제/내보내기 요청과 보관 정책 표시를 결과 흐름에 결합
 
 ## 4) 계획된 MVP 컴포넌트
 
@@ -157,10 +144,10 @@
 
 | 컴포넌트                                 | 주요 데이터 의존성                                                       | 원본 계약                                  |
 | ---------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------ |
-| `FramePresetList`                        | `FrameSummary[]`                                                         | `packages/shared/src/contracts/frame.ts`   |
-| `SessionReadiness` / 세션 상태 표시 영역 | `SessionSummary`                                                         | `packages/shared/src/contracts/session.ts` |
-| `QuickEditToolbar`                       | `SessionEditState`                                                       | `packages/shared/src/contracts/session.ts` |
-| `PrivacyActionPanel`                     | `deletionStatus`, `consentVersion`, `trainingUsed`, `retentionExpiresAt` | `packages/shared/src/contracts/session.ts` |
+| `FramePresetList`                        | `FrameSummary[]`                                                         | `apps/api/src/contracts/frame.ts`          |
+| 세션 상태 표시 영역                      | `SessionSummary`                                                         | `apps/api/src/contracts/session.ts`        |
+| `QuickEditToolbar`                       | `SessionEditState`                                                       | `apps/api/src/contracts/session.ts`        |
+| `PrivacyActionPanel`                     | `deletionStatus`, `consentVersion`, `trainingUsed`, `retentionExpiresAt` | `apps/api/src/contracts/session.ts`        |
 
 ## 6) 컴포넌트 인수 규칙
 

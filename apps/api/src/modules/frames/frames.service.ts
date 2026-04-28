@@ -1,5 +1,6 @@
-import { FRAME_CATALOG } from '@phos/shared';
 import { Injectable } from '@nestjs/common';
+
+import { FRAME_CATALOG } from '../../contracts/frame';
 
 @Injectable()
 export class FramesService {

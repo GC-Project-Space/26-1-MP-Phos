@@ -180,7 +180,7 @@
 
 ## 5) 데이터 직교성 비즈니스 로직 검증 (추가)
 
-이 섹션은 `packages/db/prisma/schema/` 기반 직교성 이슈를 QA 실행 가능한 비즈니스 테스트로 문서화한다.
+이 섹션은 `apps/api/prisma/schema/` 기반 직교성 이슈를 QA 실행 가능한 비즈니스 테스트로 문서화한다.
 
 ### 5.1 직교성 요구사항 표 (Source of Truth 기준)
 
