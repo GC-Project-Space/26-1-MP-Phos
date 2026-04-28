@@ -33,6 +33,19 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# Platform build outputs
+/android/build/
+/android/app/build/
+/ios/build/
+/linux/build/
+/macos/build/
+*.apk
+*.aab
+*.ipa
+*.app/
+*.xcarchive/
+*.dSYM/
+
 # Symbolication related
 app.*.symbols
 
