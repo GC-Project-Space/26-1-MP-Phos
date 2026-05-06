@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'screens/main_layout.dart'; // ⬅️ 이 줄을 추가해주세요.
-import 'services/face_recognition_service.dart'; // ❗️ 이 줄을 추가하거나 확인하세요.
-// void main() {  // ⬅️ 기존 코드
-//   runApp(const PhotoBoothApp());
-// }
-
-// ✅ 수정된 코드
+import 'services/face_recognition_service.dart'; // 서비스 파일 import
 Future<void> main() async {
-  // Flutter 엔진과 위젯 바인딩이 준비되었는지 확인합니다.
+  // Flutter 프레임워크가 앱을 실행할 준비가 되도록 보장합니다.
+  // main 함수가 async인 경우 반드시 필요합니다.
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 앱이 시작될 때 얼굴 인식 모델을 미리 로딩합니다.
+  // runApp을 호출하기 전에 서비스 초기화를 완료합니다.
   await FaceRecognitionService().initialize();
 
   runApp(const PhotoBoothApp());
