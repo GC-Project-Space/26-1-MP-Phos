@@ -1,0 +1,795 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:camera/camera.dart';
+
+/// 1. 프레임 레이아웃 종류 정의
+enum FrameType {
+    grid2x2,  // 2x2 격자 형태 (총 4장)
+    strip1x4, // 1x4 세로 스트립 (총 4장)
+    strip1x3, // 1x3 세로 스트립 (총 3장)
+}
+
+/// 2. 커스텀 프레임 디자인 모델
+class FrameDesign {
+    final String id;
+    final String name;
+    final BoxDecoration decoration; // 단색, 그라디언트, 배경 이미지 등 설정
+    final Color textColor;          // 하단 텍스트/로고 색상
+    final String brandText;         // 하단 브랜드 텍스트
+
+    FrameDesign({
+        required this.id,
+                required this.name,
+                required this.decoration,
+                required this.textColor,
+                this.brandText = "L I F E  4  C U T S",
+    });
+}
+
+/// 3. 프레임 및 이미지를 렌더링하는 핵심 위젯
+class CustomFourCutFrame extends StatelessWidget {
+    final List<File?> images;          // 입력받은 사진 리스트
+    final FrameType frameType;         // 선택된 레이아웃 형태
+    final FrameDesign design;          // 선택된 커스텀 프레임 디자인
+    final Function(int index)? onPhotoTap; // 개별 칸 선택 시 액션 (편집용)
+
+  const CustomFourCutFrame({
+        Key? key,
+                required this.images,
+                required this.frameType,
+                required this.design,
+                this.onPhotoTap,
+    }) : super(key: key);
+
+    // 레이아웃 별 프레임 물리 사이즈 비율 고정
+    Size _getFrameSize() {
+        switch (frameType) {
+            case FrameType.grid2x2:
+                return const Size(320, 420);
+            case FrameType.strip1x4:
+                return const Size(160, 520);
+            case FrameType.strip1x3:
+                return const Size(160, 410);
+        }
+    }
+
+    @override
+    Widget build(BuildContext context) {
+        final frameSize = _getFrameSize();
+
+        return Container(
+                width: frameSize.width,
+                height: frameSize.height,
+                decoration: design.decoration, // 개발자가 직접 구축한 디자인 적용
+                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 14.0),
+        child: Column(
+                children: [
+        Expanded(
+                child: _buildPhotosLayout(),
+          ),
+          const SizedBox(height: 10),
+        // 프레임 하단 텍스트 로고 영역
+        Text(
+                design.brandText,
+                style: TextStyle(
+                color: design.textColor,
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2.5,
+                fontFamily: 'Courier',
+            ),
+          ),
+        ],
+      ),
+    );
+    }
+
+    /// 프레임 레이아웃 배치 로직
+    Widget _buildPhotosLayout() {
+        switch (frameType) {
+            case FrameType.grid2x2:
+                return Column(
+                        children: [
+            Expanded(
+                    child: Row(
+                    children: [
+            Expanded(child: _buildPhotoCell(0)),
+                  const SizedBox(width: 6),
+            Expanded(child: _buildPhotoCell(1)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 6),
+            Expanded(
+                    child: Row(
+                    children: [
+            Expanded(child: _buildPhotoCell(2)),
+                  const SizedBox(width: 6),
+            Expanded(child: _buildPhotoCell(3)),
+                ],
+              ),
+            ),
+          ],
+        );
+
+            case FrameType.strip1x4:
+                return Column(
+                        children: [
+            Expanded(child: _buildPhotoCell(0)),
+            const SizedBox(height: 5),
+            Expanded(child: _buildPhotoCell(1)),
+            const SizedBox(height: 5),
+            Expanded(child: _buildPhotoCell(2)),
+            const SizedBox(height: 5),
+            Expanded(child: _buildPhotoCell(3)),
+          ],
+        );
+
+            case FrameType.strip1x3:
+                return Column(
+                        children: [
+            Expanded(child: _buildPhotoCell(0)),
+            const SizedBox(height: 6),
+            Expanded(child: _buildPhotoCell(1)),
+            const SizedBox(height: 6),
+            Expanded(child: _buildPhotoCell(2)),
+          ],
+        );
+        }
+    }
+
+    /// 개별 사진 영역 프레임 셸 빌더
+    Widget _buildPhotoCell(int index) {
+        final File? imgFile = (index < images.length) ? images[index] : null;
+
+        return GestureDetector(
+                onTap: onPhotoTap != null ? () => onPhotoTap!(index) : null,
+                child: Container(
+                decoration: BoxDecoration(
+                color: Colors.grey[350], // 빈 영역 플레이스홀더 색상
+                borderRadius: BorderRadius.circular(1.0),
+        ),
+        clipBehavior: Clip.antiAlias,
+                child: imgFile != null
+                ? Image.file(
+                imgFile,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              )
+            : const Center(
+                child: Icon(
+                Icons.camera_alt_outlined,
+                color: Colors.black26,
+                size: 18,
+                ),
+              ),
+      ),
+    );
+    }
+}
+
+/// 4. 프레임 합성 캡처 저장 도구
+class FrameCaptureService {
+    static Future<File?> saveFrameAsImage(GlobalKey repaintKey) async {
+        try {
+            final boundary = repaintKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+
+            // 고해상도 품질 저장을 위해 기기 비율의 3배수로 캡처 진행
+            final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+            final ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+
+            if (byteData == null) return null;
+
+            final Uint8List pngBytes = byteData.buffer.asUint8List();
+            final directory = await getTemporaryDirectory();
+            final String filePath = '${directory.path}/life4cuts_${DateTime.now().millisecondsSinceEpoch}.png';
+            final File file = File(filePath);
+
+            await file.writeAsBytes(pngBytes);
+            return file;
+        } catch (e) {
+            debugPrint('프레임 캡처 이미지 생성 오류: $e');
+            return null;
+        }
+    }
+}
+
+/// 5. 인앱 전용 포토부스 촬영 화면 (자체 카메라 연동 및 카운트다운 타이머 탑재)
+class CameraBoothScreen extends StatefulWidget {
+    final int requiredPhotos; // 촬영해야 하는 총 장수 (3 또는 4)
+
+  const CameraBoothScreen({
+        Key? key,
+                required this.requiredPhotos,
+    }) : super(key: key);
+
+    @override
+    State<CameraBoothScreen> createState() => _CameraBoothScreenState();
+}
+
+class _CameraBoothScreenState extends State<CameraBoothScreen> {
+    List<CameraDescription> _cameras = [];
+    CameraController? _cameraController;
+    int _selectedCameraIndex = 1; // 1번이 보통 전면(셀피) 카메라, 없으면 0번 후면 자동 지정
+    bool _isCameraInitialized = false;
+
+    // 촬영 진행 상태 데이터
+    final List<File> _capturedFiles = [];
+    int _currentCaptureIndex = 0;
+
+    // 카운트다운 타이머 전용 변수들
+    Timer? _timer;
+    int _timerSeconds = 3;
+    bool _isCountingDown = false;
+
+    @override
+    void initState() {
+        super.initState();
+        _initCameras();
+    }
+
+    Future<void> _initCameras() async {
+        try {
+            _cameras = await availableCameras();
+            if (_cameras.isNotEmpty) {
+                // 전면 카메라 기본 선택 시도 (목록에서 전면 검색)
+                int frontCamIndex = _cameras.indexWhere(
+                        (cam) => cam.lensDirection == CameraLensDirection.front,
+                        );
+                _selectedCameraIndex = frontCamIndex != -1 ? frontCamIndex : 0;
+
+                await _startCameraController(_cameras[_selectedCameraIndex]);
+            }
+        } catch (e) {
+            debugPrint('카메라 장비 검색 실패: $e');
+        }
+    }
+
+    Future<void> _startCameraController(CameraDescription cameraDescription) async {
+        if (_cameraController != null) {
+            await _cameraController!.dispose();
+        }
+
+        _cameraController = CameraController(
+                cameraDescription,
+                ResolutionPreset.high,
+                enableAudio: false,
+    );
+
+        try {
+            await _cameraController!.initialize();
+            if (mounted) {
+                setState(() {
+                    _isCameraInitialized = true;
+                });
+            }
+        } catch (e) {
+            debugPrint('카메라 컨트롤러 초기화 실패: $e');
+        }
+    }
+
+    @override
+    void dispose() {
+        _timer?.cancel();
+        _cameraController?.dispose();
+        super.dispose();
+    }
+
+    /// 전/후면 카메라 토글 전환
+    Future<void> _toggleCamera() async {
+        if (_cameras.length < 2) return;
+        setState(() {
+            _isCameraInitialized = false;
+            _selectedCameraIndex = (_selectedCameraIndex + 1) % _cameras.length;
+        });
+        await _startCameraController(_cameras[_selectedCameraIndex]);
+    }
+
+    /// 카운트다운 트리거 및 자동 찰칵 촬영 흐름
+    void _triggerCountdown() {
+        if (_isCountingDown || _currentCaptureIndex >= widget.requiredPhotos) return;
+
+        setState(() {
+            _isCountingDown = true;
+            _timerSeconds = 3; // 3초 카운트다운
+        });
+
+        _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+            if (_timerSeconds > 1) {
+                setState(() {
+                    _timerSeconds--;
+                });
+            } else {
+                // 타이머 완료 시 촬영 진행
+                timer.cancel();
+                setState(() {
+                    _isCountingDown = false;
+                });
+                await _takePhoto();
+            }
+        });
+    }
+
+    /// 실제 하드웨어 셔터 제어 및 사진 파일 축적
+    Future<void> _takePhoto() async {
+        if (_cameraController == null || !_cameraController!.value.isInitialized) return;
+
+        try {
+            final XFile rawPhoto = await _cameraController!.takePicture();
+            final File savedFile = File(rawPhoto.path);
+
+            setState(() {
+                _capturedFiles.add(savedFile);
+                _currentCaptureIndex++;
+            });
+
+            // 촬영 목표치에 모두 도달했을 경우, 완성된 결과물을 메인 피드로 넘겨주고 화면 종료
+            if (_currentCaptureIndex >= widget.requiredPhotos) {
+                Navigator.pop(context, _capturedFiles);
+            }
+        } catch (e) {
+            debugPrint('사진 촬영 오류: $e');
+        }
+    }
+
+    @override
+    Widget build(BuildContext context) {
+        return Scaffold(
+                backgroundColor: Colors.black,
+                appBar: AppBar(
+                backgroundColor: Colors.black,
+                iconTheme: const IconThemeData(color: Colors.white),
+        title: Text(
+                '부스 촬영중 (${_currentCaptureIndex + 1}/${widget.requiredPhotos}컷)',
+                style: const TextStyle(color: Colors.white, fontSize: 16),
+        ),
+        actions: [
+        IconButton(
+                icon: const Icon(Icons.flip_camera_ios_outlined),
+                onPressed: _isCountingDown ? null : _toggleCamera,
+          ),
+        ],
+      ),
+        body: _isCameraInitialized
+                ? Column(
+                children: [
+        // 1. 카메라 뷰포트 및 실시간 오버레이 인터페이스
+        Expanded(
+                child: Stack(
+                alignment: Alignment.center,
+                children: [
+        // 카메라 라이브 프리뷰
+        ClipRect(
+                child: OverflowBox(
+                alignment: Alignment.center,
+                child: FittedBox(
+                fit: BoxFit.cover,
+                child: SizedBox(
+                width: _cameraController!.value.previewSize!.height,
+                height: _cameraController!.value.previewSize!.width,
+                child: CameraPreview(_cameraController!),
+                            ),
+                          ),
+                        ),
+                      ),
+
+        // 실제 카운트다운 활성화 시의 UI 오버레이 효과
+        if (_isCountingDown)
+            Container(
+                    color: Colors.black45,
+                alignment: Alignment.center,
+                child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+        child: Text(
+                '$_timerSeconds',
+                key: ValueKey<int>(_timerSeconds),
+                style: const TextStyle(
+                color: Colors.yellowAccent,
+                fontSize: 120,
+                fontWeight: FontWeight.w900,
+                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ),
+                        ),
+
+        // 인생네컷 부스 느낌의 미니 가이드 가이드라인 그리드
+        IgnorePointer(
+                child: Container(
+                decoration: BoxDecoration(
+                border: Border.all(color: Colors.white12, width: 2),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+        // 2. 촬영 현황판 및 제어 데스크
+        Container(
+                color: Colors.grey[950],
+                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+        child: Column(
+                children: [
+        // 이미 획득한 사진들 가로형 프리뷰 바
+        SizedBox(
+                height: 70,
+                child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: widget.requiredPhotos,
+                itemBuilder: (context, idx) {
+            final bool isFilled = idx < _capturedFiles.length;
+            return Container(
+                    width: 55,
+                    margin: const EdgeInsets.only(right: 10),
+            decoration: BoxDecoration(
+                    color: Colors.grey[850],
+                    border: Border.all(
+                    color: _currentCaptureIndex == idx
+                    ? Colors.blueAccent
+                    : Colors.grey[700]!,
+                    width: 2,
+                                ),
+            borderRadius: BorderRadius.circular(4),
+                              ),
+            child: isFilled
+                    ? ClipRRect(
+                    borderRadius: BorderRadius.circular(2),
+                    child: Image.file(_capturedFiles[idx], fit: BoxFit.cover),
+                                    )
+                                  : const Center(
+                    child: Icon(Icons.image, color: Colors.white24, size: 20),
+                                    ),
+                            );
+        },
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+
+        // 실질적 촬영 액션 버튼 및 셔터
+        Center(
+                child: ElevatedButton(
+                onPressed: _isCountingDown ? null : _triggerCountdown,
+                style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(22),
+                          ),
+        child: const Icon(Icons.camera, size: 36),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          : const Center(
+                child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            ),
+    );
+    }
+}
+
+/// 6. 실제 사용 및 조합 완성 메인 제어판
+class LifeFourCutsCreatorScreen extends StatefulWidget {
+  const LifeFourCutsCreatorScreen({Key? key}) : super(key: key);
+
+    @override
+    State<LifeFourCutsCreatorScreen> createState() => _LifeFourCutsCreatorScreenState();
+}
+
+class _LifeFourCutsCreatorScreenState extends State<LifeFourCutsCreatorScreen> {
+    final GlobalKey _repaintBoundaryKey = GlobalKey();
+
+    // 현재 조합 설정값 데이터
+    FrameType _selectedType = FrameType.grid2x2;
+    late FrameDesign _selectedDesign;
+
+    // 부스를 통해 확보된 사진 파일들의 리스트 (기본값 빈칸 배치)
+    List<File?> _capturedPhotos = [null, null, null, null];
+
+    // 개발자가 구현한 고품격 커스텀 패턴 및 그라데이션 프레임 목록 데이터베이스
+    final List<FrameDesign> _customFrameTemplates = [
+    FrameDesign(
+            id: "midnight_black",
+            name: "미드나잇 블랙",
+            textColor: Colors.white,
+            decoration: const BoxDecoration(
+                    color: Colors.black,
+            ),
+    ),
+    FrameDesign(
+            id: "soft_pink",
+            name: "파스텔 핑크",
+            textColor: Colors.black87,
+            decoration: const BoxDecoration(
+                    color: Color(0xFFFEE2E2),
+      ),
+              ),
+    FrameDesign(
+            id: "gradient_aurora",
+            name: "오로라 그라데이션",
+            textColor: Colors.blueGrey,
+            decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFFff9a9e), Color(0xFFfecfef), Color(0xFFa1c4fd)],
+            ),
+            ),
+            ),
+    FrameDesign(
+            id: "wood_pattern",
+            name: "빈티지 체크",
+            textColor: Colors.brown,
+            decoration: const BoxDecoration(
+                    gradient: SweepGradient(
+                    colors: [Color(0xFFE5D9C4), Color(0xFFC3B091), Color(0xFFE5D9C4)],
+            ),
+            ),
+            ),
+            ];
+
+    @override
+    void initState() {
+        super.initState();
+        _selectedDesign = _customFrameTemplates.first;
+    }
+
+    // 레이아웃 타입 변경 시 슬롯 크기 및 배열의 적합성 보정 유틸
+    void _updateLayoutType(FrameType newType) {
+        setState(() {
+            _selectedType = newType;
+            // 레이아웃 변경 시 기존 촬영 데이터를 새 슬롯 구조에 맞게 리셋하거나 확장
+            _capturedPhotos = List<File?>.filled(
+                    newType == FrameType.strip1x3 ? 3 : 4,
+                    null,
+                    );
+        });
+    }
+
+    /// 인앱 순차 카메라 부스 세션 시작 트리거 및 데이터 동기화
+    Future<void> _launchCameraBooth() async {
+        final int requiredCount = _selectedType == FrameType.strip1x3 ? 3 : 4;
+
+        final List<File>? result = await Navigator.push<List<File>>(
+                context,
+                MaterialPageRoute(
+                        builder: (context) => CameraBoothScreen(requiredPhotos: requiredCount),
+      ),
+    );
+
+        if (result != null && result.isNotEmpty) {
+            setState(() {
+                _capturedPhotos = List<File?>.from(result);
+            });
+        }
+    }
+
+    @override
+    Widget build(BuildContext context) {
+        return Scaffold(
+                backgroundColor: Colors.grey[100],
+                appBar: AppBar(
+                title: const Text('인앱 인생네컷 프레임 스튜디오'),
+                centerTitle: true,
+                backgroundColor: Colors.white,
+                elevation: 0.5,
+      ),
+        body: Column(
+                children: [
+        // 1. 완성본의 레이아웃 조합 프리뷰 구역
+        Expanded(
+                child: Center(
+                child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+        child: RepaintBoundary(
+                key: _repaintBoundaryKey,
+                child: CustomFourCutFrame(
+                images: _capturedPhotos,
+                frameType: _selectedType,
+                design: _selectedDesign,
+                onPhotoTap: (index) {
+                // 개별 칸 클릭 시 단독으로 찍거나 새로 편집하는 용도
+                _launchCameraBooth();
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+        // 2. 하단 다목적 제어 및 디자인 변경 콘솔
+        Container(
+                padding: const EdgeInsets.all(20.0),
+                decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        boxShadow: [
+        BoxShadow(
+                color: Colors.black12,
+                blurRadius: 10,
+                offset: Offset(0, -4),
+                ),
+              ],
+            ),
+        child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+        // 가이드 및 부스 즉시 탑승 버튼
+        Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                    const Text(
+                '1. 레이아웃 비율 선택',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    ),
+        ElevatedButton.icon(
+                onPressed: _launchCameraBooth,
+                style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.indigoAccent,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+        icon: const Icon(Icons.camera_front_sharp, size: 18),
+        label: const Text('부스 촬영하기'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+
+        // 2x2, 1x4, 1x3 등 컷 배치 유형 지정 버튼 행
+        Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+        _buildLayoutSelectButton(FrameType.grid2x2, '2 x 2 격자'),
+                _buildLayoutSelectButton(FrameType.strip1x4, '1 x 4 세로'),
+                _buildLayoutSelectButton(FrameType.strip1x3, '1 x 3 세로'),
+                  ],
+                ),
+                const Divider(height: 32, thickness: 1),
+
+        // 자체 디자인 프레임 셀렉터 (가로 스크롤형 카드 칩)
+                const Text(
+                '2. 자체 제작 테마 프레임 디자인',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                ),
+                const SizedBox(height: 10),
+        SizedBox(
+                height: 50,
+                child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: _customFrameTemplates.length,
+                itemBuilder: (context, index) {
+            final template = _customFrameTemplates[index];
+            final isSelected = template.id == _selectedDesign.id;
+            return Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+            child: GestureDetector(
+                    onTap: () {
+                setState(() {
+                    _selectedDesign = template;
+                });
+            },
+            child: Chip(
+                    label: Text(
+                    template.name,
+                    style: TextStyle(
+                    color: isSelected ? Colors.white : Colors.black87,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                              ),
+                            ),
+            backgroundColor: isSelected ? Colors.indigoAccent : Colors.grey[200],
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      );
+        },
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+        // 최종 조합 이미지 저장/다운로드 트리거 액션
+        SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton(
+                onPressed: _saveFinalComposite,
+                style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+        child: const Text(
+                '완성된 프레임 이미지 저장하기',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+    }
+
+    Widget _buildLayoutSelectButton(FrameType type, String label) {
+        final isSelected = _selectedType == type;
+        return Expanded(
+                child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: OutlinedButton(
+                onPressed: () => _updateLayoutType(type),
+                style: OutlinedButton.styleFrom(
+                backgroundColor: isSelected ? Colors.indigoAccent.withOpacity(0.08) : Colors.transparent,
+                side: BorderSide(
+                color: isSelected ? Colors.indigoAccent : Colors.grey[300]!,
+                width: isSelected ? 2.0 : 1.0,
+            ),
+        shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+            ),
+        padding: const EdgeInsets.symmetric(vertical: 14),
+          ),
+        child: Text(
+                label,
+                style: TextStyle(
+                color: isSelected ? Colors.indigoAccent : Colors.black54,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ),
+      ),
+    );
+    }
+
+    /// 조합 및 이미지 최종 합성 및 캐싱 파일 저장 후 결과 얼럿 노출
+    Future<void> _saveFinalComposite() async {
+        if (_capturedPhotos.any((element) => element == null)) {
+            ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('아직 촬영하지 않은 빈 사진 슬롯이 존재합니다!')),
+      );
+            return;
+        }
+
+        final File? capturedFile = await FrameCaptureService.saveFrameAsImage(_repaintBoundaryKey);
+        if (capturedFile != null) {
+            if (!mounted) return;
+            showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: const Text('🎉 합성 완료'),
+                    content: Text('커스텀 프레임이 입혀진 고해상도 이미지가 생성되었습니다!\n\n저장 경로: ${capturedFile.path}'),
+                    actions: [
+            TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('확인', style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          ],
+        ),
+      );
+        }
+    }
+}
